@@ -1,6 +1,4 @@
 ---
-// import '../styles/index.css'
-
 interface Props {
     title: string
     bg?: boolean
@@ -9,7 +7,7 @@ interface Props {
 const {title} = Astro.props
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -49,10 +47,12 @@ const {title} = Astro.props
             })
         }
     </script>
-    <script src="https://js.sentry-cdn.com/8dfaea3ae774cfc8d9a79fdac78b2c5d.min.js" crossorigin="anonymous"
+    <script
+            src="https://js.sentry-cdn.com/8dfaea3ae774cfc8d9a79fdac78b2c5d.min.js"
+            crossorigin="anonymous"
     ></script>
-    </head>
-    <body>
-        <slot />
-    </body>
+</head>
+<body>
+<slot />
+</body>
 </html>
