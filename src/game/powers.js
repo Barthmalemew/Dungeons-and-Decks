@@ -9,6 +9,15 @@
  * @prop{Function=} use: The parameter and return value of the use function.
  */
 
+/**
+ * Stacks are a value that determines the duration or level of powers
+ * however they are not actually a part of the Power class and instead are a part of the powers object or the cardPowers object
+ *  used in the player/monster object or the card object respectively
+ * the player/monster powers object intitally starts with no properties, but makes use of the ability for js objects to have properties added to them after creation
+ * this added properties are stored as name: stacks where name is the POWER object and stacks is a number representing the stacks
+ * this allows for a way to imitate a data structure like maps or sets without having to use one as object properties have to have unique keys.
+ */
+
 class Power{
     
     constructor(power) {

@@ -9,7 +9,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "astro dev",
-    "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview"
   },
