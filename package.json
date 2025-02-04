@@ -29,5 +29,9 @@
     "preact": "^10.25.4",
     "sentry": "^0.1.2",
     "tone": "^15.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
   }
 }
