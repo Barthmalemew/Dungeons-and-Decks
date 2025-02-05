@@ -1,7 +1,7 @@
 import {html, Component} from '../lib.js'
-import {getRuns} from '../../game/backend.js'
-import {timeSince} from '../../utils.js'
-import gsap from '../animations.js'
+//import {getRuns} from '../../game/backend.js'
+//import {timeSince} from '../../utils.js'
+//import gsap from '../animations.js'
 
 export default class SplashScreen extends Component {
 	constructor() {
@@ -10,10 +10,10 @@ export default class SplashScreen extends Component {
 	}
 
 	componentDidMount() {
-		getRuns().then(({runs}) => this.setState({runs}))
+		//getRuns().then(({runs}) => this.setState({runs}))
 
-		gsap.from(this.base, {duration: 0.3, autoAlpha: 0, scale: 0.98})
-		gsap.to(this.base.querySelector('.Splash-spoder'), {delay: 5, x: 420, y: 60, duration: 3})
+		//gsap.from(this.base, {duration: 0.3, autoAlpha: 0, scale: 0.98})
+		//gsap.to(this.base.querySelector('.Splash-spoder'), {delay: 5, x: 420, y: 60, duration: 3})
 	}
 
 	render(props, state) {
@@ -41,7 +41,8 @@ export default class SplashScreen extends Component {
 							<a class="Button" href="/stats">Highscores</a>
 							${this.state.runs.length > 0
 								? html` <a class="LastRun" href=${`/stats/run?id=${run.id}`}>
-										${timeSince(run.createdAt)} someone ${run.won ? 'won' : 'lost'}
+										<!--${timeSince(run.createdAt)} --> 
+										someone ${run.won ? 'won' : 'lost'}
 									</a>`
 								: ''}
 						</li>
