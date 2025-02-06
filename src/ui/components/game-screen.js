@@ -39,7 +39,39 @@ export default class App extends Component {
         //this return should run a function that takes the state of the game and returns true or false depending on if the player has completed the dungeon.
         return false;
     }
+    //constructor for the App class
+    constructor()
+    {
+        //this is needed because when creating your own constructor for a derived class in JS you need to explicitly call the parent classes constructor
+        super() 
+        //Class properties
+        this.base = undefined //This is a Node container that will help in changing between overlays based on either the current or future state of the game
+        this.state = undefined //this is holds the current game state that is being rendered, and allows for control over when the rendered state is updated
+        this.game = {} //this holds the game object 
+        this.overlayIndex = 0 //this value will correspond to the zindex of the overlay in the foreground
+
+        //Creating bound functions to ensure their variable scope
+        this.playCard = this.playCard.bind(this) //this handles both the UI elements and function calls for playing cards
+        this.handlePlayerReward = this.handlePlayerReward.bind(this) //this handles the UI elements and function calls for end of battle rewards
+        this.handleCampfireChoice = this.handleCampfireChoice.bind(this) //this handles the UI elements and function calls for the players campfire choice
+        this.handleChestReward = this.handleChestReward.bind(this) //this handles the UI elements and function calls for chest contents and maybe relic assignment based on the chests assigned rarity
+        this.goToNextRoom = this.goToNextRoom.bind(this) //this bundles the UI updates and function calls used to move to the next room into a single method
+        this.toggleOverlay = this.toggleOverlay.bind(this) //this handles the toggling of overlays
+        this.handleMapMove = this.handleMapMove.bind(this) //this handles the UI element updates and function calls to facilitate map movement
+        //There might be more of these bound funtions depending on the other game elements added
+        
+        /**
+         * //maybe add in a relic handler although this might need to have a function in action.js to actually do the checking 
+        //and this just look for the relic that proc'ed and just animate it, 
+        //although we are going to need some way to check for the activation conditions and store them
+        //although we could just only have relics that proc at the end or the start of the battle or some interval that is eaiser to check
+         */
+    }
+        componentDidMount()
+        {
+            
+        }
 }
 
-//Need to write the constructor for the App class.
+
 
