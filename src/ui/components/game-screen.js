@@ -67,10 +67,132 @@ export default class App extends Component {
         //although we could just only have relics that proc at the end or the start of the battle or some interval that is eaiser to check
          */
     }
+        //This method runs when the component gets mounted to the DOM
         componentDidMount()
         {
-            
+
+            //this sets up the new game, this function currently does nothing as it is waiting on an import 
+            const game = createNewGame();
+            this.game = game; //this sets the variable game defined in the constructor to the value of the newly created game
+
+            this.setState(game.state, this.dealCards);
+            //sounds effects need to be called for this
+
+            //check if there is an already saved game
+            //if we find one we should load that over the set up new game
+
+            //enable console *insert a "now this is debugging"*
+            this.enableConsole();
         }
+
+        //this is the function that will set the game state to the one loaded from a saved game
+        loadSave(save)
+        {
+            this.game.state = save;
+            this.setState(save,this.dealCards);
+        }
+
+        //this function will enable the console so the real debugging can happen
+        enableConsole()
+        {
+            // @ts-ignore
+            window.dad = {
+                game: this.game, //this sets game variable to the state of the game
+                run: this.runAction.bind(this), //this allows for actions to be executing via the console by using dad.run([insert action])
+                dealCards: this.dealCards.bind(this), //this "creates" the command .dealCards that runs the dealCards function
+                //add some more function commands for stuff so that things like animations can be tested
+                help() {
+                    console.log('Welcome to the console for Dungeons and Decks. This will be used to allow certain actions to be run via commands in this console for debugging purposes')
+                    console.log('Some examples are dad.dealCards()')
+                },
+            }
+            //@ts-ignore
+            window.dad.help();
+        }
+        //this function is used to run an action and it takes the action name and any parameters that action might need through the use of props
+        runAction(actionName, props)
+        {
+            const action = {type: actionName, ...props};
+            this.game.enqueue(action); //this should use the enqueue function from the game object created by the new game function that currently has yet to be made
+            this.update();
+        }
+
+        //this function updates the state by dequeueing the oldest action and then also allowing for functions to be run after the state is updated via the callback parameter
+        update(callback)
+        {
+            this.game.dequeue();
+            this.setState(this.game.state,callback);
+        }
+        //This function undoes the last "action"
+        undo()
+        {
+            this.game.undo();
+            this.setState(this.game.state, this.dealCards);
+        }
+
+        //playCard
+        /**
+         * 
+         * @param {String} cardId: The id of the card being played/ used to locate the card object in the players hand
+         * @param {String} target: The target of the card attempting to be played
+         * @param {HTMLElement} cardEl: The HTML element connected to the card attempting to be played
+         */
+        playCard(cardId, target, cardEl)
+        {
+            //this sets the variable card to the card object from the players hand with the id property of cardId
+            const card = this.state.hand.find((c) => c.id === cardId);
+            this.game.enqueue({type: 'playCard',card, target}); //this is the thing actally intitating the code to play the card
+
+            //this is where card animations should go when they get finished
+
+            //we probably want to create a "dummy" card ot animate over such that we can snap it back to its origninal position if we need to
+            const clone = cardEl.cloneNode(true);
+            const cardRect = cardEl.getBoundingClientRect();
+            clone.style.position = 'absolute';
+
+
+            this.base.appendChild(clone);
+            //we then want to update the state such that the damage and the over visual effects can be updated in the render
+            this.update();
+            //probably want to re-enable any functionality to do with moving cards around by dragging them and target assignment and checking by dropping them 
+
+            //probably want to remove the cloned card once we are done using it for animation
+
+            //The players hand might need to be "updated" to more properly reflect a smaller hand size now that a card has been played
+        }
+
+        //dealCards
+
+
+        //endTurn
+        endTurn()
+        {
+            const room = getCurrRoom(this.state);
+            if(!this.didWinEntireGame && this.didWin && room.type === 'monster') return
+            
+            //maybe play a sound effect here
+
+            //run the animation for the hand discard that happens when turns end
+            //There is probably a way to "queue" a function to run when the animation is completed, which should finish ending the turn
+
+            function finEndTurn()
+            {
+                this.game.enqueue({type: 'endTurn'});
+                this.update(this.dealCards);
+            }
+        }
+
+        //handlePlayerReward
+
+        //handleCampfireChoice
+
+        //handleChestReward
+
+        //goToNextRoom
+
+        //toggleOverlay
+
+        //handleMapMove
 }
 
 
