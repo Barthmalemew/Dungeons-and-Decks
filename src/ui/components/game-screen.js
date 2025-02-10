@@ -1,5 +1,6 @@
 import {Component, html} from '../lib.js'
 
+
 //game logic imports
 //Need an import for the new game script
 //Need to import card creation from cards when they are done
@@ -162,6 +163,14 @@ export default class App extends Component {
         }
 
         //dealCards
+        dealCards()
+        {
+            const cards = this.base.querySelectorAll('.Hand .Card');
+            if (!cards?.length) return
+            //animations for the cards moving from the deck (offscreen) into the players hand
+
+            //re-enable drag and drop as well
+        }
 
 
         //endTurn
@@ -191,6 +200,14 @@ export default class App extends Component {
         //goToNextRoom
 
         //toggleOverlay
+        //this function sets the overlay element provided to the zIndex of the overlayIndex value bringing it to the foreground and incrementing the overlayIndex value
+        toggleOverlay(el)
+        {
+            if (typeof el === 'string') el = this.base.querySelector(el);
+            el.toggleAttribute('open');
+            el.style.zIndex = this.overlayIndex;
+            this.overlayIndex++;
+        }
 
         //handleMapMove
 }
