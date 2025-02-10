@@ -210,6 +210,21 @@ export default class App extends Component {
         }
 
         //handleMapMove
+
+        render(props, state)
+        {
+            if(!state.player) return
+            const state = getCurrState(state);
+            const showCombat = room.type === 'monster';
+
+            //to Add: shortcut handler 
+            return html`
+            <div class="App" tabindex="0">
+                <figure class="App-background" data-room-index=${state.dungeon.y}></div>
+
+                
+            `
+        }
 }
 
 
