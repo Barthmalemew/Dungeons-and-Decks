@@ -1,5 +1,5 @@
 import {html, render, Component} from '../lib.js'
-//import SplashScreen from './splash-screen.js'
+import SplashScreen from './splash-screen.js'
 //import WinScreen from './win-screen.js'
 //import GameScreen from './game-screen.js'
 import '../styles/index.css'
