@@ -19,9 +19,9 @@ export default class CharacterSelectScreen extends Component {
 
     render() {
         const characters = [
-            { name: 'Warrior',  class: '💪', level: '15' },
-            { name: 'Rogue',  class: '🎭', level: '13' },
-            { name: 'Mage',   class: '🧙', level: '17' },
+            { name: 'Warrior',  class: '💪'},
+            { name: 'Rogue',  class: '🎭'},
+            { name: 'Mage',   class: '🧙'},
         ]
 
         return html`
