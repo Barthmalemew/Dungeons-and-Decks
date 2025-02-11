@@ -1,5 +1,6 @@
 import {html, render, Component} from '../lib.js'
 import SplashScreen from './splash-screen.js'
+import CharacterSelectScreen from './characters-select-screen.js'
 //import WinScreen from './win-screen.js'
 //import GameScreen from './game-screen.js'
 import '../styles/index.css'
@@ -56,6 +57,12 @@ export default class DungeonsAndDecks extends Component {
         }
         if (gameMode === GameModes.gameplay) {
             return html`<${GameScreen} onWin=${this.handleWin} onLoose=${this.handleLoose} /> `
+        }
+        if (gameMode === GameModes.gameplay && this.state.runs.length > 0) {
+            return html`<${CharacterSelectScreen} 
+                onBack${this.handlePlay}
+                onCharacterSelected${this.handlePlay}
+                />`
         }
         if (gameMode === GameModes.win) {
             return html`<${WinScreen} onNewGame=${this.handleNewGame} /> `
