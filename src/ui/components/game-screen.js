@@ -192,12 +192,65 @@ export default class App extends Component {
         }
 
         //handlePlayerReward
+        /**
+         * This function handles the end of battle rewards for players, currently only has the code for card rewards but in the future will have code to handle relics
+         * @param {String} choice: a string that represents the choice a player makes when getting their end of battle rewards, will be used to diff between when the player adds a new card and when they get a relic 
+         * @param {card} card: a card object however might have a relic shoved in it depending on how the function plays out
+         */
+        handlePlayerReward(choice, card)
+        {
+            this.game.enqueue({type:'addCardToDeck', card});
+            this.setState({didPickCard: card});
+            this.update();
+            this.goToNextRoom();
+        }
 
         //handleCampfireChoice
+        /**
+         * this function simply just runs the corresponding function to the choice picked
+         * @param {String} choice: A string representing action a player picked to do at a campfire: rest, upgrade card, or remove card
+         * @param {card} reward: This holds either a card object in the case of the choice being upgrade or remove, or nothing in the case that the choice was rest as it gets assigned a numeric value in this function
+         */
+        handleCampfireChoice(choice, reward)
+        {
+            if(choice === 'rest')
+            {
+                reward = Math.floor(this.game.state.player.maxHealth * 0.3);
+                this.game.enqueue({type: 'addHealth', target: 'player', amount: reward});
+            }
+            else if(choice === 'upgradeCard')
+            {
+                //this.game.enqueue <- add the card upgrade action to this enqueue statement and set the card value to reward
+            }
+            else if(choice === 'removeCard')
+            {
+                //this.game.enqueue <- add the remove card action here use reward for card like with upgrade
+            }
+            //store the campfire choice enqueueing the campfireChoice action
+
+            //update the game, it will have to pass another update into the update function to update the game twice
+            //as not only does an action get enqueued for each of the choices but also an action get enqueued to record the choice
+            this.update();
+            //move to the next room
+        }
 
         //handleChestReward
+        handleChestReward(relic)
+        {
+            this.game.enqueue({type: 'addRelic', relic});
+            this.setState({didPickRelic: relic});
+            this.update();
+            this.goToNextRoom();
+        }
 
         //goToNextRoom
+        goToNextRoom()
+        {
+            //adding a log here to make sure this funtion will run correctly in different situations
+            //and also to document how this function accomplishes its task
+            console.log('Function run: goToNextRoom\nEffect: toggles the map overlay');
+            this.toggleOverlay('#Map');
+        }
 
         //toggleOverlay
         //this function sets the overlay element provided to the zIndex of the overlayIndex value bringing it to the foreground and incrementing the overlayIndex value
@@ -218,6 +271,8 @@ export default class App extends Component {
             const showCombat = room.type === 'monster';
 
             //to Add: shortcut handler 
+            //The overlay for if the player is dead
+            //
             return html`
             <div class="App" tabindex="0">
                 <figure class="App-background" data-room-index=${state.dungeon.y}></div>
