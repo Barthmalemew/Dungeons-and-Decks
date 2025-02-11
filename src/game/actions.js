@@ -50,6 +50,7 @@ enableMapSet()
  * @prop {Array} exhaustPile - Cards removed from play (usually permanently)
  * @prop {Player} player - Current player state
  * @prop {Dungeon} [dungeon] - Current dungeon state (optional until set)
+ * @prop {object} [character] - Selected character for the game (optional until set)
  */
 
 /**
@@ -89,6 +90,7 @@ function createNewState() {
         createdAt: new Date().getTime(),
         endedAt: undefined,
         won: false,
+        character: null,
     }
 }
 
@@ -736,10 +738,21 @@ function iddqd(state) {
     })
 }
 
+/**
+ * Sets the selected character for the game
+ * @type {ActionFn<{character: object}>}
+ */
+function selectCharacter(state, {character}) {
+    return produce(state, (draft) => {
+        draft.character = character
+    })
+}
+
 // Export all action functions as a single object
 const allActions = {
     addCardToDeck,
     addCardToHand,
+    selectCharacter,
     addEnergyToPlayer,
     addHealth,
     addRegenEqualToAllDamage,
