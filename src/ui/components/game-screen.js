@@ -1,3 +1,4 @@
+// @ts-check
 import {Component, html} from '../lib.js'
 
 
@@ -46,7 +47,7 @@ export default class App extends Component {
         //this is needed because when creating your own constructor for a derived class in JS you need to explicitly call the parent classes constructor
         super() 
         //Class properties
-        this.base = undefined //This is a Node container that will help in changing between overlays based on either the current or future state of the game
+        this.base = undefined //This is a Node container that holds the entire DOM used in the gamescreen
         this.state = undefined //this is holds the current game state that is being rendered, and allows for control over when the rendered state is updated
         this.game = {} //this holds the game object 
         this.overlayIndex = 0 //this value will correspond to the zindex of the overlay in the foreground
@@ -71,11 +72,22 @@ export default class App extends Component {
         //This method runs when the component gets mounted to the DOM
         componentDidMount()
         {
-
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.has('debug');
+            const demo = urlParams.has('demo');
             //this sets up the new game, this function currently does nothing as it is waiting on an import 
+            // @ts-expect-error
             const game = createNewGame();
             this.game = game; //this sets the variable game defined in the constructor to the value of the newly created game
 
+            if(demo)
+            {
+                //add code to move the player to a predetermined room in the dungeon 
+                //just rewrite over the game with a different createNewGame that gives a curated starting deck
+                //maybe even set the character class
+                //probably should also set the players level
+                //and give them some relics(maybe)
+            }
             this.setState(game.state, this.dealCards);
             //sounds effects need to be called for this
 
@@ -107,7 +119,7 @@ export default class App extends Component {
                     console.log('Some examples are dad.dealCards()')
                 },
             }
-            //@ts-ignore
+            // @ts-ignore
             window.dad.help();
         }
         //this function is used to run an action and it takes the action name and any parameters that action might need through the use of props
@@ -147,11 +159,16 @@ export default class App extends Component {
             //this is where card animations should go when they get finished
 
             //we probably want to create a "dummy" card ot animate over such that we can snap it back to its origninal position if we need to
+            /**@type {HTMLElement} */
+            // @ts-expect-error
             const clone = cardEl.cloneNode(true);
             const cardRect = cardEl.getBoundingClientRect();
             clone.style.position = 'absolute';
-
-
+            clone.style.width = cardEl.offsetWidth + 'px';
+            clone.style.height = cardEl.offsetHeight + 'px';
+            clone.style.top = window.scrollY + cardRect.top + 'px';
+            clone.style.left = window.scrollX + cardRect.left + 'px';
+            clone.style.transform = '';
             this.base.appendChild(clone);
             //we then want to update the state such that the damage and the over visual effects can be updated in the render
             this.update();
@@ -176,6 +193,7 @@ export default class App extends Component {
         //endTurn
         endTurn()
         {
+            // @ts-expect-error
             const room = getCurrRoom(this.state);
             if(!this.didWinEntireGame && this.didWin && room.type === 'monster') return
             
@@ -195,7 +213,7 @@ export default class App extends Component {
         /**
          * This function handles the end of battle rewards for players, currently only has the code for card rewards but in the future will have code to handle relics
          * @param {String} choice: a string that represents the choice a player makes when getting their end of battle rewards, will be used to diff between when the player adds a new card and when they get a relic 
-         * @param {card} card: a card object however might have a relic shoved in it depending on how the function plays out
+         * @param {Object} card: an object however might have a relic shoved in it depending on how the function plays out
          */
         handlePlayerReward(choice, card)
         {
@@ -209,7 +227,7 @@ export default class App extends Component {
         /**
          * this function simply just runs the corresponding function to the choice picked
          * @param {String} choice: A string representing action a player picked to do at a campfire: rest, upgrade card, or remove card
-         * @param {card} reward: This holds either a card object in the case of the choice being upgrade or remove, or nothing in the case that the choice was rest as it gets assigned a numeric value in this function
+         * @param {Object} reward: This holds either a card object in the case of the choice being upgrade or remove, or nothing in the case that the choice was rest as it gets assigned a numeric value in this function
          */
         handleCampfireChoice(choice, reward)
         {
@@ -253,21 +271,57 @@ export default class App extends Component {
         }
 
         //toggleOverlay
-        //this function sets the overlay element provided to the zIndex of the overlayIndex value bringing it to the foreground and incrementing the overlayIndex value
+        /**
+         * this function sets the overlay element provided to the zIndex of the overlayIndex value bringing it to the foreground and incrementing the overlayIndex value
+         * @param {*} el The element or string corresponding to the overlay being toggled, if it is a string it gets casted into a HTMLElement
+         */
         toggleOverlay(el)
         {
             if (typeof el === 'string') el = this.base.querySelector(el);
             el.toggleAttribute('open');
-            el.style.zIndex = this.overlayIndex;
+            el.style.zIndex = '${this.overlayIndex}';
             this.overlayIndex++;
+        }
+        
+        //handle shortcuts
+        handleShortcuts(event)
+        {
+            if(event.target.nodeName === 'INPUT') return
+            const {key} = event;
+            const keymap = {
+                e: () => this.endTurn(),
+                //u: () => this.undo(),
+                //add draw pile, discard pile, and exhaust pile element ids to the query selector terms along with relic overlay that shows up when you click a relic in your inventory to get more info about it
+                Escape: () => {
+                    let openOverlays = this.base.querySelectorAll(
+                        '#Deck[open], #Map[open]'
+                    )
+                    const mapOpened = document.querySelector('#Map').hasAttribute('open');
+                    openOverlays.forEach((el) => el.removeAttribute('open'));
+                    if(!mapOpened) this.toggleOverlay('#Menu');
+                },
+                //add the overlay commands for the drawpile discard pile and exhaust pile, with a for draw pile, s for discard pile, and either x, q or r for exhaust pile
+                d: () => this.toggleOverlay('#Deck'),
+                m: () => this.toggleOverlay('#Map')
+            }
+            keymap[key] && keymap[key]();
         }
 
         //handleMapMove
+        handleMapMove(move)
+        {
+            this.toggleOverlay('#Map');
+            this.setState({didPickCard: false});
+            this.game.enqueue({type: 'move', move});
+            this.update(this.dealCards);
+        }
+
 
         render(props, state)
         {
             if(!state.player) return
-            const state = getCurrState(state);
+            // @ts-expect-error
+            const room = getCurrRoom(state);
             const showCombat = room.type === 'monster';
 
             //to Add: shortcut handler 
@@ -277,8 +331,29 @@ export default class App extends Component {
             <div class="App" tabindex="0">
                 <figure class="App-background" data-room-index=${state.dungeon.y}></div>
 
+                ${
+                    this.isDead && 
+                    html`<${Overlay}>
+                        <div class="Container">
+                            <h1 center>You have died!</h1>
+                            <!-- Put the run stats and the button to publish the run to the back in (if that gets made) here-->
+                            
+                            <button onClick=${() => this.props.onLose()}>Try again?</button>
+                            </div>
+                            <//> `
+                }
                 
-            `
+                ${
+                    state.won &&
+                    html`<${Overlay}>
+                        <div class="Container CContainer--center">
+                            <h1 center>You Won!</h1>
+                            <!-- Add the button to "publish" the run if/when it gets made and display run stats when it gets finished-->
+
+                            <p><button onClick
+                        `
+                }
+                `
         }
 }
 
