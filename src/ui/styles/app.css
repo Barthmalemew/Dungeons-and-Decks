@@ -1,0 +1,475 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+}
+
+html {
+	color: var(--text);
+	cursor: url(/images/cursors/default.png), auto;
+	min-height: 100%;
+	background-color: var(--bg);
+	background-attachment: fixed;
+	background-position: 50%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	color: var(--text);
+}
+
+body {
+	margin: 0;
+}
+
+[center] {
+	text-align: center;
+}
+
+[align-right] {
+	text-align: right;
+}
+
+a,
+button,
+summary {
+	cursor:
+		url(/images/cursors/point.png) 10 0,
+		auto;
+}
+
+summary {
+	user-select: none;
+}
+
+input,
+textarea,
+select {
+	cursor:
+		url(/images/cursors/select.png) 10 0,
+		auto;
+}
+
+input[type='text'],
+input[type='number'] {
+	font-size: 1em;
+}
+
+.Overlay input[type='text'] {
+	color-scheme: dark;
+}
+
+a {
+	color: inherit;
+}
+
+.Button,
+button,
+.driver-popover .driver-popover-footer button {
+	font-size: 1.25rem;
+	padding: 0.4em 1em 0.4em;
+	border: 3px solid var(--text-inverse);
+	border-radius: 0.3em;
+	background: var(--lightblue);
+	color: var(--text-inverse);
+	box-shadow: 0 0.2em var(--text-inverse);
+	text-decoration: none;
+	transition: box-shadow 100ms;
+}
+.Button + .Button,
+button + button {
+	margin-left: 0.2em;
+}
+.Button:hover,
+.Button:focus,
+button:hover,
+button:focus,
+.driver-popover .driver-popover-footer button:hover,
+.driver-popover .driver-popover-footer button:focus {
+	background: hsl(194.7, 53.3%, 83%);
+	box-shadow: 0 0.1em var(--text-inverse);
+}
+.Button:active,
+button:active {
+	position: relative;
+	top: 0.1em;
+	box-shadow: none;
+}
+
+input[type='text'],
+input[type='number'] {
+	min-height: 1.5rem;
+}
+
+table {
+	width: 100%;
+}
+
+tbody {
+	font-size: smaller;
+}
+
+h1 {
+	transform: rotate3d(5, 15, 3, -13deg);
+	font-size: 4rem;
+	margin-top: 2rem;
+	margin-bottom: -1rem;
+	/* background-image: linear-gradient(63deg, var(--yellow), hsl(17, 80%, 60%), hsl(0, 97.2%, 42.7%)); */
+	background-image: linear-gradient(68deg, #ffd75f, hsl(39.3, 100%, 60.8%), hsl(0, 28.1%, 17.5%));
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	text-shadow: 2px 3px hsla(240, 89%, 4%, 0.1);
+	letter-spacing: -2px;
+	/* line-height: 1; */
+}
+h2,
+h3 {
+	font-size: 1.25rem;
+	text-shadow: 1px 1px 1px var(--text-inverse);
+}
+h2 {
+	margin: 1rem 0 0.5rem;
+}
+
+.App {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	flex-flow: column;
+	overflow: hidden;
+}
+
+.App-background {
+	margin: 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url('/images/scenes/moonlit-landscape-1904.jpg');
+}
+.App-background[data-room-index='1'] {
+	background-image: url('/images/scenes/arietty.webp');
+}
+.App-background[data-room-index='2'] {
+	background-image: url('/images/scenes/bauhaus.jpg');
+}
+.App-background[data-room-index='3'] {
+	background-image: url('/images/scenes/chihiro.jpg');
+}
+.App-background[data-room-index='4'] {
+	background-image: url('/images/scenes/howl.jpg');
+}
+.App-background[data-room-index='5'] {
+	background-image: url('/images/scenes/laputa.jpg');
+}
+.App-background[data-room-index='6'] {
+	background-image: url('/images/scenes/mononoke.jpg');
+}
+.App-background[data-room-index='7'] {
+	background-image: url('/images/scenes/nausicaa.jpg');
+}
+.App-background[data-room-index='8'] {
+	background-image: url('/images/scenes/1.jpg');
+}
+.App-background[data-room-index='9'] {
+	background-image: url('/images/scenes/landscape.jpg');
+}
+.App-background[data-room-index='10'] {
+	background-image: url('/images/scenes/flying-duo.jpg');
+}
+.App-background[data-room-index='11'] {
+	background-image: url('/images/scenes/ponyo.jpg');
+}
+
+/* Darkens the top of the screen to highlight the player+monsters on the background. */
+.App-background::before,
+.App-background::after {
+	content: '';
+	background: linear-gradient(to bottom, #0f1642, transparent);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 30vh;
+	z-index: -1;
+}
+.App-background::after {
+	top: initial;
+	bottom: 0;
+	background: linear-gradient(to top, #0f1642, transparent);
+}
+
+.App-background,
+.Targets,
+.Split,
+.Overlay {
+	animation: fade-in 1000ms cubic-bezier(0.23, 1, 0.32, 1);
+	animation-fill-mode: both;
+}
+
+.Targets {
+	animation-delay: 200ms;
+}
+
+.Split:not(.Targets) {
+	animation-delay: 150ms;
+	animation-duration: 2000ms;
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.Split {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 2vw;
+}
+
+.EnergyBadge {
+	transform: rotate3d(5, 15, 3, -20deg);
+	position: relative;
+	z-index: 1;
+	font-size: 1.5rem;
+	width: 2.2em;
+	height: 2.2em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 3px solid hsla(0, 0%, 0%, 0.8);
+	transform: rotate(45deg);
+	background-color: var(--teal);
+	text-shadow:
+		2px 2px 0 #000,
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+	box-shadow: 0 0 0.1em var(--lightblue);
+	margin-left: 1rem;
+	transition: background 700ms;
+	user-select: none;
+}
+.EnergyBadge > span {
+	transform: rotate(-45deg);
+	font-feature-settings: 'onum' on;
+}
+.no-energy .EnergyBadge {
+	background: #272d2b;
+}
+
+@keyframes pulse {
+	from {
+		background: var(--lightblue);
+	}
+	to {
+		background: white;
+		box-shadow: 0px 0px 13px 3px var(--yellow);
+	}
+}
+
+.Actions {
+	text-align: right;
+	margin: 0 1rem 0 0;
+	position: relative;
+	z-index: 1;
+}
+
+.EndTurn:hover {
+	transition-duration: 80ms;
+	box-shadow: 0px 0px 15px 4px var(--yellow);
+}
+.no-energy .EndTurn {
+	animation: pulse 1.5s infinite alternate;
+	animation-timing-function: ease-out;
+}
+
+/* In your hand, the cards stack a bit */
+.Hand {
+	margin-top: 1rem;
+	transform: translateY(2rem);
+}
+.Hand .Cards {
+	padding-left: 4rem;
+	padding-right: 4rem;
+}
+.Hand .Card {
+	margin-left: -1.5rem;
+	cursor: grab;
+	cursor:
+		url(/images/cursors/grab-open.png) 10 0,
+		auto;
+}
+.Hand .Card[disabled] {
+	cursor: not-allowed;
+}
+.Hand .Card:hover {
+	/* transition-duration: 60ms; */
+	/* transform: translate3d(0, -1rem, 0) scale(1.25) rotate(0deg) !important; */
+	box-shadow: 0 0 0.75em gold;
+	z-index: 1;
+}
+
+/* Don't show copy of the dragged card on target */
+.Target .Card {
+	position: absolute;
+	right: 20%;
+	z-index: 1;
+}
+
+.Container {
+	/* min-height: 100vh; */
+	display: flex;
+	margin: auto;
+	flex-flow: column;
+	padding: 0 0.5rem;
+}
+
+.Container--center {
+	justify-content: center;
+}
+
+.Splash {
+	min-height: 100dvh;
+	justify-content: flex-end;
+	padding-bottom: 5vh;
+}
+
+.Splash-spoder {
+	width: 10%;
+	position: absolute;
+	left: -20%;
+	top: 1%;
+	transform: rotate(130deg);
+}
+
+/* Used in the main menu */
+.LastRun {
+	background: var(--yellow);
+	padding: 1px 3px;
+	font-size: small;
+}
+
+.Box,
+.Box--text {
+	background: hsla(17, 6%, 53%, 1);
+	color: hsl(17, 6%, 7%);
+	padding: 1rem;
+	border-radius: 0.75rem;
+	border: 2px solid hsla(17, 6%, 3%, 1);
+	min-width: 15rem;
+	margin: 0.5rem auto;
+}
+
+.Box--text {
+	/* background: hsla(17, 6%, 53%, 1); */
+	background: var(--text-inverse);
+	color: inherit;
+	max-width: 30rem;
+	text-align: left;
+}
+
+.Box--text a {
+	color: var(--yellow);
+	/* color: hsl(50.4, 70%, 56%); */
+	text-decoration-thickness: from-font;
+}
+
+.Box--full {
+	max-width: 60rem;
+}
+
+.Box h2,
+.Box h3 {
+	text-shadow: none;
+}
+
+.Header {
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+.Options {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 1rem;
+	margin: 0 auto;
+	list-style: none;
+	padding: 0;
+}
+.Options > li {
+	text-align: center;
+}
+.Options .Button,
+.Options button {
+	display: block;
+	width: 100%;
+}
+
+/* Rewards */
+.RewardsBox {
+	text-align: center;
+	margin-bottom: 2rem;
+	/* so card animations dont cause scroll */
+	overflow: hidden;
+	padding: 2rem;
+}
+.RewardsBox h2 {
+	margin-bottom: 4rem;
+}
+.RewardsBox .Cards {
+	min-height: 0;
+}
+.RewardsBox .Card {
+	min-height: var(--card-height);
+}
+.RewardsBox .CardBox:hover .Card {
+	box-shadow: 0 0 0.75em gold;
+}
+.CardBox {
+	cursor: pointer;
+	cursor:
+		url(/images/cursors/grab-open.png) 10 0,
+		auto;
+}
+
+.HistoryList {
+	text-align: left;
+	padding: 0 0 0 1rem;
+}
+
+.Form p {
+	font-size: smaller;
+}
+
+.FlexGrid {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: baseline;
+}
+
+#driver-popover-content {
+	background-color: var(--bg);
+	color: var(--text);
+	border: 2px solid var(--text);
+	border-radius: 0.5rem;
+}
+.driver-popover .driver-popover-title {
+	font-size: 1.25rem;
+	margin-top: 0.5rem;
+}
+.driver-popover .driver-popover-description,
+.driver-popover .driver-popover-footer button {
+	font-size: 1rem;
+}
+/* .driver-popover .driver-popover-footer button { } */

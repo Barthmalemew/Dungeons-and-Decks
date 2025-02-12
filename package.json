@@ -7,7 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "repository": {
     "type": "git",
@@ -21,12 +24,17 @@
   "homepage": "https://github.com/Barthmalemew/Dungeons-and-Decks#readme",
   "dependencies": {
     "@astrojs/preact": "^4.0.3",
-    "astro": "^5.1.9",
+    "astro": "^5.2.3",
     "driver.js": "^1.3.1",
     "dungeons-and-decks": "file:",
     "gsap": "^3.12.7",
     "htm": "^3.1.1",
     "preact": "^10.25.4",
+    "sentry": "^0.1.2",
     "tone": "^15.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
   }
 }
