@@ -1,9 +1,9 @@
-// @ts-check
+
 import {Component, html} from '../lib.js'
 
 
 //game logic imports
-//Need an import for the new game script
+import createNewGame from '../../game/new-game.js'
 //Need to import card creation from cards when they are done
 //Need to import functions to test the current game condition such as the current room and its status along with whether the dungeon is complete or not
 //need to import the functions that allow for character selection and handle that process
@@ -16,7 +16,7 @@ import {Component, html} from '../lib.js'
 //Map import
 //player and monster import
 //menu import
-//overlay import
+import {Overlay, OverlayWithButtons} from './overlays.js'
 //start room import
 //character selection import
 //victory room import
@@ -32,8 +32,7 @@ export default class App extends Component {
     //Function returns a bool that is the result of a check that determines if the players current health is less than one.
     get isDead()
     {
-        //this return statement needs to compare the players current health to see if its less than one when the state of the game is accessable.
-        return false;
+        return this.state.player.currentHealth < 1;
     }
     //function returns a bool based on if the player has completed the dungeon.
     get didWinEntireGame()
@@ -75,8 +74,7 @@ export default class App extends Component {
             const urlParams = new URLSearchParams(window.location.search);
             const debugMode = urlParams.has('debug');
             const demo = urlParams.has('demo');
-            //this sets up the new game, this function currently does nothing as it is waiting on an import 
-            // @ts-expect-error
+            //this sets up the new game
             const game = createNewGame();
             this.game = game; //this sets the variable game defined in the constructor to the value of the newly created game
 
@@ -126,7 +124,7 @@ export default class App extends Component {
         runAction(actionName, props)
         {
             const action = {type: actionName, ...props};
-            this.game.enqueue(action); //this should use the enqueue function from the game object created by the new game function that currently has yet to be made
+            this.game.enqueue(action) //this should use the enqueue function from the game object created by the new game function that currently has yet to be made
             this.update();
         }
 
@@ -238,10 +236,12 @@ export default class App extends Component {
             }
             else if(choice === 'upgradeCard')
             {
+                this.game.enqueue({type: 'upgradeCard', card: reward})
                 //this.game.enqueue <- add the card upgrade action to this enqueue statement and set the card value to reward
             }
             else if(choice === 'removeCard')
             {
+                this.game.enqueue({type: 'removeCard', card: reward})
                 //this.game.enqueue <- add the remove card action here use reward for card like with upgrade
             }
             //store the campfire choice enqueueing the campfireChoice action
@@ -350,9 +350,28 @@ export default class App extends Component {
                             <h1 center>You Won!</h1>
                             <!-- Add the button to "publish" the run if/when it gets made and display run stats when it gets finished-->
 
-                            <p><button onClick
-                        `
+                            <p><button onClick=${() => this.props.onWin()}>Continue?</button></p>
+                            </div>
+                            <//>`
                 }
+                
+
+
+                <${OverlayWithButtons} id="Map" topright key=${1}>
+                    <button align-right onClick=${() => this.toggleOverlay('#Map')}><u>M</u>ap</button>
+                    <div class="Overlay-content">
+
+                    </div>
+
+
+
+                <${OverlayWithButtons} id='Deck" topright topright2>
+                    <button class="tooltipped tooltipped-se" aria-label="All the cards you own" onClick${() =>
+                        this.toggleOverlay('#Deck')}><u>D</u>eck ${state.deck.length}</button>
+                        <div class='Overlay-content">
+                            <${Cards} gameState=${state} type="deck" />
+                            </div>
+                    }
                 `
         }
 }
