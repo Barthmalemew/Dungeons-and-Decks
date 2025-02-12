@@ -5,16 +5,16 @@
 // including combat, card management, dungeon navigation, and status effects.
 // =============================================================================
 
-import {produce, enableMapSet} from 'immer'
-import {clamp, shuffle} from '../utils.js'
-import {isDungeonCompleted, getRoomTargets, getCurrRoom} from './utils-state.js'
-import powers from './powers.js'
-import {conditionsAreValid} from './conditions.js'
-import {createCard, CardTargets} from './cards.js'
-import {dungeonWithMap} from '../content/dungeon-encounters.js'
+//import {produce, enableMapSet} from 'immer'
+//import {clamp, shuffle} from '../utils.js'
+//import {isDungeonCompleted, getRoomTargets, getCurrRoom} from './utils-state.js'
+//import powers from './powers.js'
+//import {conditionsAreValid} from './conditions.js'
+//import {createCard, CardTargets} from './cards.js'
+//import {dungeonWithMap} from '../content/dungeon-encounters.js'
 
 // Enable Immer's Map/Set support for immutable state updates
-enableMapSet()
+//enableMapSet()
 
 // Type imports for TypeScript/JSDoc documentation
 /** @typedef {import('./dungeon.js').Dungeon} Dungeon */
@@ -50,7 +50,6 @@ enableMapSet()
  * @prop {Array} exhaustPile - Cards removed from play (usually permanently)
  * @prop {Player} player - Current player state
  * @prop {Dungeon} [dungeon] - Current dungeon state (optional until set)
- * @prop {object} [character] - Selected character for the game (optional until set)
  */
 
 /**
@@ -90,7 +89,6 @@ function createNewState() {
         createdAt: new Date().getTime(),
         endedAt: undefined,
         won: false,
-        character: null,
     }
 }
 
@@ -738,21 +736,10 @@ function iddqd(state) {
     })
 }
 
-/**
- * Sets the selected character for the game
- * @type {ActionFn<{character: object}>}
- */
-function selectCharacter(state, {character}) {
-    return produce(state, (draft) => {
-        draft.character = character
-    })
-}
-
 // Export all action functions as a single object
 const allActions = {
     addCardToDeck,
     addCardToHand,
-    selectCharacter,
     addEnergyToPlayer,
     addHealth,
     addRegenEqualToAllDamage,
