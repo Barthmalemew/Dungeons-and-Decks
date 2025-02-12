@@ -68,7 +68,7 @@ button,
 	padding: 0.4em 1em 0.4em;
 	border: 3px solid var(--text-inverse);
 	border-radius: 0.3em;
-	background: var(--lightblue);
+	background: var(--lightpurple);
 	color: var(--text-inverse);
 	box-shadow: 0 0.2em var(--text-inverse);
 	text-decoration: none;
@@ -84,7 +84,7 @@ button:hover,
 button:focus,
 .driver-popover .driver-popover-footer button:hover,
 .driver-popover .driver-popover-footer button:focus {
-	background: hsl(194.7, 53.3%, 83%);
+	background: hsl(255, 39%, 79%);
 	box-shadow: 0 0.1em var(--text-inverse);
 }
 .Button:active,

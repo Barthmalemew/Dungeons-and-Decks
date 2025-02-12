@@ -13,4 +13,5 @@
     --text-inverse: hsla(0, 0%, 0%, 0.95);
     --text-stroke: var(--text-inverse);
     --easing: cubic-bezier(0.23, 1, 0.32, 1);
+    --lightpurple: hsl(255.21deg 44.38% 77.51%);
 }
