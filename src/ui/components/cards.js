@@ -1,3 +1,4 @@
+
 import {html, Component} from '../lib.js'
 //because this is dealing with card stuff it might need the file that deals with checking the conditions to see if a card can run
 
@@ -7,7 +8,7 @@ export default class Cards extends Component
     render(props)
     {
         const cards = props.gameState[props.type];
-        return html` <div class="Cards">${cards.map((card) => Cards({card, gameState: props.gameState}))}</div>`
+        return html` <div class="Cards">${cards.map((card) => Card({card, gameState: props.gameState}))}</div>`
 
     }
 }
