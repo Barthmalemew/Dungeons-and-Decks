@@ -48,6 +48,7 @@ export default class App extends Component {
         //Class properties
         this.base = undefined //This is a Node container that holds the entire DOM used in the gamescreen
         this.state = undefined //this is holds the current game state that is being rendered, and allows for control over when the rendered state is updated
+        /**@type {import('../../game/new-game.js').Game}  */
         this.game = {} //this holds the game object 
         this.overlayIndex = 0 //this value will correspond to the zindex of the overlay in the foreground
 
