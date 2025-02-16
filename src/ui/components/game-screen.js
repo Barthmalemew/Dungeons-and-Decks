@@ -15,9 +15,9 @@ import createNewGame from '../../game/new-game.js'
 //drag and drop feature import
 //Map import
 //player and monster import
-//menu import
+import Menu from './menu.js'
 import {Overlay, OverlayWithButtons} from './overlays.js'
-//start room import
+import StartRoom from './start-room.js'
 //character selection import
 //victory room import
 
@@ -86,14 +86,18 @@ export default class App extends Component {
                 //probably should also set the players level
                 //and give them some relics(maybe)
             }
+            if(debugMode || 1)
+            {
+                //enable console *insert a "now this is debugging"*
+                this.enableConsole();
+            }
             this.setState(game.state, this.dealCards);
             //sounds effects need to be called for this
 
             //check if there is an already saved game
             //if we find one we should load that over the set up new game
 
-            //enable console *insert a "now this is debugging"*
-            this.enableConsole();
+            
         }
 
         //this is the function that will set the game state to the one loaded from a saved game
@@ -111,6 +115,8 @@ export default class App extends Component {
                 game: this.game, //this sets game variable to the state of the game
                 run: this.runAction.bind(this), //this allows for actions to be executing via the console by using dad.run([insert action])
                 dealCards: this.dealCards.bind(this), //this "creates" the command .dealCards that runs the dealCards function
+                nextRoom: this.goToNextRoom.bind(this),
+                undo: this.undo.bind(this),
                 //add some more function commands for stuff so that things like animations can be tested
                 help() {
                     console.log('Welcome to the console for Dungeons and Decks. This will be used to allow certain actions to be run via commands in this console for debugging purposes')
@@ -355,14 +361,21 @@ export default class App extends Component {
                             <//>`
                 }
                 
+                ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> <//>`}
 
+                <${OverlayWithButtons} id="Menu" topleft>
+                <button onClick=${() => this.toggleOverlay('#Menu')}<u>Esc</u>ape</button>
+                    <div class="Overlay-content">
+                        <${Menu} gameState=${state} game=${this.game} onUndo=${() => this.undo()} />
+                    </div>
+                <//>
 
                 <${OverlayWithButtons} id="Map" topright key=${1}>
                     <button align-right onClick=${() => this.toggleOverlay('#Map')}><u>M</u>ap</button>
                     <div class="Overlay-content">
 
                     </div>
-
+                <//>
 
 
                 <${OverlayWithButtons} id='Deck" topright topright2>
@@ -370,8 +383,8 @@ export default class App extends Component {
                         this.toggleOverlay('#Deck')}><u>D</u>eck ${state.deck.length}</button>
                         <div class='Overlay-content">
                             <${Cards} gameState=${state} type="deck" />
-                            </div>
-                    }
+                        </div>
+                    <//>
                 `
         }
 }
