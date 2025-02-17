@@ -1,4 +1,4 @@
-
+import {shuffle, random} from '..utils.js'
 
 /**
  * @typedef {object} roomTypes - a dictionary containing the percentages associated with each room type
@@ -16,27 +16,33 @@
  * @prop {number} height - how many floors
  */
 
+export const RoomTypes = {
+    "M" : "monster",
+    "E" : "event",
+    "T" : "treasure",
+    "EM" : "empty",
+    "B" : "elite",
+    "R" : "rest",
+    "S" : "merchant"
+}
+
 /** @typedef {mapOptions} */
 export const defaultOptions = {
     width: 7,
     height: 15,
     minRooms: 2,
     maxRooms: 5,
-    roomTypes: {
-        "monster": 0.45,
-        "event": 0.22,
-        "elite": 0.16,
-        "rest": 0.12,
-        "shop": 0.05,
-        "treasure": 0.00
+    roomGen : "MMTE",
+    forcedFloors : {
+        15 : "R",
+        9 : "T"
     }
 }
 
 class Room
 {
-    constructor(id)
+    constructor()
     {
-        this.id = id
         this.type = null
         this.adjacent = []
     }
@@ -64,6 +70,8 @@ class Dungeon
     }
 
     generateDungeon() {
+
+        //gen rooms
         for (let i = 0; i < this.height; i++)
         {
             let floor = []
@@ -72,51 +80,106 @@ class Dungeon
 
             numOfRooms = Math.min(numOfRooms, this.width)
 
+            //gen rooms
             for (let j = 0; j < this.width; j++)
             {
-                let room = new Room(this.getMapNodeID(j, i))
+                let room = new Room()
 
-                let rand = Math.random()
-
-                if (rand < this.roomGen.monster)
-                {
-                    room.type = "monster"
-                }
-                else if (rand < this.roomGen.monster + this.roomGen.event)
-                {
-                    room.type = "event"
-                }
-                else if (rand < this.roomGen.monster + this.roomGen.event + this.roomGen.elite)
-                {
-                    room.type = "elite"
-                }
-                else if (rand < this.roomGen.monster + this.roomGen.event + this.roomGen.elite + this.roomGen.rest)
-                {
-                    room.type = "rest"
-                }
-                else if (rand < this.roomGen.monster + this.roomGen.event + this.roomGen.elite + this.roomGen.rest + this.roomGen.shop)
-                {
-                    room.type = "shop"
-                }
-                else
-                {
-                    room.type = "treasure"
-                }
+                room.type = this.genRoomType(i)
 
                 floor.push(room)
             }
 
-            this.Map.push(floor)
+            //fill the floor with empty nodes
+            while (floor.length < width)
+            {
+                let temp = new Room()
+                temp.type = RoomTypes.EM
+
+                floor.push(new Room)
+            }
+
+            //shuffle floor
+            this.Map.push(shuffle(floor))
         }
+
+        //generate random paths between rooms
+        for (let starting_room = 0; starting_room < this.width; starting_room++)
+        {
+            let current_room = this.Map[0][starting_room]
+
+            if (current_room.type == RoomTypes.EM)
+            {
+                continue
+            }
+
+            for (let i = 1; i < this.height; i++)
+            {
+                let next_room = this.Map[i][Math.floor(Math.random() * this.width)]
+
+                while (next_room.type == RoomTypes.EM)
+                {
+                    next_room = this.Map[i][Math.floor(Math.random() * this.width)]
+                }
+
+                current_room.adjacent.push(next_room)
+
+                current_room = next_room
+            }
+        }
+
+        //conncect rooms with no connections
+
+        for (let i = 0; i < this.height - 1; i++)
+        {
+            for (let j = 0; j < this.width; j++)
+            {
+                let current_room = this.Map[i][j]
+
+                if (current_room.type == RoomTypes.EM)
+                {
+                    continue
+                }
+
+                if (current_room.adjacent.length == 0)
+                {
+                    let next_room = this.Map[i + 1][Math.floor(Math.random() * this.width)]
+
+                    while (next_room.type == RoomTypes.EM)
+                    {
+                        next_room = this.Map[i + 1][Math.floor(Math.random() * this.width)]
+                    }
+
+                    current_room.adjacent.push(next_room)
+
+                    if (i > 0)
+                    {
+                        let prev_room = this.Map[i - 1][Math.floor(Math.random() * this.width)]
+
+                        while (prev_room.type == RoomTypes.EM)
+                        {
+                            prev_room = this.Map[i - 1][Math.floor(Math.random() * this.width)]
+                        }
+
+                        prev_room.adjacent.push(current_room)
+                    }
+                }
+            }
+        }
+
     }
 
-    getMapNodeID(x, y)
+    genRoomType(floor)
     {
-        return (y * width) + x
+        let forced = this.forcedFloors[floor]
+
+        if (forced != null)
+        {
+            return forced
+        }
+
+        return this.roomGen[Math.floor(Math.random() * this.roomGen.length)]
     }
 
-    getMapNodeXY(id)
-    {
-        return [id % width, Math.floor(id / width)]
-    }
+    
 }
