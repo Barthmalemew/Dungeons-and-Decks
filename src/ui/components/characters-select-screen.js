@@ -21,15 +21,18 @@ export default class CharacterSelectScreen extends Component {
         const characters = [
             { 
                 name: 'Warrior',
-                image: '/images/image1x1.png'
+                border: '/images/fighter_slot.png',
+                image: '/images/fighter.png'
             },
             { 
                 name: 'Rogue',
-                image: '/images/image2x1.png'
+                border: '/images/rogue_slot.png',
+                image: '/images/rogue.png'
             },
             { 
                 name: 'Mage',
-                image: '/images/image3x1.png'
+                border: '/images/wizard_slot.png',
+                image: '/images/wizard.png'
             }
         ]
 
@@ -43,6 +46,7 @@ export default class CharacterSelectScreen extends Component {
                             <div class="CharacterInfo">
                                 <h2>${character.name}</h2>
                                 <div class="CharacterFrame">
+                                    <img src="${character.border}" alt="${character.border}" />
                                     <img src="${character.image}" alt="${character.name}" />
                                 </div>
                             </div>
