@@ -1,14 +1,15 @@
 import {html, render, Component} from '../lib.js'
-//import SplashScreen from './splash-screen.js'
-//import WinScreen from './win-screen.js'
-//import GameScreen from './game-screen.js'
+import SplashScreen from './splash-screen.js'
+import CharacterSelectScreen from './characters-select-screen.js'
+import GameScreen from './game-screen.js'
+import WinScreen from './win-screen.js'
 import '../styles/index.css'
-// import {init as initSounds} from '../sounds.js'
 
 /** @enum {string} */
 const GameModes = {
     splash: 'splash',
     gameplay: 'gameplay',
+    characterSelect: 'characterSelect',
     win: 'win',
 }
 
@@ -28,12 +29,12 @@ export default class DungeonsAndDecks extends Component {
         this.handleContinue = this.handleContinue.bind(this)
         this.handleWin = this.handleWin.bind(this)
         this.handleLoose = this.handleLoose.bind(this)
+        this.handleCharacterSelected = this.handleCharacterSelected.bind(this)
     }
 
     async handleNewGame() {
-        // await initSounds()
-        this.setState({gameMode: GameModes.gameplay})
-        // Clear any previous saved game.
+        console.log('Transitioning to character select')
+        await this.setState({gameMode: GameModes.characterSelect})
         window.history.pushState('', document.title, window.location.pathname)
     }
 
@@ -49,10 +50,30 @@ export default class DungeonsAndDecks extends Component {
         this.setState({gameMode: GameModes.splash})
     }
 
+    handleCharacterSelected(character) {
+        // Store character in game state
+        window.game.state.character = character
+        console.log('Character selected:', character.name)
+        this.setState({gameMode: GameModes.gameplay})
+    }
+
+    initializeCharacterStats(character) {
+        window.game.state.player.maxHealth = character.health
+        window.game.state.player.currentHealth = character.health
+        window.game.state.player.maxEnergy = character.energy
+        window.game.state.player.currentEnergy = character.energy
+    }
+
     render() {
         const {gameMode} = this.state
         if (gameMode === GameModes.splash) {
             return html`<${SplashScreen} onNewGame=${this.handleNewGame} onContinue=${this.handleContinue} />`
+        }
+        if (gameMode === GameModes.characterSelect) {
+            return html`<${CharacterSelectScreen} 
+                onBack=${() => this.setState({gameMode: GameModes.splash})}
+                onCharacterSelected=${this.handleCharacterSelected}
+            />`
         }
         if (gameMode === GameModes.gameplay) {
             return html`<${GameScreen} onWin=${this.handleWin} onLoose=${this.handleLoose} /> `
