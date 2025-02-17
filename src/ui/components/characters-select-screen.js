@@ -19,9 +19,18 @@ export default class CharacterSelectScreen extends Component {
 
     render() {
         const characters = [
-            { name: 'Warrior',  class: '💪'},
-            { name: 'Rogue',  class: '🎭'},
-            { name: 'Mage',   class: '🧙'},
+            { 
+                name: 'Warrior',
+                image: '/images/image1x1.png'
+            },
+            { 
+                name: 'Rogue',
+                image: '/images/image2x1.png'
+            },
+            { 
+                name: 'Mage',
+                image: '/images/image3x1.png'
+            }
         ]
 
         return html`
@@ -29,28 +38,17 @@ export default class CharacterSelectScreen extends Component {
                 <header class="Head"><h1>Select Your Character</h1></header>
                 <section class="CharacterGrid">
                     ${characters.map((character, index) => 
-                        html`<article class="CharacterCard">
+                        html`<article class="CharacterCard" 
+                            onClick=${() => this.props.onCharacterSelected(character)}>
                             <div class="CharacterInfo">
                                 <h2>${character.name}</h2>
-                                <div class="ClassIcon">${character.class}</div>
-                                <h3>Level: ${character.level}</h3>
+                                <div class="CharacterFrame">
+                                    <img src="${character.image}" alt="${character.name}" />
+                                </div>
                             </div>
-                            <button 
-                                class="Action"
-                                onClick=${() => this.handleCharacterSelected(character)}
-                                style="background: rgba(0,0,0,0.2); color: white;"
-                            >
-                                Select ${character.name}
-                            </button>
                         </article>`
                     )}
                 </section>
-                <button 
-                    class="BackButton"
-                    onClick={this.handleBack}
-                >
-                    Back to Select
-                </button>
             </article>
         `
     }

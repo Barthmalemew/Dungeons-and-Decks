@@ -33,7 +33,8 @@ export default class DungeonsAndDecks extends Component {
     }
 
     async handleNewGame() {
-        this.setState({gameMode: GameModes.characterSelect})
+        console.log('Transitioning to character select')
+        await this.setState({gameMode: GameModes.characterSelect})
         window.history.pushState('', document.title, window.location.pathname)
     }
 
@@ -50,7 +51,17 @@ export default class DungeonsAndDecks extends Component {
     }
 
     handleCharacterSelected(character) {
+        // Store character in game state
+        window.game.state.character = character
+        console.log('Character selected:', character.name)
         this.setState({gameMode: GameModes.gameplay})
+    }
+
+    initializeCharacterStats(character) {
+        window.game.state.player.maxHealth = character.health
+        window.game.state.player.currentHealth = character.health
+        window.game.state.player.maxEnergy = character.energy
+        window.game.state.player.currentEnergy = character.energy
     }
 
     render() {
