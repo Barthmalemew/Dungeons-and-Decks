@@ -21,15 +21,15 @@ export default class CharacterSelectScreen extends Component {
         const characters = [
             { 
                 name: 'Warrior',
-                image: '/images/image1x1.png'
+                image: 'public/images/image1x1.png'
             },
             { 
                 name: 'Rogue',
-                image: '/images/image2x1.png'
+                image: 'public/images/image2x1.png'
             },
             { 
                 name: 'Mage',
-                image: '/images/image3x1.png'
+                image: 'public/images/image3x1.png'
             }
         ]
 
