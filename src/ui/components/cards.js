@@ -18,7 +18,7 @@ export default class Cards extends Component
 /**
  * 
  * @param {Object} props preact props object
- * 
+ * @param {import('../../game/cards.js').CARD} props.card
  * @param {import('../../game/actions.js').State} [props.gameState] imports the type definition for the State object to be used as a property of the props object
  * @returns A preact html element used in a preact render function
  */
@@ -27,6 +27,7 @@ export function Card(props)
     const {card, gameState} = props;
     //should probably record if the card can be played so that it can be rendered that way if so
     //need to get the image associated with the card as well
+    const image = card.image ? `/image/cards/${card.image}` : `https://thumbs.dreamstime.com/b/banana-delicious-yellow-white-background-57012810.jpg`
 
     return html`
     <dad-card
@@ -43,7 +44,7 @@ export function Card(props)
                 <span>${card.energy}</span>
             </p>
             <figure class="Card-media">
-                <img src="https://thumbs.dreamstime.com/b/banana-delicious-yellow-white-background-57012810.jpg" alt="A picture of a banana, being used as a placeholder asset" />
+                <img src=${image} alt="A picture of a banana, being used as a placeholder asset" />
             </figure>
             <p class="Card-type">${card.type}</p>
             <h3 class="Card-name">${card.name}</h3>
