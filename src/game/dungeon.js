@@ -1,4 +1,5 @@
 import {shuffle, random} from '..utils.js'
+import {demoMonster} from '../content/dungeon-encounters.js'
 
 /**
  * @typedef {object} roomTypes - a dictionary containing the percentages associated with each room type
@@ -38,6 +39,10 @@ export const defaultOptions = {
         9 : "T"
     }
 }
+
+export const demoRoom = new Room()
+demoRoom.type = RoomTypes.M
+demoRoom.monsters = [demoMonster]
 
 class Room
 {
