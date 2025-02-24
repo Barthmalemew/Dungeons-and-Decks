@@ -65,7 +65,7 @@ export const dexterity = new Power({
     use: (stacks) => stacks,
 })
 
-export const weaken = new Power({
+export const weak = new Power({
     type: 'debuff',
     name: 'Weaken',
     description: 'Afflicted entity deals 25% less damage',
@@ -81,3 +81,5 @@ export const frail = new Power({
     target: 'player',
     use: (block) => Math.floor(block * 0.75),
 })
+
+export default {regen, weak, vulnerable, strength, dexterity, frail}
