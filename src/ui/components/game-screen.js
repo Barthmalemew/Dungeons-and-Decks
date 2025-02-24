@@ -4,14 +4,14 @@ import {Component, html} from '../lib.js'
 
 //game logic imports
 import createNewGame from '../../game/new-game.js'
-//Need to import card creation from cards when they are done
+import {createCard} from '../../game/cards.js'
 //Need to import functions to test the current game condition such as the current room and its status along with whether the dungeon is complete or not
 //need to import the functions that allow for character selection and handle that process
 
 
 //UI component imports
 //campfire room import
-//cards import
+import Card from './cards.js'
 //drag and drop feature import
 //Map import
 //player and monster import
