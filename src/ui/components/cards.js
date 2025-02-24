@@ -1,6 +1,7 @@
 
 import {html, Component} from '../lib.js'
 //because this is dealing with card stuff it might need the file that deals with checking the conditions to see if a card can run
+import {canPlay} from '../../game/conditions.js'
 
 export default class Cards extends Component
 {
@@ -26,7 +27,8 @@ export function Card(props)
 {
     const {card, gameState} = props;
     //should probably record if the card can be played so that it can be rendered that way if so
-    //need to get the image associated with the card as well
+    const isDisabled = !canPlay(gameState, card)
+    //need to get the image associated with the card as well\
     const image = card.image ? `/image/cards/${card.image}` : `https://thumbs.dreamstime.com/b/banana-delicious-yellow-white-background-57012810.jpg`
 
     return html`
@@ -37,7 +39,7 @@ export function Card(props)
         key=${card.id}
         data-id=${card.id}
         data-card-upgrade=${card.upgraded}
-
+        disabled=${isDisabled}
     >
         <div class="Card-inner">
             <p class="Card-energy EnergyBadge">

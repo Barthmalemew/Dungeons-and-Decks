@@ -98,7 +98,6 @@ export class Card {
     }
 }
 
-//function to create a card
 /**
  * Turns a object based card into a class based one
  * @param {String} name 
@@ -107,14 +106,16 @@ export class Card {
  */
 export function createCard(name, shouldUpgrade)
 {
+    //this checks if a card is the upgraded version of itself
     if(name.includes('+'))
     {
+        //runs the createCard function with the should upgrade as true to create the upgraded
         return createCard(upgradeNameMap[name], true);
     }
-
+    //this finds the card from the card array and sets that object to the card variable
     let card = cards.find((card) => card.name === name);
     if(!card) throw new Error(`Could not find card: ${name}`)
-    
+    //this checks if a card should be upgraded
     if(shouldUpgrade)
     {
         const upgradeFn = cardUpgrades[name];
@@ -123,11 +124,12 @@ export function createCard(name, shouldUpgrade)
         if(!card.name.includes('+')) card.name+='+'
     }
     else{
+        //clones the card
         card = {...card};
     }
     return new Card(card);
 }
-
+//creates the upgrade map for names
 const upgradeNameMap = {}
 
 cards.forEach((card) => {
@@ -142,15 +144,16 @@ cards.forEach((card) => {
     }
 })
 
-//function to get a random card
+
 /**
- * 
+ * This pulls a random amount of cards from a card array given
  * @param {Array} list The collection of cards for the function to pick from
  * @param {Number} amount the amount of cards randomly chosen from the list given you wish to recieve
  * @returns {Array} an array with length amount filled with randomly picked cards from the list array
  */
 export function getRandomCards(list, amount)
 {
+    //creates an array of cards names to pull from as we need card objects to turn into class based versions of themselves
     const cardNames = list.map((card) => card.name)
     let results = [];
     for(let i = 0; i < amount; i++)
@@ -163,11 +166,11 @@ export function getRandomCards(list, amount)
     return results;
 }
 
-//function to get card rewards, should account for color here as class state might be able to be read here
 /**
- * 
+ * This function gets an array size amount filled with random cards after filtering out basic, curse, special, and status cards along with cards that don't belong to the class(es) assigned to the player that point in the run
  * @param {import('../game/actions.js').State} gameState 
- * @param {*} amount 
+ * @param {Number=} amount 
+ * @returns {Array} rewards
  */
 export function getCardRewards(gameState, amount=3)
 {
@@ -176,20 +179,30 @@ export function getCardRewards(gameState, amount=3)
     //need to find a way to check the player's class and ideally filter out the cards that don't match the classes assigned to them as eventually there are plans
     //to have a relic or alternate game option allow one to pick up cards from other classes, I am making the gamestate a parameter of the function to facilitate this
     let rewardCards = niceCards;
-    for(let [cClass, value] of Object.entries(gameState.character))
+    //for the class filtering, key = the name of a class, and value is a bool that designates true if a class is assigned and false if it isn't, other classes can be assigned from relics that allow cards from all classes to be picked up
+    for(let [key, value] of Object.entries(gameState.character))
     {
+        //if a class is not assiged true the body of this if statement will run filtering those cards out of the pool
         if(!value)
         {
             //this Color[cClass] might need to be Color[`${cClass}`]
-            rewardCards = rewardCards.filter((card) => card.cardColor !== Color[cClass]);
+            //the easiest way to do this is to find which classes aren't assigned and then filter out the array such that all of the cards in the pool dont have the class tag that was false
+            //this is because there is no real good way to write this check in a way that always takes the shorter route
+            //as such it makes more sense to filter out unwanted classes one by one instead of filtering for wanted as it feels easier to manage since im not repeatedly adding to a pile but witling one down
+            rewardCards = rewardCards.filter((card) => card.cardColor !== Color[key]);
         }
     }
+    //this is the array that actually holds the cards
     const rewards = [];
+    //just makes sure that the amount of cards rewards generated is true to the amount wanted 
     while(rewards.length < amount)
     {
+        //uses the getRandomCards function and the newly trimmed rewardCards array to pull a single random card
         const card = getRandomCards(rewardCards, 1)[0];
-
+        //this is for checking if the card pulled was a duplicate, can probably improve this by filtering out the card name and upgrade from the pool once piced since 
+        //rewardCards is no longer a constant array however not having as a constant array might cause issues
         const isDuplicate = Boolean(rewards.find((c) => c.name === card.name));
+        //if the card isnt a duplicate push it into the rewards array
         if(!isDuplicate)
         {
             rewards.push(card);
