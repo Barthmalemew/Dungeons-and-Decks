@@ -15,3 +15,90 @@
     --easing: cubic-bezier(0.23, 1, 0.32, 1);
     --lightpurple: hsl(255.21deg 44.38% 77.51%);
 }
+
+.CharacterSelect {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.CharacterGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 2rem;
+    margin: 0 auto;
+}
+
+.CharacterCard {
+    border-radius: 1rem;
+    padding: 1.5rem;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.CharacterFrame {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 2px solid var(--lightpurple);
+    margin: 1rem 0;
+}
+
+.SlotImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.CharImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+/*.CharacterFrame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}*/
+
+.CharacterFrame:hover img {
+    transform: scale(1.1);
+}
+
+.Stats {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.Description {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+}
+
+.BackButton {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    background: var(--lightpurple);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}

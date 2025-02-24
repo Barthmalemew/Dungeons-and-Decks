@@ -19,9 +19,21 @@ export default class CharacterSelectScreen extends Component {
 
     render() {
         const characters = [
-            { name: 'Warrior',  class: '💪'},
-            { name: 'Rogue',  class: '🎭'},
-            { name: 'Mage',   class: '🧙'},
+            { 
+                name: 'Warrior',
+                //border: '/images/fighter_slot.png',
+                image: '/images/warrior_real.png'
+            },
+            { 
+                name: 'Rogue',
+                //border: '/images/rogue_slot.png',
+                image: '/images/rogue_real.png'
+            },
+            { 
+                name: 'Mage',
+                //border: '/images/wizard_slot.png',
+                image: '/images/wizard_real.png'
+            }
         ]
 
         return html`
@@ -29,28 +41,18 @@ export default class CharacterSelectScreen extends Component {
                 <header class="Head"><h1>Select Your Character</h1></header>
                 <section class="CharacterGrid">
                     ${characters.map((character, index) => 
-                        html`<article class="CharacterCard">
+                        html`<article class="CharacterCard" 
+                            onClick=${() => this.props.onCharacterSelected(character)}>
                             <div class="CharacterInfo">
                                 <h2>${character.name}</h2>
-                                <div class="ClassIcon">${character.class}</div>
-                                <h3>Level: ${character.level}</h3>
+                                <div class="CharacterFrame">
+                                    <!--<img src="${character.border}" alt="${character.border}" class="SlotImage" />-->
+                                    <img src="${character.image}" alt="${character.name}" class="CharImage" />
+                                </div>
                             </div>
-                            <button 
-                                class="Action"
-                                onClick=${() => this.handleCharacterSelected(character)}
-                                style="background: rgba(0,0,0,0.2); color: white;"
-                            >
-                                Select ${character.name}
-                            </button>
                         </article>`
                     )}
                 </section>
-                <button 
-                    class="BackButton"
-                    onClick={this.handleBack}
-                >
-                    Back to Select
-                </button>
             </article>
         `
     }
