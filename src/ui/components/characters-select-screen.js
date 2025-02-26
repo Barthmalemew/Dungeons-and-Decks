@@ -22,17 +22,17 @@ export default class CharacterSelectScreen extends Component {
             { 
                 name: 'Warrior',
                 //border: '/images/fighter_slot.png',
-                image: '/images/warrior_real.png'
+                image: '/images/warrior_cropped.png'
             },
             { 
                 name: 'Rogue',
                 //border: '/images/rogue_slot.png',
-                image: '/images/rogue_real.png'
+                image: '/images/rogue_cropped.png'
             },
             { 
                 name: 'Mage',
                 //border: '/images/wizard_slot.png',
-                image: '/images/wizard_real.png'
+                image: '/images/wizard_cropped.png'
             }
         ]
 
