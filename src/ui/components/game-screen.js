@@ -11,7 +11,7 @@ import {createCard} from '../../game/cards.js'
 
 //UI component imports
 //campfire room import
-import Card from './cards.js'
+import Cards from './cards.js'
 //drag and drop feature import
 //Map import
 //player and monster import
@@ -139,7 +139,7 @@ export default class App extends Component {
         update(callback)
         {
             this.game.dequeue();
-            this.setState(this.game.state,callback);
+            this.setState(this.game.state, callback);
         }
         //This function undoes the last "action"
         undo()
@@ -150,7 +150,7 @@ export default class App extends Component {
 
         //playCard
         /**
-         * 
+         * This intitates a playCard action and the animation for playing cards
          * @param {String} cardId: The id of the card being played/ used to locate the card object in the players hand
          * @param {String} target: The target of the card attempting to be played
          * @param {HTMLElement} cardEl: The HTML element connected to the card attempting to be played
@@ -159,7 +159,7 @@ export default class App extends Component {
         {
             //this sets the variable card to the card object from the players hand with the id property of cardId
             const card = this.state.hand.find((c) => c.id === cardId);
-            this.game.enqueue({type: 'playCard',card, target}); //this is the thing actally intitating the code to play the card
+            this.game.enqueue({type: 'playCard', card, target}); //this is the thing actally intitating the code to play the card
 
             //this is where card animations should go when they get finished
 
@@ -252,11 +252,12 @@ export default class App extends Component {
                 //this.game.enqueue <- add the remove card action here use reward for card like with upgrade
             }
             //store the campfire choice enqueueing the campfireChoice action
-
+            this.game.enqueue({type: 'makeCampfireChoice', choice, reward});
             //update the game, it will have to pass another update into the update function to update the game twice
             //as not only does an action get enqueued for each of the choices but also an action get enqueued to record the choice
-            this.update();
+            this.update(this.update);
             //move to the next room
+            this.goToNextRoom();
         }
 
         //handleChestReward
@@ -286,7 +287,7 @@ export default class App extends Component {
         {
             if (typeof el === 'string') el = this.base.querySelector(el);
             el.toggleAttribute('open');
-            el.style.zIndex = '${this.overlayIndex}';
+            el.style.zIndex = `${this.overlayIndex}`;
             this.overlayIndex++;
         }
         
@@ -386,6 +387,8 @@ export default class App extends Component {
                             <${Cards} gameState=${state} type="deck" />
                         </div>
                     <//>
+
+                
                 `
         }
 }
