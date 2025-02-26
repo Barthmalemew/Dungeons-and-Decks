@@ -30,7 +30,7 @@ export function Card(props)
     const isDisabled = !canPlay(gameState, card)
     //need to get the image associated with the card as well\
     const image = card.image ? `/image/cards/${card.image}` : `https://thumbs.dreamstime.com/b/banana-delicious-yellow-white-background-57012810.jpg`
-
+    //need to add in a element that can be used to change the cards outline for strike and defends based on the base class the player has
     return html`
     <dad-card
         class="Card"

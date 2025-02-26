@@ -302,7 +302,7 @@ export default class App extends Component {
                 //add draw pile, discard pile, and exhaust pile element ids to the query selector terms along with relic overlay that shows up when you click a relic in your inventory to get more info about it
                 Escape: () => {
                     let openOverlays = this.base.querySelectorAll(
-                        '#Deck[open], #Map[open]'
+                        '#Deck[open], #Map[open], #DrawPile[open], #DiscardPile[open], #ExhaustPile[open]',
                     )
                     const mapOpened = document.querySelector('#Map').hasAttribute('open');
                     openOverlays.forEach((el) => el.removeAttribute('open'));
@@ -310,7 +310,10 @@ export default class App extends Component {
                 },
                 //add the overlay commands for the drawpile discard pile and exhaust pile, with a for draw pile, s for discard pile, and either x, q or r for exhaust pile
                 d: () => this.toggleOverlay('#Deck'),
-                m: () => this.toggleOverlay('#Map')
+                m: () => this.toggleOverlay('#Map'),
+                a: () => this.toggleOverlay('#DrawPile'),
+                s: () => this.toggleOverlay('#DiscardPile'),
+                x: () => this.toggleOverlay('#ExhaustPile')
             }
             keymap[key] && keymap[key]();
         }
@@ -378,18 +381,46 @@ export default class App extends Component {
 
                     </div>
                 <//>
+                
 
-
-                <${OverlayWithButtons} id='Deck" topright topright2>
-                    <button class="tooltipped tooltipped-se" aria-label="All the cards you own" onClick${() =>
+                <${OverlayWithButtons} id='Deck' topright topright2>
+                    <button class="tooltipped tooltipped-se" aria-label="All the cards you own" onClick=${() =>
                         this.toggleOverlay('#Deck')}><u>D</u>eck ${state.deck.length}</button>
-                        <div class='Overlay-content">
+                        <div class='Overlay-content'>
                             <${Cards} gameState=${state} type="deck" />
                         </div>
-                    <//>
-
+                <//>
                 
-                `
+
+                <${OverlayWithButtons} id='DrawPile' bottomleft>
+                    <button class="tooltipped tooltipped-ne" aria-label="The cards you will draw next in a random order" onClick=${() => 
+                        this.toggleOverlay('#DrawPile')}>Dr<u>a</u>w pile ${state.drawPile.length}</button>
+                    <div class="Overlay-content">
+                        <${Cards} gameState=${state} type="drawPile" />
+                    </div>
+                <//>
+                
+
+                <${OverlayWithButtons} id="ExhaustPile" topleft topleft2>
+                        <button class="tooltipped tooltipped-se" aria-label="The cards you have exhausted this combat" onClick=${() =>
+                        this.toggleOverlay('#ExhaustPile')}>E<u>x</u>haust pile ${state.exhaustPile.length}</button>
+                        <div class="Overlay-content">
+                            <${Cards} gameState=${state} type="exhaustPile" />
+                        </div>
+                <//>
+                
+
+                <${OverlayWithButtons} id="DiscardPile" bottomright>
+                    <button onClick=${() =>
+                    this.toggleOverlay('#DiscardPile')} align-right class="tooltipped tooltipped-nw tooltipped-multiline"
+                    aria-label="Cards you have already played. The discard pile is shuffled into the draw pile when the draw pile contains less cards than the amount attempting to be drawn.">Di<u>s</u>card pile
+                    ${state.discardPile.length}</button>
+                    <div class="Overlay-content">
+                        <${Cards} gameState=${state} type="discardPile"/>
+                    </div>
+                <//>
+            </div>
+            `
         }
 }
 
