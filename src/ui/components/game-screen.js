@@ -6,6 +6,7 @@ import {Component, html} from '../lib.js'
 import createNewGame from '../../game/new-game.js'
 import {createCard} from '../../game/cards.js'
 //Need to import functions to test the current game condition such as the current room and its status along with whether the dungeon is complete or not
+import {getCurrRoom, isCurrRoomCompleted, isDungeonCompleted} from '../../game/utils-state.js'
 //need to import the functions that allow for character selection and handle that process
 
 
@@ -27,7 +28,7 @@ export default class App extends Component {
     get didWin()
     {
         //set this return to return the value of a check that sees if the current room is completed by checking the game state.
-        return true;
+        return isCurrRoomCompleted(this.state);
     }
     //Function returns a bool that is the result of a check that determines if the players current health is less than one.
     get isDead()
@@ -38,7 +39,7 @@ export default class App extends Component {
     get didWinEntireGame()
     {
         //this return should run a function that takes the state of the game and returns true or false depending on if the player has completed the dungeon.
-        return false;
+        return isDungeonCompleted(this.state);
     }
     //constructor for the App class
     constructor()
@@ -121,6 +122,7 @@ export default class App extends Component {
                 game: this.game, //this sets game variable to the state of the game
                 run: this.runAction.bind(this), //this allows for actions to be executing via the console by using dad.run([insert action])
                 dealCards: this.dealCards.bind(this), //this "creates" the command .dealCards that runs the dealCards function
+                createCard,
                 nextRoom: this.goToNextRoom.bind(this),
                 undo: this.undo.bind(this),
                 //add some more function commands for stuff so that things like animations can be tested
@@ -344,7 +346,7 @@ export default class App extends Component {
             //The overlay for if the player is dead
             //
             return html`
-            <div class="App" tabindex="0">
+            <div class="App" tabindex="0" onKeyDown=${(e) => this.handleShortcuts(e)}>
                 <figure class="App-background" data-room-index=${state.dungeon.y}></div>
 
                 ${
