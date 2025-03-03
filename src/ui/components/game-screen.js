@@ -86,6 +86,11 @@ export default class App extends Component {
                 //maybe even set the character class
                 //probably should also set the players level
                 //and give them some relics(maybe)
+                //const roomIndex will be the room we want to move to preplanned for the demo 
+                //we will find it using findIndex on the dungeon graph array
+                //roomIndex = game.state.dungeon.graph[1].findIndex((r) => r.room)
+                //then move the player to this room by enqueuing a move action
+                //this.game.enqueue.({type: 'move', move: {y: 1, x: roomIndex}})
             }
             if(debugMode || 1)
             {
