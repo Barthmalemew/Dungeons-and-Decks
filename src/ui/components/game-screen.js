@@ -322,7 +322,10 @@ export default class App extends Component {
                 s: () => this.toggleOverlay('#DiscardPile'),
                 x: () => this.toggleOverlay('#ExhaustPile')
             }
-            keymap[key] && keymap[key]();
+            //Don't mind that this isn't an optional chain expression because this is backup if the optional chaining doesnt work
+            //keymap[key] && keymap[key]();
+            //This is optional chaining but idk if it works for this case
+            keymap?.[key]();
         }
 
         //handleMapMove
