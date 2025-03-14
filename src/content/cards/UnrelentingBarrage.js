@@ -1,6 +1,6 @@
 export default
 {
-    name: 'Unrelenting barrage',
+    name: 'Unrelenting Barrage',
     class: 'Rogue',
     type: 'attack',
     energy: 1,

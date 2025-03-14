@@ -20,6 +20,7 @@ import {Overlay, OverlayWithButtons} from './overlays.js'
 import StartRoom from './start-room.js'
 //character selection import
 //victory room import
+import startTutorial from '../intro-tutorial.js'
 
 //extend the component class from preact to create a class to be exported that can check the very basic state of the game {isPlayerDead, didPlayerWinCombat, didPlayerWinGame}.
 export default class App extends Component {

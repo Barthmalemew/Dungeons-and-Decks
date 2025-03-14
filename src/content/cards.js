@@ -1,13 +1,15 @@
 const cardIndex = [
     'Strike',
     'Shield',
-    'Unrelenting Barrage',
-    'Shadow Walk',
+    'UnrelentingBarrage',
+    'ShadowWalk',
     'Shadow',
 ]
 
-@type {import("../game/cards.js").CARD[]}
-
+/**
+ * A collection of all existing cards in this game.
+ * @type {import("../game/cards.js").CARD[]}
+ */
 export const cards = []
 
 export const cardUpgrades = {}
