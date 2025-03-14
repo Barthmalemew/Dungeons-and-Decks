@@ -78,19 +78,16 @@ export default class App extends Component {
             const game = createNewGame();
             this.game = game; //this sets the variable game defined in the constructor to the value of the newly created game
 
-            if(demo)
-            {
-                //add code to move the player to a predetermined room in the dungeon 
-                //just rewrite over the game with a different createNewGame that gives a curated starting deck
-                //maybe even set the character class
-                //probably should also set the players level
-                //and give them some relics(maybe)
-            }
-            if(debugMode || 1)
+            if(debugMode)
             {
                 //enable console *insert a "now this is debugging"*
                 this.enableConsole();
             }
+
+            if (urlParams.has('tutorial')) {
+			setTimeout(startTutorial, 800)
+		    }
+            
             this.setState(game.state, this.dealCards);
             //sounds effects need to be called for this
 

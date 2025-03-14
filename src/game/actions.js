@@ -11,7 +11,7 @@
 //import powers from './powers.js'
 //import {conditionsAreValid} from './conditions.js'
 //import {createCard, CardTargets} from './cards.js'
-//import {dungeonWithMap} from '../content/dungeon-encounters.js'
+import {dungeonWithMap} from '../content/dungeon-encounters.js'
 
 // Enable Immer's Map/Set support for immutable state updates
 //enableMapSet()
