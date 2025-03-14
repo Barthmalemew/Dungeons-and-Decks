@@ -27,8 +27,6 @@ export default function createNewGame(debug = false) {
 	 */
 	function createNewState() {
 		let state = actions.createNewState()
-		state.character = null  // Store selected character
-		state.selectedClass = null  // Store character class type
 		state = actions.setDungeon(state)
 		state = actions.addStarterDeck(state)
 		state = actions.drawCards(state)
