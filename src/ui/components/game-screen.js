@@ -4,6 +4,7 @@ import {Component, html} from '../lib.js'
 
 //game logic imports
 import createNewGame from '../../game/new-game.js'
+import * as sounds from '../tones.js'
 //Need to import card creation from cards when they are done
 //Need to import functions to test the current game condition such as the current room and its status along with whether the dungeon is complete or not
 //need to import the functions that allow for character selection and handle that process
@@ -92,7 +93,7 @@ export default class App extends Component {
                 this.enableConsole();
             }
             this.setState(game.state, this.dealCards);
-            //sounds effects need to be called for this
+            sounds.startGame();
 
             //check if there is an already saved game
             //if we find one we should load that over the set up new game

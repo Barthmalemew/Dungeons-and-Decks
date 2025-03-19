@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import "../styles/index.css";
 
-const sounds = ["startGame"]; //, 'startTurn', 'endTurn', 'selectCard', 'cardToHand', 'playCard']
+const sounds = ["startGame" , 'startTurn', 'endTurn', 'selectCard', 'cardToHand', 'playCard'];
 ---
 
 <script>
@@ -22,7 +22,7 @@ const sounds = ["startGame"]; //, 'startTurn', 'endTurn', 'selectCard', 'cardToH
 		el.addEventListener('click', () => {
 			const {sfx, coin} = el.dataset
 			if (sfx === 'whoosh') {
-				//sounds.playWhoosh(0.6)
+				sounds.playWhoosh(0.6)
 			} else if (coin) {
 				//sounds.playCoin(coin)
 			} else if (sfx) {

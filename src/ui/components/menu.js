@@ -1,7 +1,7 @@
 import {html, useState} from '../lib.js'
 import History from './history.js'
 //import {saveToUrl} from '../save-load.js'
-//import {toggleMute} from '../tones.js'
+import {toggleMute} from '../tones.js'
 
 // @ts-ignore
 const abandonGame = () => (window.location.href = window.location.origin)
