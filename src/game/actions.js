@@ -5,16 +5,16 @@
 // including combat, card management, dungeon navigation, and status effects.
 // =============================================================================
 
-//import {produce, enableMapSet} from 'immer'
-//import {clamp, shuffle} from '../utils.js'
+import {produce, enableMapSet} from 'immer'
+import {clamp, shuffle} from '../utils.js'
 //import {isDungeonCompleted, getRoomTargets, getCurrRoom} from './utils-state.js'
 //import powers from './powers.js'
-//import {conditionsAreValid} from './conditions.js'
-//import {createCard, CardTargets} from './cards.js'
-//import {dungeonWithMap} from '../content/dungeon-encounters.js'
+import {conditionsAreValid} from './conditions.js'
+import {createCard, CardTargets} from './cards.js'
+import {dungeonWithMap} from '../content/dungeon-encounters.js'
 
 // Enable Immer's Map/Set support for immutable state updates
-//enableMapSet()
+enableMapSet()
 
 // Type imports for TypeScript/JSDoc documentation
 /** @typedef {import('./dungeon.js').Dungeon} Dungeon */
@@ -115,10 +115,10 @@ function setDungeon(state, dungeon) {
 function addStarterDeck(state) {
     const deck = [
         // Basic defensive cards (4)
-        createCard('Defend'),
-        createCard('Defend'),
-        createCard('Defend'),
-        createCard('Defend'),
+        createCard('Shield'),
+        createCard('Shield'),
+        createCard('Shield'),
+        createCard('Shield'),
         // Basic attack cards (5)
         createCard('Strike'),
         createCard('Strike'),
@@ -126,7 +126,6 @@ function addStarterDeck(state) {
         createCard('Strike'),
         createCard('Strike'),
         // Special starter card (1)
-        createCard('Bash'),
     ]
     return produce(state, (draft) => {
         draft.deck = deck

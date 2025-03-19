@@ -81,5 +81,3 @@ export const frail = new Power({
     target: 'player',
     use: (block) => Math.floor(block * 0.75),
 })
-
-export default {regen, weak, vulnerable, strength, dexterity, frail}
