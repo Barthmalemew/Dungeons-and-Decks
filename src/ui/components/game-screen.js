@@ -4,10 +4,10 @@ import Flip from 'gsap/Flip'
 
 // Game logic
 import createNewGame from '../../game/new-game.js'
+import * as sounds from '../tones.js'
 import {createCard} from '../../game/cards.js'
 import {getCurrRoom, isCurrRoomCompleted, isDungeonCompleted} from '../../game/utils-state.js'
 // import {saveToUrl, loadFromUrl} from '../save-load.js'
-//import * as sounds from '../sounds.js'
 
 // UI Components
 // import CampfireRoom from './campfire.js'
