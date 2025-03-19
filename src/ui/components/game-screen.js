@@ -361,6 +361,8 @@ export default class App extends Component {
         const room = getCurrRoom(state) || { type: 'unknown' }
         const showCombat = room.type === 'monster'
 
+        //the stuff in the template string starting at line __ is testing to get the hands to work
+
         return html`
             <div class="App" tabindex="0" onKeyDown=${(e) => this.handleShortcuts(e)}>
                 <figure class="App-background" data-room-index=${state.dungeon.y}></figure>
@@ -390,6 +392,14 @@ export default class App extends Component {
                 }
                 
                 ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> </>`}
+
+                ${
+                    html`
+                    <div class='Hand'>
+                        <${Cards} gameState=${state} type="hand" />
+                    </div>
+                    `
+                }
 
                 <${OverlayWithButton} id="Menu" topleft>
                 <button onClick=${() => this.toggleOverlay('#Menu')}><u>Esc</u>ape</button>
