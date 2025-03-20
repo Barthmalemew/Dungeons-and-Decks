@@ -361,7 +361,7 @@ export default class App extends Component {
         const room = getCurrRoom(state) || { type: 'unknown' }
         const showCombat = room.type === 'monster'
 
-        //the stuff in the template string starting at line __ is testing to get the hands to work
+        //the stuff in the template string starting at line 396(currently) is testing to get the hands to work
 
         return html`
             <div class="App" tabindex="0" onKeyDown=${(e) => this.handleShortcuts(e)}>
