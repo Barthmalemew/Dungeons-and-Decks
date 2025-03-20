@@ -378,6 +378,14 @@ export default class App extends Component {
                 
                 ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> <//>`}
 
+                ${
+                    html`
+                    <div class='Hand'>
+                        <${Cards} gameState=${state} type="hand" />
+                    </div>
+                    `
+                }
+
                 <${OverlayWithButtons} id="Menu" topleft>
                 <button onClick=${() => this.toggleOverlay('#Menu')}<u>Esc</u>ape</button>
                     <div class="Overlay-content">
