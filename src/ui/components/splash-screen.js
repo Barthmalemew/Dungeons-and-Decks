@@ -2,6 +2,7 @@ import {html, Component} from '../lib.js'
 //import {getRuns} from '../../game/backend.js'
 //import {timeSince} from '../../utils.js'
 //import gsap from '../animations.js'
+import * as sounds from "../tones.js"
 
 export default class SplashScreen extends Component {
 	constructor() {
@@ -33,7 +34,14 @@ export default class SplashScreen extends Component {
 								<li><button onClick=${props.onNewGame}>New Game</a></li>
 					`
 							: html`
-							<li><button autofocus onClick=${props.onNewGame}>Play</a></li>
+							<!--<li><button autofocus onClick=${props.onNewGame}>Play</a></li>-->
+							<li>
+							<button onClick=${() => { 
+								sounds.startGame(); 
+								props.onNewGame(); 
+							}}>Play</button>
+							</li>
+
 							<li><a class="Button" href="/?debug&tutorial">Tutorial</a></li>
 							`}
 						<li><a class="Button" href="/collection">Collection</a></li>

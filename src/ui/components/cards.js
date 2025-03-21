@@ -28,12 +28,13 @@ export function Card(props)
     const {card, gameState} = props;
     //should probably record if the card can be played so that it can be rendered that way if so
     const isDisabled = !canPlay(gameState, card)
-    //need to get the image associated with the card as well\
-    const image = card.image ? `/image/cards/${card.image}` : `https://thumbs.dreamstime.com/b/banana-delicious-yellow-white-background-57012810.jpg`
-    //need to add in a element that can be used to change the cards outline for strike and defends based on the base class the player has
+    //need to get the image associated with the card as well
+    //this is testing if the image value of the card is set to something, not if that value it is set to exits or not
+    const image = card.image ? `/images/cards/${card.image}` : '/images/cards/batBannan.png';
+
     return html`
     <dad-card
-        class="Card"
+        class='Card'
         data-card-type=${card.type}
         data-card-target=${card.target}
         key=${card.id}

@@ -28,7 +28,7 @@ export default class DungeonsAndDecks extends Component {
         this.handleNewGame = this.handleNewGame.bind(this)
         this.handleContinue = this.handleContinue.bind(this)
         this.handleWin = this.handleWin.bind(this)
-        this.handleLoose = this.handleLoose.bind(this)
+        this.handleLoose = this.handleLose.bind(this)
         this.handleCharacterSelected = this.handleCharacterSelected.bind(this)
     }
 
@@ -46,7 +46,7 @@ export default class DungeonsAndDecks extends Component {
         this.setState({gameMode: GameModes.win})
     }
 
-    handleLoose() {
+    handleLose() {
         this.setState({gameMode: GameModes.splash})
     }
 
@@ -76,7 +76,7 @@ export default class DungeonsAndDecks extends Component {
             />`
         }
         if (gameMode === GameModes.gameplay) {
-            return html`<${GameScreen} onWin=${this.handleWin} onLose=${this.handleLoose} /> `
+            return html`<${GameScreen} onWin=${this.handleWin} onLose=${this.handleLose} /> `
         }
         if (gameMode === GameModes.win) {
             return html`<${WinScreen} onNewGame=${this.handleNewGame} /> `
