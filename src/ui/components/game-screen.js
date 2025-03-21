@@ -430,7 +430,7 @@ enableConsole()
                             
                             <button onClick=${() => this.props.onLose()}>Try again?</button>
                             </div>
-                            </> `
+                            <//> `
                 }
                 
                 ${
@@ -442,7 +442,7 @@ enableConsole()
 
                             <p><button onClick=${() => this.props.onWin()}>Continue?</button></p>
                             </div>
-                            </>`
+                            <//>`
                 }
                 
                 ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> <//>`}
@@ -465,7 +465,7 @@ enableConsole()
                 <${OverlayWithButton} id="Map" topright key=${1}>
                     <button align-right onClick=${() => this.toggleOverlay('#Map')}><u>M</u>ap</button>
                     <div class="Overlay-content">
-
+                        <p>Map import hasn't been added yet</p>
                     </div>
                 <//>
                 
