@@ -1,5 +1,5 @@
 @import './app.css';
-
+@import './overlay.css';
 
 :root {
     --card-width: 10em;

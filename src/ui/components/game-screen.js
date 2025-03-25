@@ -515,7 +515,7 @@ enableConsole()
                 <${OverlayWithButton} id="DiscardPile" bottomright>
                     <button onClick=${() =>
                     this.toggleOverlay('#DiscardPile')} align-right class="tooltipped tooltipped-nw tooltipped-multiline"
-                    aria-label="Cards you have already played. The discard pile is shuffled into the draw pile when the draw pile contains less cards than the amount attempting to be drawn.">Di<u>s</u>card pile
+                    aria-label="Cards you have already played. The discard pile is shuffled into the draw pile when the draw pile contains less cards than the amount attempting to be drawn.">Di<u>s</u>card pile 
                     ${state.discardPile.length}</button>
                     <div class="Overlay-content">
                         <${Cards} gameState=${state} type="discardPile"/>
