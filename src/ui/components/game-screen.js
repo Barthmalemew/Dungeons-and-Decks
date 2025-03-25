@@ -103,7 +103,7 @@ export default class App extends Component {
         //if we find one we should load that over the set up new gam
 
         // First set state without callback to ensure DOM is ready
-        this.setState(game.state, this.dealCards())
+        this.setState(game.state, this.dealCards)
         if(this.game.state.player)
         {
             console.log(`The state is set correctly and player evaluates to ${Object.prototype.toString.call(this.game.state.player)}`)
@@ -112,7 +112,7 @@ export default class App extends Component {
             console.warn(`State is not set correctly as player evaluates to ${Object.prototype.toString.call(this.game.state.player)}`)
         }
         
-        
+        //callback functions fulfill this purpose already so this code is not needed as setState is passed dealCards as a callback function ensuring it is only ran once that state has been set
         // Use setTimeout to ensure the component is fully mounted before manipulating DOM
         /* setTimeout(() => {
             if (this.base) {
