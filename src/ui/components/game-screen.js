@@ -17,7 +17,7 @@ import Cards from './cards.js'
 // import {DecksMap} from './Decks-map.js'
 import Menu from './menu.js'
 import {Overlay, OverlayWithButton} from './overlays.js'
-// import {Player, Monster} from './player.js'
+import {Player, Monster} from './player.js'
 // import {PublishRun} from './publish-run.js'
 import StartRoom from './start-room.js'
 // import VictoryRoom from './victory-room.js'
@@ -461,14 +461,38 @@ enableConsole()
                 ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> <//>`}
                 
                 ${
-                    
-                    html`
+					showCombat &&
+					html`
+						<div class="Targets Split">
+							<div class="Targets-group">
+								<${Player} model=${state.player} name="Player" />
+							</div>
+							<div class="Targets-group">
+								${room.monsters &&
+								room.monsters.map((monster) => html`<${Monster} model=${monster} gameState=${state} />`)}
+							</div>
+						</div>
 
-                    <div class='Hand'>
-                        <${Cards} gameState=${state} type="hand" />
-                    </div>
-                    `
-                }
+						<div class="Split ${!state.player.currentEnergy ? 'no-energy' : ''}">
+							<div class="EnergyBadge">
+								<span
+									class="tooltipped tooltipped-e tooltipped-multiline"
+									aria-label="Cards costs energy and this badge shows how much you have left this turn. Next turn your energy is refilled."
+									>${state.player.currentEnergy}/${state.player.maxEnergy}</span
+								>
+							</div>
+							<p class="Actions">
+								<button class="EndTurn" onClick=${() => this.endTurn()}><u>E</u>nd turn</button>
+							</p>
+						</div>
+
+						<div class="Hand">
+							<${Cards} gameState=${state} type="hand" />
+						</div>
+					`
+				}
+
+            
 
                 <${OverlayWithButton} id="Menu" topleft>
                 <button onClick=${() => this.toggleOverlay('#Menu')}><u>Esc</u>ape</button>
