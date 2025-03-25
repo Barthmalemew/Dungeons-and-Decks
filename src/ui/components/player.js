@@ -48,13 +48,14 @@ export const Monster = (props) => {
 		<//>
 	`
 }
-
+//not entirely sure what this code is needed for as the function above already does this 
 class intentTooltip extends Component
 {
     render(intent) {
 
         if (!intent) return null
 
+		let tooltip = ''
         if (intent.type === 'damage') 
         {
             tooltip = 'Deals ' + intent.value + ' damage'
@@ -63,7 +64,7 @@ class intentTooltip extends Component
         
 
         return html`
-            <span class="tooltipped tooltipped-s" aria-label=${intent}>
+            <span class="tooltipped tooltipped-s" aria-label=${tooltip}>
                 ${intent}
             </span>
         `

@@ -159,6 +159,7 @@ enableConsole()
         this.setState(this.game.state, callback)
     }
     //This function undoes the last "action"
+    //we need to "fix" the issue where because we don't have a functioning start room, hitting undo on the first room "undoes" the last move and just kinda softlocks 
     undo() {
         this.game.undo()
         this.setState(this.game.state,this.dealCards)
