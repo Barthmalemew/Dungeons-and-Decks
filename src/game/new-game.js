@@ -17,7 +17,7 @@ import ActionManager from './action-manager.js'
 /**
  * Creates a new game
  * @param {boolean} debug - whether to log actions to the console
- * @returns {Game}
+ * @returns {Game} game - A game object holding the beginning state
  */
 export default function createNewGame(debug = false) {
 	const actionManager = ActionManager({debug})

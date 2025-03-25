@@ -1,7 +1,9 @@
 import {html, Component} from '../lib.js'
 
 export default class StartRoom extends Component {
-	render() {
+
+	render(props) 
+    {
 		return html`
         <div class="container">
             <h1 center> Start </h1>

@@ -59,13 +59,14 @@ export default class App extends Component {
         this.goToNextRoom = this.goToNextRoom.bind(this) //this bundles the UI updates and function calls used to move to the next room into a single method
         this.toggleOverlay = this.toggleOverlay.bind(this) //this handles the toggling of overlays
         this.handleMapMove = this.handleMapMove.bind(this) //this handles the UI element updates and function calls to facilitate map movement
-        this.dealCards = this.dealCards.bind(this)
-        this.endTurn = this.endTurn.bind(this)
+        //this.dealCards = this.dealCards.bind(this)
+        //this.endTurn = this.endTurn.bind(this)
     }
 
      //This method runs when the component gets mounted to the DOM
-     componentDidMount()
-     {
+    componentDidMount()
+    {
+        console.log("ComponentDidMount() lifecycle")
          const urlParams = new URLSearchParams(window.location.search)
          const debugMode = urlParams.has('debug')
          const demo = urlParams.has('demo')
@@ -73,7 +74,7 @@ export default class App extends Component {
          const game = createNewGame()
          this.game = game; //this sets the variable game defined in the constructor to the value of the newly created game
 
-         if(demo)
+         if(demo || 1)
          {
             /**
              * Other things we might want to demo/tutorial to do
@@ -84,10 +85,10 @@ export default class App extends Component {
              */
              //const roomIndex will be the room we want to move to preplanned for the demo 
              //we will find it using findIndex on the dungeon graph array
-              const roomIndex = game.state.dungeon.graph[1].findIndex((r) => r.room)
+            const roomIndex = game.state.dungeon.graph[1].findIndex((r) => r.room)
              //then move the player to this room by enqueuing a move action
-             this.game.enqueue({type: 'move', move: {y: 1, x: roomIndex}})
-             this.game.dequeue()
+            this.game.enqueue({type: 'move', move: {y: 1, x: roomIndex}})
+            this.game.dequeue()
          }
          if(debugMode || 1)
          {
@@ -97,19 +98,27 @@ export default class App extends Component {
          if (urlParams.has('tutorial')) {
             setTimeout(startTutorial, 800)
         }
-        //this.setState(game.state, this.dealCards);
+        
         //check if there is an already saved game
         //if we find one we should load that over the set up new gam
 
         // First set state without callback to ensure DOM is ready
-        this.setState(game.state)
+        this.setState(game.state, this.dealCards())
+        if(this.game.state.player)
+        {
+            console.log(`The state is set correctly and player evaluates to ${Object.prototype.toString.call(this.game.state.player)}`)
+        }
+        else{
+            console.warn(`State is not set correctly as player evaluates to ${Object.prototype.toString.call(this.game.state.player)}`)
+        }
+        
         
         // Use setTimeout to ensure the component is fully mounted before manipulating DOM
-        setTimeout(() => {
+        /* setTimeout(() => {
             if (this.base) {
                 this.dealCards()
             }
-        }, 50)
+        }, 50) */
 
     }
 
@@ -152,7 +161,7 @@ enableConsole()
     //This function undoes the last "action"
     undo() {
         this.game.undo()
-        this.setState(this.game.state, this.dealCards)
+        this.setState(this.game.state,this.dealCards)
     }
 
     /**
@@ -335,66 +344,69 @@ enableConsole()
         this.goToNextRoom()
     }
 
-        
-        
-        //goToNextRoom
-        goToNextRoom()
-        {
-            //adding a log here to make sure this funtion will run correctly in different situations
-            //and also to document how this function accomplishes its task
-            console.log('Function run: goToNextRoom\nEffect: toggles the map overlay')
-            this.toggleOverlay('#Map')
-        }
+          
+    //goToNextRoom
+    goToNextRoom()
+    {
+        //adding a log here to make sure this funtion will run correctly in different situations
+        //and also to document how this function accomplishes its task
+        console.log('Function run: goToNextRoom\nEffect: toggles the map overlay')
+        this.toggleOverlay('#Map')
+    }
 
-        //toggleOverlay
-        /**
-         * this function sets the overlay element provided to the zIndex of the overlayIndex value bringing it to the foreground and incrementing the overlayIndex value
-         * @param {*} el The element or string corresponding to the overlay being toggled, if it is a string it gets casted into a HTMLElement
-         */
-        toggleOverlay(el)
-        {
-            //changed from if(typeof el === 'string' && this.base) as this if statement is never true since 1. a string cant also be part of the base and 
-            //2. this function sometimes recieves a string tied to a class/id value and sometimes recieves a HTMLelement so it needs a way to find the HTMLelement from the string
-            if (typeof el === 'string') el = this.base.querySelector(el)
-            if (!el) {
-                console.warn('Overlay element not found')
-                return
-            }
-            el.toggleAttribute('open')
-            el.style.zIndex = `${this.overlayIndex}`
-            this.overlayIndex++
+    //toggleOverlay
+    /**
+     * this function sets the overlay element provided to the zIndex of the overlayIndex value bringing it to the foreground and incrementing the overlayIndex value
+     * @param {*} el The element or string corresponding to the overlay being toggled, if it is a string it gets casted into a HTMLElement
+     */
+    toggleOverlay(el) {
+        //changed from if(typeof el === 'string' && this.base) as this if statement is never true since 1. a string cant also be part of the base and 
+        //2. this function sometimes recieves a string tied to a class/id value and sometimes recieves a HTMLelement so it needs a way to find the HTMLelement from the string
+        if (typeof el === 'string') {
+            console.log('Recieved a string\n')
+            el = this.base.querySelector(el)
         }
-        
-        //handle shortcuts
-        handleShortcuts(event)
-        {
-            if(event.target.nodeName === 'INPUT') return
-            const {key} = event
-            const keymap = {
-                e: () => this.endTurn(),
-                u: () => this.undo(),
-                //add draw pile, discard pile, and exhaust pile element ids to the query selector terms along with relic overlay that shows up when you click a relic in your inventory to get more info about it
-                Escape: () => {
-                    let openOverlays = this.base.querySelectorAll(
-                        '#Deck[open], #Map[open], #DrawPile[open], #DiscardPile[open], #ExhaustPile[open]',
-                    )
-                    //might need to change document to this.base
-                    const mapOpened = document.querySelector('#Map').hasAttribute('open')
-                    openOverlays.forEach((el) => el.removeAttribute('open'))
-                    if(!mapOpened) this.toggleOverlay('#Menu')
-                },
-                //add the overlay commands for the drawpile discard pile and exhaust pile, with a for draw pile, s for discard pile, and either x, q or r for exhaust pile
-                d: () => this.toggleOverlay('#Deck'),
-                m: () => this.toggleOverlay('#Map'),
-                a: () => this.toggleOverlay('#DrawPile'),
-                s: () => this.toggleOverlay('#DiscardPile'),
-                x: () => this.toggleOverlay('#ExhaustPile')
-            }
-            //Don't mind that this isn't an optional chain expression because this is backup if the optional chaining doesnt work
-            //keymap[key] && keymap[key]();
-            //This is optional chaining but idk if it works for this case
-            keymap?.[key]()
+        if (!el) {
+            console.warn('Overlay element not found\nType found: ')
+            console.warn(Object.prototype.toString.call(el))
+
+            return
         }
+        el.toggleAttribute('open')
+        el.style.zIndex = `${this.overlayIndex}`
+        this.overlayIndex++
+    }
+
+    //handle shortcuts
+    handleShortcuts(event) {
+        if (event.target.nodeName === 'INPUT') return
+        const { key } = event
+        const keymap = {
+            e: () => this.endTurn(),
+            u: () => this.undo(),
+            //add draw pile, discard pile, and exhaust pile element ids to the query selector terms along with relic overlay that shows up when you click a relic in your inventory to get more info about it
+            Escape: () => {
+                let openOverlays = this.base.querySelectorAll(
+                    '#Deck[open], #Map[open], #DrawPile[open], #DiscardPile[open], #ExhaustPile[open]',
+                )
+                //might need to change document to this.base
+                const mapOpened = document.querySelector('#Map').hasAttribute('open')
+                openOverlays.forEach((el) => el.removeAttribute('open'))
+                if (!mapOpened) this.toggleOverlay('#Menu')
+            },
+            //add the overlay commands for the drawpile discard pile and exhaust pile, with a for draw pile, s for discard pile, and either x, q or r for exhaust pile
+            d: () => this.toggleOverlay('#Deck'),
+            m: () => this.toggleOverlay('#Map'),
+            a: () => this.toggleOverlay('#DrawPile'),
+            s: () => this.toggleOverlay('#DiscardPile'),
+            x: () => this.toggleOverlay('#ExhaustPile')
+        }
+        //Don't mind that this isn't an optional chain expression because this is backup if the optional chaining doesnt work
+        //keymap[key] && keymap[key]();
+        //This is optional chaining but idk if it works for this case
+        //this returns an error if a a key that isnt defined is 
+        keymap?.[key]?.()
+    }
 
     handleMapMove(move) {
         this.toggleOverlay('#Map')
@@ -406,6 +418,7 @@ enableConsole()
 
         render(props, state)
         {
+            console.log("render() lifecycle")
             //if(!state.player) return
             if(!state?.player) {
                 return html`<div class="App loading">Loading game...</div>`
@@ -418,7 +431,7 @@ enableConsole()
             //The overlay for if the player is dead
             //
             return html`
-            <div class="App" tabindex="0" onKeyDown=${(e) => this.handleShortcuts(e)}>
+            <div class="App" tabindex="0" onkeydown=${(e) => this.handleShortcuts(e)}>
                 <figure class="App-background" data-room-index=${state.dungeon.y}></div>
 
                 ${
@@ -428,7 +441,7 @@ enableConsole()
                             <h1 center>You have died!</h1>
                             <!-- Put the run stats and the button to publish the run to the back in (if that gets made) here-->
                             
-                            <button onClick=${() => this.props.onLose()}>Try again?</button>
+                            <button onClick=${() => this.props.onLoose()}>Try again?</button>
                             </div>
                             <//> `
                 }
@@ -446,9 +459,11 @@ enableConsole()
                 }
                 
                 ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> <//>`}
-
+                
                 ${
+                    
                     html`
+
                     <div class='Hand'>
                         <${Cards} gameState=${state} type="hand" />
                     </div>
@@ -470,7 +485,7 @@ enableConsole()
                 <//>
                 
 
-                <${OverlayWithButtons} id='Deck' topright topright2>
+                <${OverlayWithButton} id='Deck' topright topright2>
                     <button class="tooltipped tooltipped-se" aria-label="All the cards you own" onClick=${() =>
                         this.toggleOverlay('#Deck')}><u>D</u>eck ${state.deck.length}</button>
                         <div class='Overlay-content'>
@@ -479,7 +494,7 @@ enableConsole()
                 <//>
                 
 
-                <${OverlayWithButtons} id='DrawPile' bottomleft>
+                <${OverlayWithButton} id='DrawPile' bottomleft>
                     <button class="tooltipped tooltipped-ne" aria-label="The cards you will draw next in a random order" onClick=${() => 
                         this.toggleOverlay('#DrawPile')}>Dr<u>a</u>w pile ${state.drawPile.length}</button>
                     <div class="Overlay-content">
@@ -488,7 +503,7 @@ enableConsole()
                 <//>
                 
 
-                <${OverlayWithButtons} id="ExhaustPile" topleft topleft2>
+                <${OverlayWithButton} id="ExhaustPile" topleft topleft2>
                         <button class="tooltipped tooltipped-se" aria-label="The cards you have exhausted this combat" onClick=${() =>
                         this.toggleOverlay('#ExhaustPile')}>E<u>x</u>haust pile ${state.exhaustPile.length}</button>
                         <div class="Overlay-content">
@@ -497,7 +512,7 @@ enableConsole()
                 <//>
                 
 
-                <${OverlayWithButtons} id="DiscardPile" bottomright>
+                <${OverlayWithButton} id="DiscardPile" bottomright>
                     <button onClick=${() =>
                     this.toggleOverlay('#DiscardPile')} align-right class="tooltipped tooltipped-nw tooltipped-multiline"
                     aria-label="Cards you have already played. The discard pile is shuffled into the draw pile when the draw pile contains less cards than the amount attempting to be drawn.">Di<u>s</u>card pile

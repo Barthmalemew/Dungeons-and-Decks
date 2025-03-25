@@ -76,7 +76,7 @@ export default class DungeonsAndDecks extends Component {
             />`
         }
         if (gameMode === GameModes.gameplay) {
-            return html`<${GameScreen} onWin=${this.handleWin} onLose=${this.handleLose} /> `
+            return html`<${GameScreen} onWin=${this.handleWin} onLoose=${this.handleLose} /> `
         }
         if (gameMode === GameModes.win) {
             return html`<${WinScreen} onNewGame=${this.handleNewGame} /> `

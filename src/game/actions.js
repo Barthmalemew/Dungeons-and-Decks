@@ -7,8 +7,8 @@
 
 import {produce, enableMapSet} from 'immer'
 import {clamp, shuffle} from '../utils.js'
-//import {isDungeonCompleted, getRoomTargets, getCurrRoom} from './utils-state.js'
-//import powers from './powers.js'
+import {isDungeonCompleted, getRoomTargets, getCurrRoom} from './utils-state.js'
+import powers from './powers.js'
 import {conditionsAreValid} from './conditions.js'
 import {createCard, CardTargets} from './cards.js'
 import {dungeonWithMap} from '../content/dungeon-encounters.js'
