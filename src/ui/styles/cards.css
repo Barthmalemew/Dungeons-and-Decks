@@ -61,7 +61,7 @@
 	flex-flow: column nowrap;
 	/*background: #2a3335*/
 	background: #2a3335;
-	color: var(--text);
+	color: var(--whiteText);
 	text-align: center;
 }
 .Card-media {
