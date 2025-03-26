@@ -95,13 +95,13 @@
 	font-family: 'heliotrope_4_caps';
 	font-feature-settings: 'ss10';
 	font-size: 0.75rem;
-	background: hsl(191.3, 33.3%, 18.8%);
+	background: hsl(231.3deg 36.07% 51.85%);/*hsl(191.3, 33.3%, 18.8%);*/
 	border: 1px solid hsla(0, 0%, 0%, 0.2);
 	border-bottom-width: 2px;
 	border-radius: 0.4em;
 }
 .Card[data-card-type='attack'] .Card-type {
-	background: hsl(0deg 33% 19%);
+	background: hsl(0deg 45.93% 40.85%); /*hsl(0deg 33% 19%);*/
 }
 .Card-description {
 	font-size: 0.875rem;
