@@ -1,5 +1,7 @@
 @import './app.css';
 @import './overlay.css';
+@import './cards.css';
+
 
 :root {
     --card-width: 10em;
@@ -10,10 +12,12 @@
     --red: hsl(0, 77%, 29%);
     --bg: hsl(0deg 0% 11.6%);
     --text: hsl(250.06deg 39.88% 67.58%);
+    --whiteText: hsl(61.04deg 17.99% 74.55%);
     --text-inverse: hsla(0, 0%, 0%, 0.95);
     --text-stroke: var(--text-inverse);
     --easing: cubic-bezier(0.23, 1, 0.32, 1);
     --lightpurple: hsl(255.21deg 44.38% 77.51%);
+    --energyYellow: #af9442;
 }
 
 .CharacterSelect {
