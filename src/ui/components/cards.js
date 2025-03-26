@@ -43,15 +43,18 @@ export function Card(props)
         disabled=${isDisabled}
     >
         <div class="Card-inner">
+            <!-- Card name on top -->
+            <h3 class="Card-name">${card.name}</h3> <!-- (Strike) -->
+
             <p class="Card-energy EnergyBadge">
                 <span>${card.energy}</span>
             </p>
             <figure class="Card-media">
                 <img src=${image} alt="A picture of a banana, being used as a placeholder asset" />
             </figure>
-            <p class="Card-type">${card.type}</p>
-            <h3 class="Card-name">${card.name}</h3>
-            <p class="Card-description">${card.description}</p>
+
+            <p class="Card-type">${card.type}</p> <!-- Middle (attack)-->
+            <p class="Card-description">${card.description}</p> <!-- Bottom (desc)-->
         </div>
     </dad-card>
     `

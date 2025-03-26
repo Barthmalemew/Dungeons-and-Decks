@@ -248,7 +248,7 @@ h2 {
 	align-items: center;
 	border: 3px solid hsla(0, 0%, 0%, 0.8);
 	transform: rotate(45deg);
-	background-color: var(--teal);
+	background-color: var(--energyYellow);
 	text-shadow:
 		2px 2px 0 #000,
 		-1px -1px 0 #000,
@@ -259,6 +259,8 @@ h2 {
 	margin-left: 1rem;
 	transition: background 700ms;
 	user-select: none;
+	top: 2.25em;
+    left: .2em;
 }
 .EnergyBadge > span {
 	transform: rotate(-45deg);
