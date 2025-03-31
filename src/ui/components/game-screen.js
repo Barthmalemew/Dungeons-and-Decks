@@ -1,6 +1,6 @@
 
 import {html, Component} from '../lib.js'
-//import gsap from '../animations.js'
+import gsap from '../animations.js'
 import Flip from 'gsap/Flip'
 
 // Game logic
