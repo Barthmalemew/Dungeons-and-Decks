@@ -1,3 +1,4 @@
+
 import {html, Component} from '../lib.js'
 //import gsap from '../animations.js'
 import Flip from 'gsap/Flip'
@@ -424,7 +425,7 @@ enableConsole()
             if(!state?.player) {
                 return html`<div class="App loading">Loading game...</div>`
             }
-            // @ts-expect-error
+            
             const room = getCurrRoom(state) || { type: 'unknown' }
             const showCombat = room.type === 'monster'
 
