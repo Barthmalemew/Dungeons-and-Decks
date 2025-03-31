@@ -5,6 +5,7 @@ const cardIndex = [
     'ShadowWalk',
     'Shadow',
     'TrueStrike',
+    'Bash',
 ]
 
 /**
