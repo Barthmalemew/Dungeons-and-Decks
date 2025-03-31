@@ -4,6 +4,7 @@ const cardIndex = [
     'UnrelentingBarrage',
     'ShadowWalk',
     'Shadow',
+    'TrueStrike',
 ]
 
 /**
