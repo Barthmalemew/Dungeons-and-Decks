@@ -13,7 +13,7 @@ import {getCurrRoom, isCurrRoomCompleted, isDungeonCompleted} from '../../game/u
 // UI Components
 // import CampfireRoom from './campfire.js'
 import Cards from './cards.js'
-// import enableDragDrop from '../dragdrop.js'
+import enableDragDrop from '../dragdrop.js'
 // import DungeonStats from './dungeon-stats.js'
 // import {DecksMap} from './Decks-map.js'
 import Menu from './menu.js'
