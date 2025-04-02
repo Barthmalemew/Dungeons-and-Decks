@@ -1,7 +1,7 @@
 export default
 {
     name: 'Bash',
-    class: 'Knight',
+    cardColor: 'Red',
     type: 'attack',
     energy: 2,
     target: 'enemy',
