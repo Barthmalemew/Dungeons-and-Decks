@@ -1,6 +1,7 @@
+export default
 {
     name: 'True Strike',
-    class: 'all',
+    cardColor: 'Purple',
     type: 'attack',
     energy: 1,
     target: 'enemy',
