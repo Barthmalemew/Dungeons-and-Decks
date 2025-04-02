@@ -43,6 +43,9 @@ export function Card(props)
         disabled=${isDisabled}
     >
         <div class="Card-inner">
+            <figure>
+                <img src=${border} alt="Card border"
+            </figure>
             <!-- Card name on top -->
             <h3 class="Card-name">${card.name}</h3> <!-- (Strike) -->
 
