@@ -40,7 +40,7 @@ gsap.registerEffect({name: 'dealCards',
 //this creates the animation of the cards flowing to the discard pile
 gsap.registerEffect({
     name: 'discardHand',
-    effect: (target, config) => {
+    effect: (targets, config) => {
         gsap.killTweensOf(targets)
         const x = window.innerWidth
         return gsap.to(targets, {
