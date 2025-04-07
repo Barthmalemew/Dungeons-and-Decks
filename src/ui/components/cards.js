@@ -44,7 +44,7 @@ export function Card(props)
     >
         <div class="Card-inner">
             <figure>
-                <img src=${border} alt="Card border"
+                <img src=${card.cardColor} alt="Card border"
             </figure>
             <!-- Card name on top -->
             <h3 class="Card-name">${card.name}</h3> <!-- (Strike) -->
