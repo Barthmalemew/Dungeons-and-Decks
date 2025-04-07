@@ -1,6 +1,6 @@
 export default
 {
-    name: 'Unrelenting barrage',
+    name: 'Unrelenting Barrage',
     cardColor: 'Green',
     type: 'attack',
     energy: 1,
