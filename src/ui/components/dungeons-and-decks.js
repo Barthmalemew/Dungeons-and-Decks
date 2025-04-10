@@ -3,6 +3,7 @@ import SplashScreen from './splash-screen.js'
 import CharacterSelectScreen from './characters-select-screen.js'
 import GameScreen from './game-screen.js'
 import WinScreen from './win-screen.js'
+import createNewGame from '../../game/new-game.js'
 import '../styles/index.css'
 
 /** @enum {string} */
@@ -22,18 +23,21 @@ export default class DungeonsAndDecks extends Component {
         super()
         const urlParams = new URLSearchParams(window.location.search)
         const initialGameMode = urlParams.has('debug') ? GameModes.gameplay : GameModes.splash
-
-        this.state = {gameMode: initialGameMode}
-
+        
+        // Game object is now created within GameScreen based on character choice
+        this.state = {gameMode: initialGameMode, selectedCharacter: null}
+        
         this.handleNewGame = this.handleNewGame.bind(this)
         this.handleContinue = this.handleContinue.bind(this)
         this.handleWin = this.handleWin.bind(this)
-        this.handleLoose = this.handleLose.bind(this)
+        this.handleLose = this.handleLose.bind(this)
         this.handleCharacterSelected = this.handleCharacterSelected.bind(this)
     }
 
     async handleNewGame() {
         console.log('Transitioning to character select')
+        // Reset selected character when starting a new flow
+        this.setState({ selectedCharacter: null })
         await this.setState({gameMode: GameModes.characterSelect})
         window.history.pushState('', document.title, window.location.pathname)
     }
@@ -49,19 +53,11 @@ export default class DungeonsAndDecks extends Component {
     handleLose() {
         this.setState({gameMode: GameModes.splash})
     }
-
-    handleCharacterSelected(character) {
-        // Store character in game state
-        window.game.state.character = character
-        console.log('Character selected:', character.name)
-        this.setState({gameMode: GameModes.gameplay})
-    }
-
-    initializeCharacterStats(character) {
-        window.game.state.player.maxHealth = character.health
-        window.game.state.player.currentHealth = character.health
-        window.game.state.player.maxEnergy = character.energy
-        window.game.state.player.currentEnergy = character.energy
+    
+    async handleCharacterSelected(character) {
+        console.log('Character selected:', character);
+        // Store the selected character data and switch to gameplay mode
+        await this.setState({gameMode: GameModes.gameplay, selectedCharacter: character});
     }
 
     render() {
@@ -76,7 +72,8 @@ export default class DungeonsAndDecks extends Component {
             />`
         }
         if (gameMode === GameModes.gameplay) {
-            return html`<${GameScreen} onWin=${this.handleWin} onLoose=${this.handleLose} /> `
+            // Pass the selected character data to GameScreen
+            return html`<${GameScreen} selectedCharacter=${this.state.selectedCharacter} onWin=${this.handleWin} onLoose=${this.handleLose} /> `
         }
         if (gameMode === GameModes.win) {
             return html`<${WinScreen} onNewGame=${this.handleNewGame} /> `
