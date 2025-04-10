@@ -1,7 +1,7 @@
 export default
 {
-    name: 'Unrelenting barrage',
-    class: 'Rogue',
+    name: 'Unrelenting Barrage',
+    cardColor: 'Green',
     type: 'attack',
     energy: 1,
     target: 'enemy',
