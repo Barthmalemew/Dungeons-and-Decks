@@ -49,7 +49,7 @@ export const Monster = (props) => {
 	`
 }
 
-class intentTooltip extends Component
+class IntentTooltip extends Component
 {
     render(intent) {
 
@@ -76,6 +76,7 @@ class Target extends Component
     render({model, type, name, children}, state) {
 		const isDead = model.currentHealth < 1
 		const hp = isDead ? 0 : model.currentHealth
+		console.log("Rendering Target health:", hp, "max:", model.maxHealth);
 		return html`
 			<div class=${`Target${isDead ? ' Target--isDead' : ''}`} data-type=${type}>
 				<h2><span class="Target-name">${name}</span> ${children}</h2>
