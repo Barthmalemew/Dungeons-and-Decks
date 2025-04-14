@@ -9,6 +9,8 @@
  * @prop{Function=} use: The parameter and return value of the use function.
  */
 
+import { describe } from "node:test"
+
 /**
  * Stacks are a value that determines the duration or level of powers
  * however they are not actually a part of the Power class and instead are a part of the powers object or the cardPowers object
@@ -82,4 +84,13 @@ export const frail = new Power({
     use: (block) => Math.floor(block * 0.75),
 })
 
-export default {regen, weak, vulnerable, strength, dexterity, frail}
+export const dblAttack = new Power({
+    type: 'buff',
+    name: 'True strike',
+    description: 'Attacks are played ${stacks} times',
+    duration: 'counter',
+    target: 'Player',
+    use: (stacks) => stacks,
+})
+
+export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack}
