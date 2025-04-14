@@ -9,8 +9,6 @@
  * @prop{Function=} use: The parameter and return value of the use function.
  */
 
-import { describe } from "node:test"
-
 /**
  * Stacks are a value that determines the duration or level of powers
  * however they are not actually a part of the Power class and instead are a part of the powers object or the cardPowers object
@@ -20,8 +18,13 @@ import { describe } from "node:test"
  * this allows for a way to imitate a data structure like maps or sets without having to use one as object properties have to have unique keys.
  */
 
+//Power class
 class Power{
-    
+
+    /**
+     * 
+     * @param {POWER} power - The base to create a class from 
+     */
     constructor(power) {
         const{name, description, duration,type,target,use} = power
         this.name = name
