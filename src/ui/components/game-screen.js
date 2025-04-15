@@ -472,6 +472,18 @@ enableConsole()
                         ><//>
                     <//>`
                 }
+                ${
+                    !this.didWinEntireGame && 
+                    this.didWin &&
+                    room.type === 'monster' &&
+                    html`<${Overlay} middle>
+                        <${VictoryRoom}
+                            gameState=${state}
+                            onSelectCard=${(card) => this.handlePlayerReward('addCard',card)}
+                            onContinue=${() => this.goToNextRoom()}
+                        ><//>
+                    <//> `
+                }
                 
                 ${
 					showCombat &&

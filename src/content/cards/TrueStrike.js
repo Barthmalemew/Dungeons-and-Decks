@@ -2,7 +2,7 @@
 export default
 {
     name: 'True Strike',
-    cardColor: 'Purple',
+    color: 'Purple',
     type: 'attack',
     energy: 1,
     target: 'enemy',

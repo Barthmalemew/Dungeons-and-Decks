@@ -26,7 +26,7 @@ export class DadMap extends Component {
 
     componentDidMount()
     {
-        this.drawPathsDebounced = debounce(this.drawPathsDebounced.bind(this), 300, {leading: true, trailing : true})
+        this.drawPathsDebounced = debounce(this.drawPaths.bind(this), 300, {leading: true, trailing : true})
         //this triggers an update
         this.setState({universe: 42})
     }
@@ -173,7 +173,7 @@ export class DadMap extends Component {
                     ${row.map((node, nodeIndex) => {
                         const isCurrent = rowIndex === y && nodeIndex === x
                         const isConnected = currentNode.edges.has(node.id)
-                        const completedCurrentRoom = isRoomComplete(dungeon.graph[y][x].room)
+                        const completedCurrentRoom = isRoomCompleted(dungeon.graph[y][x].room)
                         const canVisit = isConnected && completedCurrentRoom
                         return html`<dad-map-node
                         key=${`${rowIndex}${nodeIndex}`}
