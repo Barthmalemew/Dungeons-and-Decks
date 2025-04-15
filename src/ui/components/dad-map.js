@@ -2,7 +2,7 @@ import { Component, html } from '../lib.js'
 import {debounce, random as randomBetween} from '../../utils.js'
 import {isRoomCompleted} from '../../game/utils-state.js'
 import { emojiFromNodeType, nodeTypeToName, generatePaths } from '../../game/dungeon.js'
-import { object } from 'astro/zod.js'
+
 
 
 /**
