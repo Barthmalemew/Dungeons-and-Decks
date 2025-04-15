@@ -15,7 +15,7 @@ import {getCurrRoom, isCurrRoomCompleted, isDungeonCompleted} from '../../game/u
 import Cards from './cards.js'
 import enableDragDrop from '../dragdrop.js'
 // import DungeonStats from './dungeon-stats.js'
-// import {DecksMap} from './Decks-map.js'
+import {DadMap} from './dad-map.js'
 import Menu from './menu.js'
 import {Overlay, OverlayWithButton} from './overlays.js'
 import {Player, Monster} from './player.js'
@@ -517,7 +517,7 @@ enableConsole()
                 <${OverlayWithButton} id="Map" topright key=${1}>
                     <button align-right onClick=${() => this.toggleOverlay('#Map')}><u>M</u>ap</button>
                     <div class="Overlay-content">
-                        <p>Map import hasn't been added yet</p>
+                        <${DadMap} dungeon=${state.dungeon} x=${state.dungeon.x} y=${state.dungeon.y} scatter=${20} onSelect=${this.handleMapMove}><//>
                     </div>
                 <//>
                 
