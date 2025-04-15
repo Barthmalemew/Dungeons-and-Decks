@@ -65,15 +65,16 @@ export class DadMap extends Component {
             node.style.transform = `translate3d(
             ${randomBetween(-distance, distance)}%,
             ${randomBetween(-distance, distance)}%,
-            0)`
+            0)
+            `
         })
     }
 
     //this draws the SVG lines between the DOM nodes from the dungeon's path, however it might be a bit intensive so it should be done as little as possible
     drawPaths() 
     {
-        if(this.debug) console.time('drawPaths');
-        if(this.debug) console.groupCollapsed(`drawing ${this.props.dungeon.paths.length} paths`);
+        if(this.debug) console.time('drawPaths')
+        if(this.debug) console.groupCollapsed(`drawing ${this.props.dungeon.paths.length} paths`)
 
         const existingPaths = this.base?.querySelectorAll(`svg.paths`) || []
         for (const p of existingPaths)
@@ -87,8 +88,8 @@ export class DadMap extends Component {
 
         this.didDrawPaths = true
 
-        if(this.debug) console.groupEnd();
-        if(this.debug) console.timeEnd('drawPaths');
+        if(this.debug) console.groupEnd()
+        if(this.debug) console.timeEnd('drawPaths')
     }
 
     /**
@@ -103,19 +104,19 @@ export class DadMap extends Component {
         const debug = this.debug
 
         const nodeFromMove = ([row, col]) => graph[row][col]
-        const elFromNode = ([row,col]) => containerElement.childNodes[row].childNodes[col]
+        const elFromNode = ([row, col]) => containerElement.childNodes[row].childNodes[col]
         //makes sure our container element is present
-        if(!containerElement) throw new Error('Missing container element');
+        if(!containerElement) throw new Error('Missing container element')
 
         const id = `path${preferredIndex}`
         let svg = containerElement.querySelector(`svg#${id}`)
-        if(svg) svg.remove();
+        if(svg) svg.remove()
         svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
         svg.id = id
         svg.classList.add('paths')
         containerElement.appendChild(svg)
 
-        if(debug) console.groupCollapsed(`drawing path on x${preferredIndex}`, path);
+        if(debug) console.groupCollapsed(`drawing path on x${preferredIndex}`, path)
 
         path.forEach((move,index) => {
             const a = nodeFromMove(move[0])
@@ -140,7 +141,7 @@ export class DadMap extends Component {
             aEl.setAttribute('linked', true)
             bEl.setAttribute('linked',true)
 
-            if(debug) console.log(`Move ${index}`, {from: a, to: b});
+            if(debug) console.log(`Move ${index}`, {from: a, to: b})
         })
         
         if(debug) console.groupEnd();
@@ -148,21 +149,21 @@ export class DadMap extends Component {
     //a function to select a node at the given x and y index
     nodeSelect({x,y}) 
     {
-        if(this.debug) console.log('nodeSelect', {x,y});
+        if(this.debug) console.log('nodeSelect', {x,y})
         this.props.onSelect({x,y})
     }
 
     render(props)
     {
         const {dungeon, x, y} = props
-        if(!dungeon.graph) throw new Error('No graph to render. Something went real wrong!', dungeon);
+        if(!dungeon.graph) throw new Error('No graph to render. Something went real wrong!', dungeon)
 
         const currentNode = dungeon.graph[y][x]
 
         if(isEmpty(currentNode.edges))
         {
             dungeon.paths = generatePaths(dungeon.graph)
-            if(this.debug) console.log('generated new dungeon paths', {dungeon});
+            if(this.debug) console.log('generated new dungeon paths', {dungeon})
         }
 
         return html`
@@ -200,7 +201,7 @@ function isEmpty(obj)
 {
     for(const prop in obj)
     {
-        if(Object.hasOwn(obj,prop))
+        if(Object.hasOwn(obj, prop))
         {
             return false
         }
@@ -218,7 +219,7 @@ function isEmpty(obj)
 function getPosWithin(el, container)
 {
     if(!el) throw new Error('Could not find DOM node for graph row node');
-    if(!container) throw new Error('missing the container');
+    if(!container) throw new Error('missing the container')
     const parent = container.getBoundingClientRect()
     const rect = el.getBoundingClientRect()
     return {

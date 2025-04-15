@@ -6,7 +6,7 @@ export default
     target: 'enemy',
     damage: 7,
     description: 'Strike a target with your blade and Deal 7 damage.',
-    rarity: 'basic',
+    cardRarity: 'Basic',
     
 }
 

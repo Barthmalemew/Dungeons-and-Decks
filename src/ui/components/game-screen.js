@@ -21,7 +21,7 @@ import {Overlay, OverlayWithButton} from './overlays.js'
 import {Player, Monster} from './player.js'
 // import {PublishRun} from './publish-run.js'
 import StartRoom from './start-room.js'
-// import VictoryRoom from './victory-room.js'
+import VictoryRoom from './victory-room.js'
 import startTutorial from '../intro-tutorial.js'
 
 export default class App extends Component {

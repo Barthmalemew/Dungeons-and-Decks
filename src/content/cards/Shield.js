@@ -5,7 +5,7 @@ export default {
     target: 'player',
     block: 5,
     description: 'Raise your sword in a blocking stance and gain 5 block',
-    rarity: 'basic',
+    cardRarity: 'Basic',
     
 }
 
