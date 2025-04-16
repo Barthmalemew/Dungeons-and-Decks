@@ -1,9 +1,11 @@
+@import './typography.css';
 @import './app.css';
 @import './overlay.css';
 @import './cards.css';
 @import './targets.css';
+@import './fct.css';
+/*@import './tooltipped.css'*/
 @import './map.css';
-
 
 :root {
     --card-width: 10em;
