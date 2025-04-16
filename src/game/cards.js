@@ -87,8 +87,8 @@ export class Card {
         this.damage = props.damage || 0;
         this.block = props.block || 0;
         this.target = CardTargets[props.target];
-        this.cardColor = Color[props.color];
-        this.cardRarity = Rarity[props.rarity] || Rarity.Common;
+        this.cardColor = Color[props.cardColor];
+        this.cardRarity = Rarity[props.cardRarity] || Rarity.Common;
         this.exhaust = props.exhaust || false;
         this.ethereal = props.ethereal || false;
         this.upgraded = props.upgraded || false;
