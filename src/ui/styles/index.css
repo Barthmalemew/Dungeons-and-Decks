@@ -6,8 +6,6 @@
 @import './map.css';
 @import './fct.css';
 /*@import './tooltipped.css'*/
-
-
 :root {
     --card-width: 10em;
     --card-height: 17em;
