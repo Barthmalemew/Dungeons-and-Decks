@@ -1,6 +1,6 @@
 export default{
     name: 'Shadow',
-    cardColor: 'Green',
+    color: 'Green',
     type: 'Skill',
     energy: 3,
     target: 'enemy',
