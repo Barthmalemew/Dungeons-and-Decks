@@ -48,7 +48,7 @@ export const Monster = (props) => {
 		<//>
 	`
 }
-//not entirely sure what this code is needed for as the function above already does this 
+
 class intentTooltip extends Component
 {
     render(intent) {
@@ -91,15 +91,22 @@ class Target extends Component
 }
 
 function Healthbar({value, max, block}) {
+    const healthPercent = (value / max) * 100;
+    const healthState = 
+        healthPercent <= 25 ? 'low' :
+        healthPercent <= 50 ? 'medium' : 
+        'high';
+
     return html`
         <div class="Healthbar ${block ? `Healthbar--hasblock` : ``}">
-            <p class="healthbar-label">
-                <span>${value}/${max}</span>
-            </p>
-            <div class="Healthbar-bar" style=${`width: ${(value / max) * 100}%`}></div>
-            <div class="Healthbar-bar Healthbar-blockBar" style=${`width: ${(block / max) * 100}%`}>
-                ${block > 0 ? block : ``}
+            <div class="Healthbar-label">
+                <span class="Healthbar-numbers">${value}/${max}</span>
             </div>
+            <div 
+                class="Healthbar-bar" 
+                style=${`width: ${(value / max) * 100}%`}
+                data-health-percent=${healthState}
+            ></div>
         </div>
     `
 }
