@@ -97,6 +97,9 @@ export default class App extends Component {
              this.enableConsole()
          }
          if (urlParams.has('tutorial')) {
+            const roomIndex = game.state.dungeon.graph[1].findIndex((r) => r.room)
+            this.game.enqueue({type: 'move', move: {y: 1, x: roomIndex}})
+            this.game.dequeue()
             setTimeout(startTutorial, 800)
         }
         

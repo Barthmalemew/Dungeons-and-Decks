@@ -179,19 +179,21 @@ export function getCardRewards(gameState, amount=3)
     //need to find a way to check the player's class and ideally filter out the cards that don't match the classes assigned to them as eventually there are plans
     //to have a relic or alternate game option allow one to pick up cards from other classes, I am making the gamestate a parameter of the function to facilitate this
     let rewardCards = niceCards;
-    //for the class filtering, key = the name of a class, and value is a bool that designates true if a class is assigned and false if it isn't, other classes can be assigned from relics that allow cards from all classes to be picked up
-    for(let [key, value] of Object.entries(gameState.character))
+    if(gameState.character)
     {
-        //if a class is not assiged true the body of this if statement will run filtering those cards out of the pool
-        if(!value)
-        {
-            //this Color[cClass] might need to be Color[`${cClass}`]
-            //the easiest way to do this is to find which classes aren't assigned and then filter out the array such that all of the cards in the pool dont have the class tag that was false
-            //this is because there is no real good way to write this check in a way that always takes the shorter route
-            //as such it makes more sense to filter out unwanted classes one by one instead of filtering for wanted as it feels easier to manage since im not repeatedly adding to a pile but witling one down
-            rewardCards = rewardCards.filter((card) => card.cardColor !== Color[key]);
+        //for the class filtering, key = the name of a class, and value is a bool that designates true if a class is assigned and false if it isn't, other classes can be assigned from relics that allow cards from all classes to be picked up
+        for (let [key, value] of Object.entries(gameState.character)) {
+            //if a class is not assiged true the body of this if statement will run filtering those cards out of the pool
+            if (!value) {
+                //this Color[cClass] might need to be Color[`${cClass}`]
+                //the easiest way to do this is to find which classes aren't assigned and then filter out the array such that all of the cards in the pool dont have the class tag that was false
+                //this is because there is no real good way to write this check in a way that always takes the shorter route
+                //as such it makes more sense to filter out unwanted classes one by one instead of filtering for wanted as it feels easier to manage since im not repeatedly adding to a pile but witling one down
+                rewardCards = rewardCards.filter((card) => card.cardColor !== Color[key]);
+            }
         }
     }
+    
     //this is the array that actually holds the cards
     const rewards = [];
     //just makes sure that the amount of cards rewards generated is true to the amount wanted 
