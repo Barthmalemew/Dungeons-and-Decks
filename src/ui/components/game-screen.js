@@ -75,7 +75,7 @@ export default class App extends Component {
          const game = createNewGame()
          this.game = game; //this sets the variable game defined in the constructor to the value of the newly created game
 
-         if(demo || 1)
+         if(demo)
          {
             /**
              * Other things we might want to demo/tutorial to do
@@ -303,9 +303,10 @@ enableConsole()
         }
         
         // Enable drag and drop if available
-        if (typeof enableDragDrop === 'function') {
+        /* if (typeof enableDragDrop === 'function') {
             enableDragDrop(this.base, this.playCard)
-        }
+        } */
+        enableDragDrop(this.base, this.playCard)
     }
 
     handlePlayerReward(choice, card) {
@@ -460,7 +461,7 @@ enableConsole()
                             <//>`
                 }
                 
-                ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> <//>`}
+                ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /><//>`}
 
                 ${
                     room.type === 'campfire' &&
@@ -472,6 +473,7 @@ enableConsole()
                         ><//>
                     <//>`
                 }
+
                 ${
                     !this.didWinEntireGame && 
                     this.didWin &&
@@ -482,7 +484,7 @@ enableConsole()
                             onSelectCard=${(card) => this.handlePlayerReward('addCard',card)}
                             onContinue=${() => this.goToNextRoom()}
                         ><//>
-                    <//> `
+                    <//>`
                 }
                 
                 ${
