@@ -47,10 +47,10 @@
 .Card {
 	position: relative;
 	display: flex;
-	border: 0.5em ridge #53b5a8;
+	/*border: 0.5em ridge #53b5a8;
 
 	border-width: 0.75rem;
-	border-width: 0.5rem;
+	border-width: 0.5rem;*/
 	image-rendering: -moz-crisp-edges;
 	image-rendering: pixelated;
 }
@@ -125,4 +125,15 @@
 .Hand .Card[disabled] .EnergyBadge {
 	color: #fb1515;
 	background-color: hsl(0deg 73% 25%);
+}
+
+.Card-inner-attack {
+	background-image : url('/public/images/attack_border_cropped.png');
+	background-size: contain;
+	z-index: 5;
+}
+
+.Card-inner-skill {
+	background-image : url('/public/images/skill_border_cropped.png');
+	background-size: cover;
 }
