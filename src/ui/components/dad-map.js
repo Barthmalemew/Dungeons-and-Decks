@@ -15,7 +15,6 @@ import { emojiFromNodeType, nodeTypeToName, generatePaths } from '../../game/dun
  * @param {Function} props.onSelect - The function called on the map node select
  * @param {Boolean} props.debug - A boolean that if true, will console.log things
  */
-
 export class DadMap extends Component {
     constructor(props)
     {
@@ -26,14 +25,14 @@ export class DadMap extends Component {
 
     componentDidMount()
     {
-        this.drawPathsDebounced = debounce(this.drawPaths.bind(this), 300, {leading: true, trailing : true})
+        this.drawPathsDebounced = debounce(this.drawPaths.bind(this), 300, {leading: true, trailing: true})
         //this triggers an update
         this.setState({universe: 42})
     }
 
-    componentDidUpdate(preProps)
+    componentDidUpdate(prevProps)
     {
-        const newDungeon = this.props.dungeon.id !== preProps?.dungeon.id
+        const newDungeon = this.props.dungeon.id !== prevProps?.dungeon.id
         //this sets the correct number of columns and rows in the css
         this.base.style.setProperty('--rows', Number(this.props.dungeon.graph.length))
         this.base.style.setProperty('--columns', Number(this.props.dungeon.graph[1].length))
@@ -53,6 +52,8 @@ export class DadMap extends Component {
             this.resizeObserver.observe(this.base)
         }
     }
+
+    
 
     scatterNodes()
     {
@@ -128,6 +129,9 @@ export class DadMap extends Component {
             const bPos = getPosWithin(bEl, containerElement)
             if(!aPos.top)
             {
+                const style = window.getComputedStyle(containerElement)
+                console.log('Container Element: %s, Visibility: %s, Display: %s',containerElement.tagName,style.getPropertyValue("visibility"),style.getPropertyValue('display'))
+
                 throw new Error("Could not render the svg path. Check to see if the graphs container element is visible/rendered")
             }
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
@@ -226,6 +230,6 @@ function getPosWithin(el, container)
         top: rect.top - parent.top,
         left: rect.left - parent.left,
         width: rect.width,
-        height:rect.height,
+        height: rect.height,
     }
 }
