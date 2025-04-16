@@ -14,7 +14,7 @@ figure {
 }
 
 /* A smaller map */
-slay-map {
+dad-map {
 	max-width: 500px;
 	min-height: 0;
 	width: 100%;
@@ -22,15 +22,15 @@ slay-map {
 	background: none;
 	--pathColor: black;
 }
-slay-map-row {
+dad-map-row {
 	gap: 0;
 }
 
-stw-card .Card-inner {
+dad-card .Card-inner {
 	display: flex;
 	align-items: center;
 }
-stw-card img {
+dad-card img {
 	display: none;
 }
 
