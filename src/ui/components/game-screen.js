@@ -9,6 +9,7 @@ import {createCard} from '../../game/cards.js'
 import {getCurrRoom, isCurrRoomCompleted, isDungeonCompleted} from '../../game/utils-state.js'
 
 // UI Components
+import CampfireRoom from './campfire.js'
 import Cards from './cards.js'
 import enableDragDrop from '../dragdrop.js'
 import Menu from './menu.js'
@@ -310,7 +311,8 @@ export default class App extends Component {
             return html`<div class="App loading">Loading game...</div>`
         }
         
-        const room = getCurrRoom(state) || { type: 'unknown' }
+        //const room = getCurrRoom(state) || { type: 'unknown' }
+        const room = { type: 'campfire'}
         const showCombat = room.type === 'monster'
 
         return html`
