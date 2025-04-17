@@ -338,6 +338,17 @@ export default class App extends Component {
             }
             
             ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> <//>`}
+
+            ${
+                room.type === 'campfire' &&
+                html`<${Overlay} middle>
+                    <${CampfireRoom}
+                        gameState=${state}
+                        onChoose=${this.handleCampfireChoice}
+                        onContinue=${this.goToNextRoom}
+                    ><//>
+                <//>`
+            }
             
             ${
                 showCombat &&
