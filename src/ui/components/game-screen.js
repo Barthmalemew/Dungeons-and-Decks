@@ -311,8 +311,7 @@ export default class App extends Component {
             return html`<div class="App loading">Loading game...</div>`
         }
         
-        //const room = getCurrRoom(state) || { type: 'unknown' }
-        const room = { type: 'campfire'}
+        const room = getCurrRoom(state) || { type: 'unknown' }
         const showCombat = room.type === 'monster'
 
         return html`
