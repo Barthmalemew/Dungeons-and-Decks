@@ -18,8 +18,13 @@
  * this allows for a way to imitate a data structure like maps or sets without having to use one as object properties have to have unique keys.
  */
 
+//Power class
 class Power{
-    
+
+    /**
+     * 
+     * @param {POWER} power - The base to create a class from 
+     */
     constructor(power) {
         const{name, description, duration,type,target,use} = power
         this.name = name
@@ -82,4 +87,13 @@ export const frail = new Power({
     use: (block) => Math.floor(block * 0.75),
 })
 
-export default {regen, weak, vulnerable, strength, dexterity, frail}
+export const dblAttack = new Power({
+    type: 'buff',
+    name: 'True strike',
+    description: 'Attacks are played ${stacks} times',
+    duration: 'counter',
+    target: 'Player',
+    use: (stacks) => stacks,
+})
+
+export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack}

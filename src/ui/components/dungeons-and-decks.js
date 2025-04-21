@@ -5,6 +5,8 @@ import GameScreen from './game-screen.js'
 import WinScreen from './win-screen.js'
 import createNewGame from '../../game/new-game.js'
 import '../styles/index.css'
+import '../styles/map.css'
+
 
 /** @enum {string} */
 const GameModes = {

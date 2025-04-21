@@ -17,7 +17,7 @@ export default class StartRoom extends Component {
 
             <p center>
 					<a href="/">Let me out</a>
-				</p>
+			</p>
         </div>
         `
     }

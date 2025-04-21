@@ -1,7 +1,7 @@
 import {html, Component} from '../lib.js'
 //import {getRuns} from '../../game/backend.js'
-//import {timeSince} from '../../utils.js'
-//import gsap from '../animations.js'
+import {timeSince} from '../../utils.js'
+import gsap from '../animations.js'
 import * as sounds from "../tones.js"
 
 export default class SplashScreen extends Component {

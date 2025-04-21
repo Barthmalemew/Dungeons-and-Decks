@@ -11,10 +11,13 @@ import {getCurrRoom, isCurrRoomCompleted, isDungeonCompleted} from '../../game/u
 // UI Components
 import Cards from './cards.js'
 import enableDragDrop from '../dragdrop.js'
+// import DungeonStats from './dungeon-stats.js'
+import {DadMap} from './dad-map.js'
 import Menu from './menu.js'
 import {Overlay, OverlayWithButton} from './overlays.js'
 import {Player, Monster} from './player.js'
 import StartRoom from './start-room.js'
+import VictoryRoom from './victory-room.js'
 import startTutorial from '../intro-tutorial.js'
 
 export default class App extends Component {
@@ -45,21 +48,37 @@ export default class App extends Component {
 
     componentDidMount() {
         console.log("ComponentDidMount() lifecycle")
-        const urlParams = new URLSearchParams(window.location.search)
-        const debugMode = urlParams.has('debug')
-        const demo = urlParams.has('demo')
-        const game = createNewGame(debugMode, this.props.selectedCharacter)
-        this.game = game;
+         const urlParams = new URLSearchParams(window.location.search)
+         const debugMode = urlParams.has('debug')
+         const demo = urlParams.has('demo')
+         //this sets up the new game
+         const game = createNewGame()
+         this.game = game; //this sets the variable game defined in the constructor to the value of the newly created game
 
-        if(demo || 1) {
+         if(demo)
+         {
+            /**
+             * Other things we might want to demo/tutorial to do
+             * just rewrite over the game with a different createNewGame that gives a curated starting deck
+             * maybe even set the character class
+             * probably should also set the players level
+             * and give them some relics(maybe)
+             */
+             //const roomIndex will be the room we want to move to preplanned for the demo 
+             //we will find it using findIndex on the dungeon graph array
             const roomIndex = game.state.dungeon.graph[1].findIndex((r) => r.room)
             this.game.enqueue({type: 'move', move: {y: 1, x: roomIndex}})
             this.game.dequeue()
-        }
-        if(debugMode || 1) {
-            this.enableConsole()
-        }
-        if (urlParams.has('tutorial')) {
+         }
+         if(debugMode || 1)
+         {
+             //enable console *insert a "now this is debugging"*
+             this.enableConsole()
+         }
+         if (urlParams.has('tutorial')) {
+            const roomIndex = game.state.dungeon.graph[1].findIndex((r) => r.room)
+            this.game.enqueue({type: 'move', move: {y: 1, x: roomIndex}})
+            this.game.dequeue()
             setTimeout(startTutorial, 800)
         }
 
@@ -221,7 +240,8 @@ export default class App extends Component {
         
         if (typeof enableDragDrop === 'function') {
             enableDragDrop(this.base, this.playCard)
-        }
+        } */
+        enableDragDrop(this.base, this.playCard)
     }
 
     handlePlayerReward(choice, card) {
@@ -317,40 +337,68 @@ export default class App extends Component {
         <div class="App" tabindex="0" onkeydown=${(e) => this.handleShortcuts(e)}>
             <figure class="App-background" data-room-index=${state.dungeon.y}></div>
 
-            ${
-                this.isDead && 
-                html`<${Overlay}>
-                    <div class="Container">
-                        <h1 center>You have died!</h1>
-                        <button onClick=${() => this.props.onLoose()}>Try again?</button>
-                        </div>
-                        <//> `
-            }
-            
-            ${
-                state.won &&
-                html`<${Overlay}>
-                    <div class="Container CContainer--center">
-                        <h1 center>You Won!</h1>
-                        <p><button onClick=${() => this.props.onWin()}>Continue?</button></p>
-                        </div>
-                        <//>`
-            }
-            
-            ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /> <//>`}
-            
-            ${
-                showCombat &&
-                html`
-                    <div class="Targets Split">
-                        <div class="Targets-group">
-                            <${Player} model=${state.player} name="Player" />
-                        </div>
-                        <div class="Targets-group">
-                            ${room.monsters &&
-                            room.monsters.map((monster) => html`<${Monster} model=${monster} gameState=${state} />`)}
-                        </div>
-                    </div>
+                ${
+                    this.isDead && 
+                    html`<${Overlay}>
+                        <div class="Container">
+                            <h1 center>You have died!</h1>
+                            <!-- Put the run stats and the button to publish the run to the back in (if that gets made) here-->
+                            
+                            <button onClick=${() => this.props.onLoose()}>Try again?</button>
+                            </div>
+                            <//> `
+                }
+                
+                ${
+                    state.won &&
+                    html`<${Overlay}>
+                        <div class="Container CContainer--center">
+                            <h1 center>You Won!</h1>
+                            <!-- Add the button to "publish" the run if/when it gets made and display run stats when it gets finished-->
+
+                            <p><button onClick=${() => this.props.onWin()}>Continue?</button></p>
+                            </div>
+                            <//>`
+                }
+                
+                ${room.type === 'start' && html`<${Overlay}><${StartRoom} onContinue=${this.goToNextRoom} /><//>`}
+
+                ${
+                    room.type === 'campfire' &&
+                    html`<${Overlay} middle>
+                        <${CampfireRoom} 
+                            gameState=${state}
+                            onChoose=${this.handleCampfireChoice}
+                            onContinue=${this.goToNextRoom}
+                        ><//>
+                    <//>`
+                }
+
+                ${
+                    !this.didWinEntireGame && 
+                    this.didWin &&
+                    room.type === 'monster' &&
+                    html`<${Overlay} middle>
+                        <${VictoryRoom}
+                            gameState=${state}
+                            onSelectCard=${(card) => this.handlePlayerReward('addCard',card)}
+                            onContinue=${() => this.goToNextRoom()}
+                        ><//>
+                    <//>`
+                }
+                
+                ${
+					showCombat &&
+					html`
+						<div class="Targets Split">
+							<div class="Targets-group">
+								<${Player} model=${state.player} name="Player" />
+							</div>
+							<div class="Targets-group">
+								${room.monsters &&
+								room.monsters.map((monster) => html`<${Monster} model=${monster} gameState=${state} />`)}
+							</div>
+						</div>
 
                     <div class="Split ${!state.player.currentEnergy ? 'no-energy' : ''}">
                         <div class="EnergyBadge">
@@ -378,13 +426,13 @@ export default class App extends Component {
                 </div>
             <//>
 
-            <${OverlayWithButton} id="Map" topright key=${1}>
-                <button align-right onClick=${() => this.toggleOverlay('#Map')}><u>M</u>ap</button>
-                <div class="Overlay-content">
-                    <p>Map import hasn't been added yet</p>
-                </div>
-            <//>
-            
+                <${OverlayWithButton} id="Map" topright key=${1}>
+                    <button align-right onClick=${() => this.toggleOverlay('#Map')}><u>M</u>ap</button>
+                    <div class="Overlay-content">
+                        <${DadMap} dungeon=${state.dungeon} x=${state.dungeon.x} y=${state.dungeon.y} scatter=${20} onSelect=${this.handleMapMove}><//>
+                    </div>
+                <//>
+                
 
             <${OverlayWithButton} id='Deck' topright topright2>
                 <button class="tooltipped tooltipped-se" aria-label="All the cards you own" onClick=${() =>
