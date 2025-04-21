@@ -1,7 +1,6 @@
 const cardIndex = [
     'Strike',
     'Shield',
-    'UnrelentingBarrage',
     'ShadowWalk',
     'Shadow',
     'TrueStrike',

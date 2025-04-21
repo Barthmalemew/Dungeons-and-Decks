@@ -9,6 +9,7 @@ import {createCard} from '../../game/cards.js'
 import {getCurrRoom, isCurrRoomCompleted, isDungeonCompleted} from '../../game/utils-state.js'
 
 // UI Components
+import CampfireRoom from './campfire.js'
 import Cards from './cards.js'
 import enableDragDrop from '../dragdrop.js'
 // import DungeonStats from './dungeon-stats.js'
