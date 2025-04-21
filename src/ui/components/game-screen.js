@@ -241,7 +241,7 @@ export default class App extends Component {
         
         if (typeof enableDragDrop === 'function') {
             enableDragDrop(this.base, this.playCard)
-        } */
+        }
         enableDragDrop(this.base, this.playCard)
     }
 
