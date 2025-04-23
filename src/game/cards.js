@@ -35,6 +35,8 @@ export const Rarity = {
     Special: 'Special', //for cards that can only be obtained from other cards or events, such as the spell cards generated from the wizards spell slot cards
     Curse: 'Curse', //curses 
     Common: 'Common', //just a rank for any cards that don't fall into the other categories
+    Uncommon: 'Uncommon', //idk what we will use these later rarities for outside of maybe adding weights in the random card selection
+    Rare: 'Rare',
 }
 
 /**
