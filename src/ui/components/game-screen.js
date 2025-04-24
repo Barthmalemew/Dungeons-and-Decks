@@ -433,9 +433,7 @@ enableConsole()
             const room = getCurrRoom(state) || { type: 'unknown' }
             const showCombat = room.type === 'monster'
 
-            //to Add: shortcut handler 
-            //The overlay for if the player is dead
-            //
+             
             return html`
             <div class="App" tabindex="0" onkeydown=${(e) => this.handleShortcuts(e)}>
                 <figure class="App-background" data-room-index=${state.dungeon.y}></div>

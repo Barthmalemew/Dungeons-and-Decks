@@ -314,7 +314,14 @@ export function useCardActions(state, {target, card}) {
         if(!action.parameter.target) {
             action.parameter.target = target
         }
+        /**
+         * better to implement any waiting here as each function run should be "different" so they shouldn't interfere with other cards
+         * However some interference could still occur but should be easier to handle here or like sort itself out
+         */
 
+        /* const waitProm = new Promise((resolve,reject) =>{
+
+        }) */
         // Execute the action
         console.log(`From useCardActions\nActions:`, action)
         console.log('From useCardActions card: ',card)
@@ -405,6 +412,7 @@ const removeHealth = (state, {target, amount = 0}) => {
         })
     })
 }
+
 
 /**
  * Sets health of target to specific value

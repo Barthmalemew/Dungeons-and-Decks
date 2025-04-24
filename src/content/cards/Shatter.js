@@ -25,12 +25,22 @@ export default{
 }
 
 export const upgrade = (card) => {
-    const a = card.actions.find((action) => action.type === 'removeHealth')
+    /* const a = card.actions.find((action) => action.type === 'removeHealth')
     console.log('Upgrade activating\na: ',a)
-    a.parameter.amount = 4 //try removing this to see if it stops making unupgraded shatter deal 4 splash damage, if that doesnt work see if its an off by one error
+    a.parameter.amount = 4  */
+    //the above section doesn't cause the correct effect, as instead of making the upgraded version of the card have the changed values,
+    // it makes both the upgraded and unupgraded versions of the card have the value the upgraded version should have
     return{
         ...card, //this makes it so any unchanged values stay unchanged
         damage: 4, //add your changed values here
-        
+        actions: [
+            {
+                type: 'removeHealth',
+                parameter: {
+                    amount: 4,
+                    target: 'allEnemies',
+                },
+            },
+        ],
     }
 }

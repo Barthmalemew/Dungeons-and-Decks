@@ -42,5 +42,7 @@ export const upgrade = (card) => {
     return{
         ...card, //this makes it so any unchanged values stay unchanged
         damage: 0, //add your changed values here
+        //when wanting to have the upgraded version of a card have different values for the parameters of the card action it has, just rewrite the actions property here
+        //and changes the values as trying to do it the way that stw does it causes the change that should only affect the upgraded version alter the base verison as well
     }
 }
