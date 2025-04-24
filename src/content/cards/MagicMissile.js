@@ -24,12 +24,6 @@ export default{
                 amount: 2, 
             },
         },
-        {
-            type: 'removeHealth', 
-            parameter: {
-                amount: 2,
-            },
-        },
     ],
 
 }
@@ -50,12 +44,6 @@ export const upgrade = (card) => {
                 type: 'removeHealth', 
                 parameter: {
                     amount: 3, 
-                },
-            },
-            {
-                type: 'removeHealth', 
-                parameter: {
-                    amount: 3,
                 },
             },
         ],

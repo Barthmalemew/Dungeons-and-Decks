@@ -118,14 +118,16 @@ function addStarterDeck(state) {
         createCard('Shield'),
         createCard('Shield'),
         createCard('Shield'),
-        createCard('Shield'),
+        //createCard('Shield'),
         // Basic attack cards (5)
         createCard('Strike'),
         createCard('Strike'),
         createCard('Strike'),
-        createCard('Strike'),
-        createCard('Strike'),
+        //createCard('Strike'),
+        //createCard('Strike'),
         // Special starter card (1)
+        //Testing cards
+        createCard('Card Adder'),
     ]
     return produce(state, (draft) => {
         draft.deck = deck
@@ -163,9 +165,22 @@ function drawCards(state, options) {
  * @type {ActionFn<{card: CARD}>}
  */
 function addCardToHand(state, {card}) {
+    console.log(`From addCardToHand\ncard being added: `,card)
     return produce(state, (draft) => {
         draft.hand.push(card)
     })
+}
+
+/**
+ * 
+ * @type {ActionFn<{cardName: String, card: CARD}>}
+ */
+function _addCardToHand(state, {cardName, card}) {
+    console.log(`From _addCardToHand\nCard Invoking the creation of others: `,card)
+    const cardz = createCard(cardName)
+    console.log(`From _addCardToHand cardz object: `, cardz)
+    let newState = addCardToHand(state, {card: cardz})
+    return newState
 }
 
 /**
@@ -192,7 +207,14 @@ function discardCard(state, {card}) {
 function discardHand(state) {
     return produce(state, (draft) => {
         draft.hand.forEach((card) => {
-            draft.discardPile.push(card)
+            if(card.etheral)
+            {
+                draft.exhaustPile.push(card)
+            } 
+            else
+            {
+                draft.discardPile.push(card)
+            }
         })
         draft.hand = []
     })
@@ -285,11 +307,17 @@ export function useCardActions(state, {target, card}) {
             return
         }
 
-        // Ensure action has target info
+        // Ensure action has target info, it also overwrites any target info one is trying to give an action
         if (!action.parameter) action.parameter = {}
-        action.parameter.target = target
+
+        //this should make it so that if target info already exists, it won't overwrite anything, but if the target property doesn't exist it will add it
+        if(!action.parameter.target) {
+            action.parameter.target = target
+        }
 
         // Execute the action
+        console.log(`From useCardActions\nActions:`, action)
+        console.log('From useCardActions card: ',card)
         nextState = allActions[action.type](nextState, {...action.parameter, card})
     })
 
@@ -765,6 +793,7 @@ const allActions = {
     takeMonsterTurn,
     upgradeCard,
     endEncounter,
+    _addCardToHand,
 }
 
 export default allActions

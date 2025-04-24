@@ -1,3 +1,5 @@
+//I don't think it is a good idea to use helper cards this way, as I would have to make a new action to handle it, so for now I shall do effects like this with removeHealth
+//however I think I might make some helper actions for this such that it can be invoked if hit animations are tied to cards
 export default{
     name: "Shatter",
     cardColor: "Colorless", //can be Red, Green, Purple, Curse, Colorless
@@ -10,23 +12,25 @@ export default{
     cardRarity: "Special", // can be Basic, Special, Curse, Common
     exhaust: true, //a boolean that dictates whether a card should exhaust when played
     ethereal: true, //a boolean that dictates whether a card should exhaust when discarded
-    //upgraded this isnt a thing set in cards but rather 
+    //upgraded this isnt a thing set in cards but rather something createCard adds
     actions: [
-        {
-            type: 'playCard', //the name of the action goes here
-            parameter: {
-                card: "ShatterSplash",
-                target: "allEnemies", //any parameters to be passed to the action go here
-            },
-        },
-    ],
-
+		{
+			type: 'removeHealth',
+			parameter: {
+				amount: 3,
+				target: 'allEnemies',
+			},
+		},
+	],
 }
 
 export const upgrade = (card) => {
+    const a = card.actions.find((action) => action.type === 'removeHealth')
+    console.log('Upgrade activating\na: ',a)
+    a.parameter.amount = 4 //try removing this to see if it stops making unupgraded shatter deal 4 splash damage, if that doesnt work see if its an off by one error
     return{
         ...card, //this makes it so any unchanged values stay unchanged
-        damage: 5, //add your changed values here
+        damage: 4, //add your changed values here
         
     }
 }

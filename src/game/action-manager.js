@@ -82,6 +82,7 @@ export default function ActionManager(props) {
             nextState = actions[action.type](state, action)
         } catch (err) {
             console.warn('am:Failed running action', action)
+            console.warn(err)
             throw new Error(err)
         }
 

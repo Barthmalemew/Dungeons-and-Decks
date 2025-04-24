@@ -1,3 +1,5 @@
+//NOT GOING TO WORK UNLESS AN OVERLOAD IS MADE
+
 export default{
     name: "ShatterSplash",
     cardColor: "Colorless", //can be Red, Green, Purple, Curse, Colorless
@@ -11,4 +13,5 @@ export default{
     exhaust: true, //a boolean that dictates whether a card should exhaust when played
     ethereal: true, //a boolean that dictates whether a card should exhaust when discarded
     //upgraded this isnt a thing set in cards but rather 
+
 }
