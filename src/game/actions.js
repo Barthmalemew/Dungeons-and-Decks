@@ -67,9 +67,12 @@ enableMapSet()
 /**
  * Creates initial game state with default values
  * This is the entry point for starting a new game
+ * @param {State} [state] - Optional initial state (unused here but good practice)
+ * @param {object} [characterData] - Optional character data (health, energy) for initialization
  * @returns {State} Fresh game state with default values
  */
-function createNewState() {
+function createNewState(state, characterData = null) {
+    console.log("createNewState received characterData:", characterData); // Add this log for debugging
     return {
         turn: 1,
         deck: [],
@@ -78,10 +81,10 @@ function createNewState() {
         discardPile: [],
         exhaustPile: [],
         player: {
-            maxEnergy: 3,
-            currentEnergy: 3,
-            maxHealth: 72,
-            currentHealth: 72,
+            maxEnergy: characterData?.energy || 3, 
+            currentEnergy: characterData?.energy || 3, 
+            maxHealth: characterData?.health || 72, // Uses character health here
+            currentHealth: characterData?.health || 72, // Uses character health here
             block: 0,
             powers: {},
         },
@@ -108,28 +111,38 @@ function setDungeon(state, dungeon) {
 /**
  * Creates and adds starter deck to game
  * This provides the basic cards every player starts with
- * Standard starter deck includes basic attack and defense cards
+ * Creates deck based on character data if provided, otherwise uses default.
+ * @param {object} [characterData] - Optional character data with a `startingDeck` list of card names
  * @param {State} state - Current game state
  * @returns {State} Updated state with starter deck added
  */
-function addStarterDeck(state) {
-    const deck = [
-        // Basic defensive cards (4)
-        createCard('Shield'),
-        createCard('Shield'),
-        createCard('Shield'),
-        //createCard('Shield'),
-        // Basic attack cards (5)
-        createCard('Strike'),
-        createCard('Strike'),
-        createCard('Strike'),
-        //createCard('Strike'),
-        //createCard('Strike'),
-        // Special starter card (1)
-        //Testing cards
-        createCard('Card Adder'),
-        createCard('Card Adder',true),
-    ]
+function addStarterDeck(state, characterData = null) {
+    let deck = [];
+    if (characterData?.startingDeck && Array.isArray(characterData.startingDeck)) {
+        // Create deck based on character data
+        console.log("Creating deck from character data:", characterData.startingDeck); // Debug log
+        deck = characterData.startingDeck.map(cardName => createCard(cardName));
+    } else {
+        // Default starter deck if no character data or invalid startingDeck
+        console.log("Creating default starter deck."); // Debug log
+        deck = [
+            // Basic defensive cards (4)
+            createCard('Shield'),
+            createCard('Shield'),
+            createCard('Shield'),
+            //createCard('Shield'),
+            // Basic attack cards (5)
+            createCard('Strike'),
+            createCard('Strike'),
+            createCard('Strike'),
+            //createCard('Strike'),
+            //createCard('Strike'),
+            // Special starter card (1)
+            //Testing cards
+            createCard('Card Adder'),
+            createCard('Card Adder', true),
+        ]
+    }
     return produce(state, (draft) => {
         draft.deck = deck
         draft.drawPile = shuffle(deck)
