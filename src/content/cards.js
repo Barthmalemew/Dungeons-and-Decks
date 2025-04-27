@@ -10,6 +10,7 @@ const cardIndex = [
     'Firebolt',
     'MagicMissile',
     'testSAdd',
+    'UnrelentingBarrage',
 ]
 
 /**
