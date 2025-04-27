@@ -5,6 +5,11 @@ const cardIndex = [
     'Shadow',
     'TrueStrike',
     'Bash',
+    'Shatter',
+    'ShatterSplash',
+    'Firebolt',
+    'MagicMissile',
+    'testSAdd',
 ]
 
 /**

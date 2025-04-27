@@ -116,27 +116,24 @@ function setDungeon(state, dungeon) {
  * @param {State} state - Current game state
  * @returns {State} Updated state with starter deck added
  */
-function addStarterDeck(state, characterData = null) {
-    let deck = [];
-    if (characterData?.startingDeck && Array.isArray(characterData.startingDeck)) {
-        // Create deck based on character data
-        console.log("Creating deck from character data:", characterData.startingDeck); // Debug log
-        deck = characterData.startingDeck.map(cardName => createCard(cardName));
-    } else {
-        // Default starter deck if no character data or invalid startingDeck
-        console.log("Creating default starter deck."); // Debug log
-        deck = [
-            createCard('Shield'),
-            createCard('Shield'),
-            createCard('Shield'),
-            createCard('Shield'),
-            createCard('Strike'),
-            createCard('Strike'),
-            createCard('Strike'),
-            createCard('Strike'),
-            createCard('Strike'),
-        ];
-    }
+function addStarterDeck(state) {
+    const deck = [
+        // Basic defensive cards (4)
+        createCard('Shield'),
+        createCard('Shield'),
+        createCard('Shield'),
+        //createCard('Shield'),
+        // Basic attack cards (5)
+        createCard('Strike'),
+        createCard('Strike'),
+        createCard('Strike'),
+        //createCard('Strike'),
+        //createCard('Strike'),
+        // Special starter card (1)
+        //Testing cards
+        createCard('Card Adder'),
+        createCard('Card Adder',true),
+    ]
     return produce(state, (draft) => {
         draft.deck = deck
         draft.drawPile = shuffle(deck)
@@ -173,9 +170,22 @@ function drawCards(state, options) {
  * @type {ActionFn<{card: CARD}>}
  */
 function addCardToHand(state, {card}) {
+    console.log(`From addCardToHand\ncard being added: `,card)
     return produce(state, (draft) => {
         draft.hand.push(card)
     })
+}
+
+/**
+ * 
+ * @type {ActionFn<{cardName: String,shouldUpgrade: boolean, card: CARD}>}
+ */
+function _addCardToHand(state, {cardName,shouldUpgrade, card}) {
+    console.log(`From _addCardToHand\nCard Invoking the creation of others: `,card)
+    const cardz = createCard(cardName, shouldUpgrade)
+    console.log(`From _addCardToHand cardz object: `, cardz)
+    let newState = addCardToHand(state, {card: cardz})
+    return newState
 }
 
 /**
@@ -202,7 +212,14 @@ function discardCard(state, {card}) {
 function discardHand(state) {
     return produce(state, (draft) => {
         draft.hand.forEach((card) => {
-            draft.discardPile.push(card)
+            if(card.etheral)
+            {
+                draft.exhaustPile.push(card)
+            } 
+            else
+            {
+                draft.discardPile.push(card)
+            }
         })
         draft.hand = []
     })
@@ -258,17 +275,39 @@ function playCard(state, {card, target}) {
 
     // Handle attack/damage effects
     if (card.type === 'attack' || card.damage) {
+        //a loop should propably start here looking for the power dblAttack and do a decrementing for loop through the stacks
         const newTarget = card.target === CardTargets.allEnemies ? card.target : target
         let amount = card.damage
         // Apply strength modifier
         if (newState.player.powers.strength) {
             amount = amount + powers.strength.use(newState.player.powers.strength)
         }
+        if(newState.player.powers.tempStrength) {
+            amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
+        }
         // Apply weakness modifier
         if (newState.player.powers.weak) {
             amount = powers.weak.use(amount)
+            
         }
         newState = removeHealth(newState, {target: newTarget, amount})
+        for (let i = 0; i < powers.dblAttack.use(newState.player.powers.dblAttack); i++) {
+            const newTarget = card.target === CardTargets.allEnemies ? card.target : target
+            let amount = card.damage
+            // Apply strength modifier
+            if (newState.player.powers.strength) {
+                amount = amount + powers.strength.use(newState.player.powers.strength)
+            }
+            if (newState.player.powers.tempStrength) {
+                amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
+            }
+            // Apply weakness modifier
+            if (newState.player.powers.weak) {
+                amount = powers.weak.use(amount)
+
+            }
+            newState = removeHealth(newState, { target: newTarget, amount })
+        }
     }
 
     // Apply any power effects from the card
@@ -295,11 +334,24 @@ export function useCardActions(state, {target, card}) {
             return
         }
 
-        // Ensure action has target info
+        // Ensure action has target info, it also overwrites any target info one is trying to give an action
         if (!action.parameter) action.parameter = {}
-        action.parameter.target = target
 
+        //this should make it so that if target info already exists, it won't overwrite anything, but if the target property doesn't exist it will add it
+        if(!action.parameter.target) {
+            action.parameter.target = target
+        }
+        /**
+         * better to implement any waiting here as each function run should be "different" so they shouldn't interfere with other cards
+         * However some interference could still occur but should be easier to handle here or like sort itself out
+         */
+
+        /* const waitProm = new Promise((resolve,reject) =>{
+
+        }) */
         // Execute the action
+        console.log(`From useCardActions\nActions:`, action)
+        console.log('From useCardActions card: ',card)
         nextState = allActions[action.type](nextState, {...action.parameter, card})
     })
 
@@ -387,6 +439,7 @@ const removeHealth = (state, {target, amount = 0}) => {
         })
     })
 }
+
 
 /**
  * Sets health of target to specific value
@@ -775,6 +828,7 @@ const allActions = {
     takeMonsterTurn,
     upgradeCard,
     endEncounter,
+    _addCardToHand,
 }
 
 export default allActions

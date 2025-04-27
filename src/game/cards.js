@@ -35,6 +35,8 @@ export const Rarity = {
     Special: 'Special', //for cards that can only be obtained from other cards or events, such as the spell cards generated from the wizards spell slot cards
     Curse: 'Curse', //curses 
     Common: 'Common', //just a rank for any cards that don't fall into the other categories
+    Uncommon: 'Uncommon', //idk what we will use these later rarities for outside of maybe adding weights in the random card selection
+    Rare: 'Rare',
 }
 
 /**
@@ -44,6 +46,9 @@ export const Rarity = {
  * @prop {Number=} vulnerable
  * @prop {Number=} strength
  * @prop {Number=} dexterity
+ * @prop {Number=} tempStrength
+ * @prop {Number=} frail
+ * @prop {Number=} dblAttack
  */
 
 /**
@@ -101,7 +106,7 @@ export class Card {
 /**
  * Turns a object based card into a class based one
  * @param {String} name 
- * @param {Boolean} [shouldUpgrade]
+ * @param {boolean} [shouldUpgrade]
  * @returns {CARD}  the newly created card
  */
 export function createCard(name, shouldUpgrade)
@@ -109,11 +114,15 @@ export function createCard(name, shouldUpgrade)
     //this checks if a card is the upgraded version of itself
     if(name.includes('+'))
     {
+        console.log('shouldUpgrade triggered')
         //runs the createCard function with the should upgrade as true to create the upgraded
         return createCard(upgradeNameMap[name], true);
     }
     //this finds the card from the card array and sets that object to the card variable
+    //console.log(`card.name: ${card.name}`)
+    console.log(`From createCard name: ${name}`)
     let card = cards.find((card) => card.name === name);
+    console.log('From createCard\nAnother log of the created card: ',card)
     if(!card) throw new Error(`Could not find card: ${name}`)
     //this checks if a card should be upgraded
     if(shouldUpgrade)
@@ -169,7 +178,7 @@ export function getRandomCards(list, amount)
 /**
  * This function gets an array size amount filled with random cards after filtering out basic, curse, special, and status cards along with cards that don't belong to the class(es) assigned to the player that point in the run
  * @param {import('../game/actions.js').State} gameState 
- * @param {Number=} amount 
+ * @param {Number=} [amount=3] - Number of card to reward
  * @returns {Array} rewards
  */
 export function getCardRewards(gameState, amount=3)

@@ -19,7 +19,7 @@ export const upgrade = (card) => {
         powers: {
             dblAttack: 2,
         },
-        description: 'This turn allow your next attack to play thrice .',
+        description: 'This turn allow your next attack to play thrice.',
     }
 
 }

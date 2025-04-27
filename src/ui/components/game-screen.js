@@ -334,9 +334,10 @@ export default class App extends Component {
         const room = getCurrRoom(state) || { type: 'unknown' }
         const showCombat = room.type === 'monster'
 
-        return html`
-        <div class="App" tabindex="0" onkeydown=${(e) => this.handleShortcuts(e)}>
-            <figure class="App-background" data-room-index=${state.dungeon.y}></div>
+             
+            return html`
+            <div class="App" tabindex="0" onkeydown=${(e) => this.handleShortcuts(e)}>
+                <figure class="App-background" data-room-index=${state.dungeon.y}></div>
 
                 ${
                     this.isDead && 
