@@ -22,8 +22,8 @@ export const Monster = (props) => {
 		const weakened = monster.powers.weak
 		const vulnerable = state.player.powers.vulnerable
 
-		if (type === 'damage' && weakened) amount = weakPower.use(amount)
-		if (type === 'damage' && vulnerable) amount = vulnerablePower.use(amount)
+		if (type === 'damage' && weakened) amount = weak.use(amount)
+		if (type === 'damage' && vulnerable) amount = vulnerable.use(amount)
 
 		let tooltip = ''
 		if (type === 'damage') tooltip = `Will deal ${amount} damage`
@@ -94,8 +94,7 @@ function Healthbar({value, max, block}) {
     const healthPercent = (value / max) * 100;
     const healthState = 
         healthPercent <= 25 ? 'low' :
-        healthPercent <= 50 ? 'medium' : 
-        'high';
+        healthPercent <= 50 ? 'medium' : 'high';
 
     return html`
         <div class="Healthbar ${block ? `Healthbar--hasblock` : ``}">

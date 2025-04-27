@@ -5,7 +5,7 @@ export default
     color: 'Purple',
     type: 'attack',
     energy: 1,
-    target: 'enemy',
+    target: 'player',
     description: 'This turn allow you next attack to play twice.',
     image: 'TrueStrike.png',
     powers: {

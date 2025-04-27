@@ -15,13 +15,15 @@ export default{
         {
             type: 'removeHealth', 
             parameter: {
-                amount: 2, 
+                amount: 2,
+                target: null,
             },
         },
         {
             type: 'removeHealth', 
             parameter: {
-                amount: 2, 
+                amount: 2,
+                target: null,
             },
         },
     ],
@@ -37,13 +39,15 @@ export const upgrade = (card) => {
             {
                 type: 'removeHealth', 
                 parameter: {
-                    amount: 3, 
+                    amount: 3,
+                    target: null,
                 },
             },
             {
                 type: 'removeHealth', 
                 parameter: {
-                    amount: 3, 
+                    amount: 3,
+                    target: null,
                 },
             },
         ],

@@ -300,22 +300,9 @@ function playCard(state, {card, target}) {
             
         }
         newState = removeHealth(newState, {target: newTarget, amount})
-        for (let i = 0; i < powers.dblAttack.use(newState.player.powers.dblAttack); i++) {
-            const newTarget = card.target === CardTargets.allEnemies ? card.target : target
-            let amount = card.damage
-            // Apply strength modifier
-            if (newState.player.powers.strength) {
-                amount = amount + powers.strength.use(newState.player.powers.strength)
-            }
-            if (newState.player.powers.tempStrength) {
-                amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
-            }
-            // Apply weakness modifier
-            if (newState.player.powers.weak) {
-                amount = powers.weak.use(amount)
-
-            }
+        while(powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
             newState = removeHealth(newState, { target: newTarget, amount })
+            newState = decreasePowerC(newState, 'dblAttack')
         }
     }
 
@@ -362,6 +349,7 @@ export function useCardActions(state, {target, card}) {
         console.log(`From useCardActions\nActions:`, action)
         console.log('From useCardActions card: ',card)
         nextState = allActions[action.type](nextState, {...action.parameter, card})
+        
     })
 
     return nextState
@@ -497,11 +485,14 @@ function applyCardPowers(state, {card, target}) {
 /**
  * Helper function to decrease power stacks
  * Used at end of turn to reduce duration of effects
- * @param {CardPowers} powers - Collection of powers to decrease
+ * @param {CardPowers} powersP - Collection of powers to decrease
  */
-function _decreasePowers(powers) {
-    Object.entries(powers).forEach(([name, stacks]) => {
-        if (stacks > 0) powers[name] = stacks - 1
+function _decreasePowers(powersP) {
+    Object.entries(powersP).forEach(([name, stacks]) => {
+        if (stacks > 0 && powers[name].duration === 'turn')
+            {
+                powersP[name] = stacks - 1
+            } 
     })
 }
 
@@ -513,6 +504,46 @@ function _decreasePowers(powers) {
 function decreasePlayerPowerStacks(state) {
     return produce(state, (draft) => {
         _decreasePowers(draft.player.powers)
+    })
+}
+
+/**
+ * This decreases 1 power the player has by 1 stack
+ * used for things that have the counter duration
+ * @type {ActionFn<{pName: String}>}
+ */
+function decreasePowerC(state, pName)
+{
+    //console.log('Testing if this returns null: ' + state.player.powers[pName])
+    return produce(state, (draft) => {
+        if(draft.player.powers[pName])
+        {
+            draft.player.powers[pName] = stacks - 1
+        }
+    })
+}
+
+/**
+ * A helper function to remove temp powers stacks
+ * Use at end of turn
+ * @param {CardPowers} powersP - Collection of powers to decrease, named distinctly so the powers imported from powers could also be accessed
+ */
+function _decreasePowersT(powersP) {
+    Object.entries(powersP).forEach(([name, stacks]) => {
+        if(powers[name].duration === 'temp' && stacks > 0)
+        {
+            powersP[name] = 0
+        }
+    })
+}
+
+/**
+ * This function should call on a helper function to decrease any powers that only last per a single turn
+ * @type {ActionFn<{}>}
+ */
+function decreasePlayerPowerStacksT(state) {
+    return produce(state, (draft) => {
+        _decreasePowersT(draft.player.powers)
     })
 }
 
@@ -557,6 +588,7 @@ function endTurn(state) {
     // Run monster turns and decrease power stacks
     newState = playMonsterActions(newState)
     newState = decreasePlayerPowerStacks(newState)
+    newState = decreasePlayerPowerStacksT(newState)
     newState = decreaseMonsterPowerStacks(newState)
 
     // Check for game over conditions
