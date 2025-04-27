@@ -2,7 +2,7 @@ export default{
     name: "Firebolt",
     cardColor: "Colorless", //can be Red, Green, Purple, Curse, Colorless
     type: "attack", //can be attack, skill, power, status or curse
-    description: "Shoots a bolt of fire at an enemy",
+    description: "Shoots a bolt of fire at an enemy that deals 5 damage",
     //image: "usually the name of the card as the image file is named [cardName].png",
     energy: 0, //normally a Number
     damage: 5, //also normally a number
@@ -18,5 +18,6 @@ export const upgrade = (card) => {
     return{
         ...card, //this makes it so any unchanged values stay unchanged
         damage: 10, //add your changed values here
+        description: "Shoots a bolt of fire at an enemy that deals 10 damage",
     }
 }

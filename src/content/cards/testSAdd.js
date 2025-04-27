@@ -40,19 +40,22 @@ export const upgrade = (card) => {
             {
                 type: '_addCardToHand', //the name of the action goes here
                 parameter: {
-                    cardName: 'Magic Missile+', //any parameters to be passed to the action go here
+                    cardName: 'Magic Missile', //any parameters to be passed to the action go here
+                    shouldUpgrade: true,
                 },
             },
             {
                 type: '_addCardToHand',
                 parameter: {
-                    cardName: 'Firebolt+',
+                    cardName: 'Firebolt',
+                    shouldUpgrade: true,
                 },
             },
             {
                 type: '_addCardToHand',
                 parameter: {
-                    cardName: 'Shatter+',
+                    cardName: 'Shatter',
+                    shouldUpgrade: true,
                 },
             },
         ],

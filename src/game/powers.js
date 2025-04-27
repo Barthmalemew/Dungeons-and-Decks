@@ -61,6 +61,15 @@ export const strength = new Power({
     use: (stacks) => stacks,
 })
 
+export const tempStrength = new Power({
+    type: 'buff',
+    name: 'Temporary Strength',
+    description: 'Attacks deal +${stacks} extra damage this turn',
+    duration: 'temp',
+    use: (stacks) => stacks,
+
+})
+
 export const dexterity = new Power({
     type: 'buff',
     name: 'Dexterity',
@@ -96,4 +105,4 @@ export const dblAttack = new Power({
     use: (stacks) => stacks,
 })
 
-export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack}
+export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength}

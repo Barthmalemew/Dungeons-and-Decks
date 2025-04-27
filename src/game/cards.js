@@ -46,6 +46,9 @@ export const Rarity = {
  * @prop {Number=} vulnerable
  * @prop {Number=} strength
  * @prop {Number=} dexterity
+ * @prop {Number=} tempStrength
+ * @prop {Number=} frail
+ * @prop {Number=} dblAttack
  */
 
 /**

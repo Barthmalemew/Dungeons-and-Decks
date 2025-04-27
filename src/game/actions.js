@@ -128,6 +128,7 @@ function addStarterDeck(state) {
         // Special starter card (1)
         //Testing cards
         createCard('Card Adder'),
+        createCard('Card Adder',true),
     ]
     return produce(state, (draft) => {
         draft.deck = deck
@@ -173,11 +174,11 @@ function addCardToHand(state, {card}) {
 
 /**
  * 
- * @type {ActionFn<{cardName: String, card: CARD}>}
+ * @type {ActionFn<{cardName: String,shouldUpgrade: boolean, card: CARD}>}
  */
-function _addCardToHand(state, {cardName, card}) {
+function _addCardToHand(state, {cardName,shouldUpgrade, card}) {
     console.log(`From _addCardToHand\nCard Invoking the creation of others: `,card)
-    const cardz = createCard(cardName)
+    const cardz = createCard(cardName, shouldUpgrade)
     console.log(`From _addCardToHand cardz object: `, cardz)
     let newState = addCardToHand(state, {card: cardz})
     return newState
@@ -270,17 +271,39 @@ function playCard(state, {card, target}) {
 
     // Handle attack/damage effects
     if (card.type === 'attack' || card.damage) {
+        //a loop should propably start here looking for the power dblAttack and do a decrementing for loop through the stacks
         const newTarget = card.target === CardTargets.allEnemies ? card.target : target
         let amount = card.damage
         // Apply strength modifier
         if (newState.player.powers.strength) {
             amount = amount + powers.strength.use(newState.player.powers.strength)
         }
+        if(newState.player.powers.tempStrength) {
+            amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
+        }
         // Apply weakness modifier
         if (newState.player.powers.weak) {
             amount = powers.weak.use(amount)
+            
         }
         newState = removeHealth(newState, {target: newTarget, amount})
+        for (let i = 0; i < powers.dblAttack.use(newState.player.powers.dblAttack); i++) {
+            const newTarget = card.target === CardTargets.allEnemies ? card.target : target
+            let amount = card.damage
+            // Apply strength modifier
+            if (newState.player.powers.strength) {
+                amount = amount + powers.strength.use(newState.player.powers.strength)
+            }
+            if (newState.player.powers.tempStrength) {
+                amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
+            }
+            // Apply weakness modifier
+            if (newState.player.powers.weak) {
+                amount = powers.weak.use(amount)
+
+            }
+            newState = removeHealth(newState, { target: newTarget, amount })
+        }
     }
 
     // Apply any power effects from the card
