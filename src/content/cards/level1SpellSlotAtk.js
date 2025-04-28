@@ -1,7 +1,7 @@
 export default{
     name: "Spell Slot lvl 1", //this is what create card will uses to find the card indicated by the string given to it
     cardColor: "Purple", //can be Red, Green, Purple, Curse, Colorless
-    type: "attack", //can be attack, skill, power, status or curse
+    type: "skill", //can be attack, skill, power, status or curse
     description: "Creates 1 of 3 level 1 attack spells",
     //image: "usually the name of the card as the image file is named [cardName].png",
     energy: 1, //normally a Number

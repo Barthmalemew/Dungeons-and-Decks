@@ -292,7 +292,7 @@ function playCard(state, {card, target}) {
     newState = produce(newState, (draft) => {
         draft.player.currentEnergy = newState.player.currentEnergy - card.energy
         if (card.block) {
-            draft.player.block = newState.player.block + card.block
+            draft.player.block = newState.player.block + card.block + powers.dexterity.use(newState.player.powers.dexterity)
         }
     })
 
