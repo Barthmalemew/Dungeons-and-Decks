@@ -1,3 +1,5 @@
+import { tempStrength } from "@/game/powers"
+
 export default{
     name: 'Shadow',
     cardColor: 'Green',
@@ -9,7 +11,7 @@ export default{
     image: 'Shadow.png',
     powers:
     {
-
+        tempStrength: 6,
     },
 }
 
@@ -18,5 +20,9 @@ export const upgrade = (card) => {
         ...card,
         damage: 10,
         description: 'Create 2 dark clones and gain 10 damage to your attack cards.(Last for one round)',
+        powers: 
+        {
+            tempStrength: 10,
+        },
     }
 }

@@ -12,6 +12,7 @@ import powers from './powers.js'
 import {conditionsAreValid} from './conditions.js'
 import {createCard, CardTargets} from './cards.js'
 import {dungeonWithMap} from '../content/dungeon-encounters.js'
+import {pick} from '../utils.js'
 
 // Enable Immer's Map/Set support for immutable state updates
 enableMapSet()
@@ -116,24 +117,34 @@ function setDungeon(state, dungeon) {
  * @param {State} state - Current game state
  * @returns {State} Updated state with starter deck added
  */
-function addStarterDeck(state) {
-    const deck = [
-        // Basic defensive cards (4)
-        createCard('Shield'),
-        createCard('Shield'),
-        createCard('Shield'),
-        //createCard('Shield'),
-        // Basic attack cards (5)
-        createCard('Strike'),
-        createCard('Strike'),
-        createCard('Strike'),
-        //createCard('Strike'),
-        //createCard('Strike'),
-        // Special starter card (1)
-        //Testing cards
-        createCard('Card Adder'),
-        createCard('Card Adder',true),
-    ]
+function addStarterDeck(state, characterData = null) {
+    let deck = [];
+    if (characterData?.startingDeck && Array.isArray(characterData.startingDeck)) {
+        // Create deck based on character data
+        console.log("Creating deck from character data:", characterData.startingDeck); // Debug log
+        deck = characterData.startingDeck.map(cardName => createCard(cardName));
+    } else {
+        // Default starter deck if no character data or invalid startingDeck
+        console.log("Creating default starter deck."); // Debug log
+        deck = [
+            // Basic defensive cards (4)
+            createCard('Shield'),
+            createCard('Shield'),
+            createCard('Shield'),
+            //createCard('Shield'),
+            // Basic attack cards (5)
+            createCard('Strike'),
+            createCard('Strike'),
+            createCard('Strike'),
+            //createCard('Strike'),
+            //createCard('Strike'),
+            // Special starter card (1)
+            createCard('Spell Slot lvl 1')
+            //Testing cards
+/*             createCard('Card Adder'),
+            createCard('Card Adder', true), */
+        ]
+    }
     return produce(state, (draft) => {
         draft.deck = deck
         draft.drawPile = shuffle(deck)
@@ -177,7 +188,7 @@ function addCardToHand(state, {card}) {
 }
 
 /**
- * 
+ * This adds a card to the players hand specified by cardName and should upgrade as the other addCardToHand function only allows one to add a copy of the card that triggered this effect to a players hand
  * @type {ActionFn<{cardName: String,shouldUpgrade: boolean, card: CARD}>}
  */
 function _addCardToHand(state, {cardName,shouldUpgrade, card}) {
@@ -185,6 +196,18 @@ function _addCardToHand(state, {cardName,shouldUpgrade, card}) {
     const cardz = createCard(cardName, shouldUpgrade)
     console.log(`From _addCardToHand cardz object: `, cardz)
     let newState = addCardToHand(state, {card: cardz})
+    return newState
+}
+
+/**
+ * 
+ * @type {ActionFn<{cardN1: String, cardN2: String, cardN3: String, shouldUpgrade: Boolean, card: CARD}}
+ */
+function addCardToHandRand(state, {cardN1, cardN2, cardN3, shouldUpgrade, card}) {
+    console.log('Card that is invoking the addCardToHandRand action\n',card)
+    let choosenCard = pick({cardN1,cardN2,cardN3})
+    const cardRC = createCard(choosenCard, shouldUpgrade)
+    let newState = addCardToHand(state, {card: cardRC})
     return newState
 }
 
@@ -291,22 +314,9 @@ function playCard(state, {card, target}) {
             
         }
         newState = removeHealth(newState, {target: newTarget, amount})
-        for (let i = 0; i < powers.dblAttack.use(newState.player.powers.dblAttack); i++) {
-            const newTarget = card.target === CardTargets.allEnemies ? card.target : target
-            let amount = card.damage
-            // Apply strength modifier
-            if (newState.player.powers.strength) {
-                amount = amount + powers.strength.use(newState.player.powers.strength)
-            }
-            if (newState.player.powers.tempStrength) {
-                amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
-            }
-            // Apply weakness modifier
-            if (newState.player.powers.weak) {
-                amount = powers.weak.use(amount)
-
-            }
+        while(powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
             newState = removeHealth(newState, { target: newTarget, amount })
+            newState = decreasePowerC(newState, 'dblAttack')
         }
     }
 
@@ -353,6 +363,7 @@ export function useCardActions(state, {target, card}) {
         console.log(`From useCardActions\nActions:`, action)
         console.log('From useCardActions card: ',card)
         nextState = allActions[action.type](nextState, {...action.parameter, card})
+        
     })
 
     return nextState
@@ -488,11 +499,14 @@ function applyCardPowers(state, {card, target}) {
 /**
  * Helper function to decrease power stacks
  * Used at end of turn to reduce duration of effects
- * @param {CardPowers} powers - Collection of powers to decrease
+ * @param {CardPowers} powersP - Collection of powers to decrease
  */
-function _decreasePowers(powers) {
-    Object.entries(powers).forEach(([name, stacks]) => {
-        if (stacks > 0) powers[name] = stacks - 1
+function _decreasePowers(powersP) {
+    Object.entries(powersP).forEach(([name, stacks]) => {
+        if (stacks > 0 && powers[name].duration === 'turn')
+            {
+                powersP[name] = stacks - 1
+            } 
     })
 }
 
@@ -504,6 +518,46 @@ function _decreasePowers(powers) {
 function decreasePlayerPowerStacks(state) {
     return produce(state, (draft) => {
         _decreasePowers(draft.player.powers)
+    })
+}
+
+/**
+ * This decreases 1 power the player has by 1 stack
+ * used for things that have the counter duration
+ * @type {ActionFn<{pName: String}>}
+ */
+function decreasePowerC(state, pName)
+{
+    //console.log('Testing if this returns null: ' + state.player.powers[pName])
+    return produce(state, (draft) => {
+        if(draft.player.powers[pName])
+        {
+            draft.player.powers[pName] = stacks - 1
+        }
+    })
+}
+
+/**
+ * A helper function to remove temp powers stacks
+ * Use at end of turn
+ * @param {CardPowers} powersP - Collection of powers to decrease, named distinctly so the powers imported from powers could also be accessed
+ */
+function _decreasePowersT(powersP) {
+    Object.entries(powersP).forEach(([name, stacks]) => {
+        if(powers[name].duration === 'temp' && stacks > 0)
+        {
+            powersP[name] = 0
+        }
+    })
+}
+
+/**
+ * This function should call on a helper function to decrease any powers that only last per a single turn
+ * @type {ActionFn<{}>}
+ */
+function decreasePlayerPowerStacksT(state) {
+    return produce(state, (draft) => {
+        _decreasePowersT(draft.player.powers)
     })
 }
 
@@ -548,6 +602,7 @@ function endTurn(state) {
     // Run monster turns and decrease power stacks
     newState = playMonsterActions(newState)
     newState = decreasePlayerPowerStacks(newState)
+    newState = decreasePlayerPowerStacksT(newState)
     newState = decreaseMonsterPowerStacks(newState)
 
     // Check for game over conditions
@@ -829,6 +884,7 @@ const allActions = {
     upgradeCard,
     endEncounter,
     _addCardToHand,
+    addCardToHandRand,
 }
 
 export default allActions

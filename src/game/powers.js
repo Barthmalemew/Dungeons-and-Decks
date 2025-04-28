@@ -4,7 +4,7 @@
  * @prop{String} name, the name of the power, this will show when it is hovered over
  * @prop{String} description: A description of the powers effects, also shown when hovered over
  * @prop{String} type: the type of effect this power is, buff or debuff
- * @prop{String} duration describes how long a power stack is supposed to last: combat lasts the entire combat, turn has 1 stack last per 1 turn, and 
+ * @prop{String} duration describes how long a power stack is supposed to last: combat lasts the entire combat, turn has 1 stack last per 1 turn, counter lasts one stack per action that triggers the effect, and temp lasts 1 turn only
  * @prop{String=} target: The target of this power or who this can be applied to, when this field is blank it means this power can be applied to both the player and the enemy
  * @prop{Function=} use: The parameter and return value of the use function.
  */
