@@ -28,10 +28,10 @@ export default function createNewGame(debug = false, characterData = null) {
      * @returns {State} with a dungeon, start deck and cards drawn
      */
     function createInitialState(charData = null) {
-        console.log("createInitialState received characterData:", charData); // Added console log
-        let state = actions.createNewState(undefined, charData); // Pass character data to createNewState
+        console.log("Creating initial state with character data:", charData);
+        let state = actions.createNewState(undefined, charData);
         state = actions.setDungeon(state)
-        state = actions.addStarterDeck(state, charData); // Pass character data to addStarterDeck
+        state = actions.addStarterDeck(state, charData);
         state = actions.drawCards(state)
         return state
     }

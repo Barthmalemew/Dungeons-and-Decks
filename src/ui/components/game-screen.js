@@ -52,8 +52,9 @@ export default class App extends Component {
          const urlParams = new URLSearchParams(window.location.search)
          const debugMode = urlParams.has('debug')
          const demo = urlParams.has('demo')
+         const characterData = this.props.selectedCharacter;
          //this sets up the new game
-         const game = createNewGame()
+         const game = createNewGame(false, characterData);
          this.game = game; //this sets the variable game defined in the constructor to the value of the newly created game
 
          if(demo)

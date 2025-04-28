@@ -73,7 +73,7 @@ enableMapSet()
  * @returns {State} Fresh game state with default values
  */
 function createNewState(state, characterData = null) {
-    console.log("createNewState received characterData:", characterData); // Add this log for debugging
+    console.log("createNewState received characterData:", characterData);
     return {
         turn: 1,
         deck: [],
@@ -82,10 +82,10 @@ function createNewState(state, characterData = null) {
         discardPile: [],
         exhaustPile: [],
         player: {
-            maxEnergy: characterData?.energy || 3, 
-            currentEnergy: characterData?.energy || 3, 
-            maxHealth: characterData?.health || 72, // Uses character health here
-            currentHealth: characterData?.health || 72, // Uses character health here
+            maxEnergy: characterData?.energy || 3,
+            currentEnergy: characterData?.energy || 3,
+            maxHealth: characterData?.health || 72,
+            currentHealth: characterData?.health || 72,
             block: 0,
             powers: {},
         },
@@ -121,28 +121,22 @@ function addStarterDeck(state, characterData = null) {
     let deck = [];
     if (characterData?.startingDeck && Array.isArray(characterData.startingDeck)) {
         // Create deck based on character data
-        console.log("Creating deck from character data:", characterData.startingDeck); // Debug log
+        console.log("Creating deck from character data:", characterData.startingDeck);
         deck = characterData.startingDeck.map(cardName => createCard(cardName));
     } else {
         // Default starter deck if no character data or invalid startingDeck
-        console.log("Creating default starter deck."); // Debug log
+        console.log("Creating default starter deck.");
         deck = [
             // Basic defensive cards (4)
             createCard('Shield'),
             createCard('Shield'),
             createCard('Shield'),
-            //createCard('Shield'),
             // Basic attack cards (5)
             createCard('Strike'),
             createCard('Strike'),
             createCard('Strike'),
-            //createCard('Strike'),
-            //createCard('Strike'),
             // Special starter card (1)
             createCard('Spell Slot lvl 1')
-            //Testing cards
-/*             createCard('Card Adder'),
-            createCard('Card Adder', true), */
         ]
     }
     return produce(state, (draft) => {
