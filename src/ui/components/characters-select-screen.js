@@ -28,7 +28,10 @@ export default class CharacterSelectScreen extends Component {
                 health: 80,
                 energy: 3,
                 description: 'A stalwart fighter with high health and strong defensive abilities.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'Strike', 'Shield', 'Shield', 'Shield', 'Shield', 'Bash']
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Strike', 'Shield', 'Shield', 'Shield', 'Shield', 'Bash'],
+                class: {
+                    Red: true,
+                }
             },
             { 
                 name: 'Rogue',
@@ -37,7 +40,10 @@ export default class CharacterSelectScreen extends Component {
                 health: 60,
                 energy: 3,
                 description: 'A nimble fighter who excels at quick attacks and evasion.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield']
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield'],
+                class: {
+                    Green: true,
+                }
             },
             { 
                 name: 'Mage',
@@ -46,7 +52,10 @@ export default class CharacterSelectScreen extends Component {
                 health: 50,
                 energy: 3,
                 description: 'A powerful spellcaster with high energy but lower health.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield']
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield'],
+                class: {
+                    Purple: true,
+                }
             }
         ]
 

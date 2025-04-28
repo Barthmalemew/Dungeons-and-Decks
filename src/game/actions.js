@@ -6,13 +6,12 @@
 // =============================================================================
 
 import {produce, enableMapSet} from 'immer'
-import {clamp, shuffle} from '../utils.js'
+import {clamp, shuffle, pick} from '../utils.js'
 import {isDungeonCompleted, getRoomTargets, getCurrRoom} from './utils-state.js'
 import powers from './powers.js'
 import {conditionsAreValid} from './conditions.js'
 import {createCard, CardTargets} from './cards.js'
 import {dungeonWithMap} from '../content/dungeon-encounters.js'
-import {pick} from '../utils.js'
 
 // Enable Immer's Map/Set support for immutable state updates
 enableMapSet()
@@ -88,6 +87,11 @@ function createNewState(state, characterData = null) {
             currentHealth: characterData?.health || 72,
             block: 0,
             powers: {},
+            class : {
+                Red: characterData?.class.Red | false,
+                Green: characterData?.class.Green | false,
+                Purple: characterData?.class.Purple | false,
+            }
         },
         dungeon: undefined,
         createdAt: new Date().getTime(),
