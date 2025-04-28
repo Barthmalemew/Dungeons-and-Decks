@@ -84,7 +84,7 @@ button:hover,
 button:focus,
 .driver-popover .driver-popover-footer button:hover,
 .driver-popover .driver-popover-footer button:focus {
-	background: hsl(255, 39%, 79%);
+	background: hsl(35, 22%, 50%);
 	box-shadow: 0 0.1em var(--text-inverse);
 }
 .Button:active,
