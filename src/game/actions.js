@@ -140,9 +140,21 @@ function addStarterDeck(state, characterData = null) {
             createCard('Strike'),
             createCard('Strike'),
             // Special starter card (1)
-            createCard('Spell Slot lvl 1')
+            //createCard('Spell Slot lvl 1')
         ]
+        if(characterData?.class.Red)
+            {
+                deck.push(createCard('Bash'))
+            }
+            else if(characterData?.class.Green) {
+                deck.push(createCard('Unrelenting Barrage'))
+            }
+            else if(characterData?.class.Purple)
+            {
+                deck.push(createCard('Spell Slot lvl 1'))
+            }
     }
+    
     return produce(state, (draft) => {
         draft.deck = deck
         draft.drawPile = shuffle(deck)
