@@ -21,7 +21,7 @@ export default function VictoryRoom(props) {
             html`
             <${CardChooser}
             animate
-            cards=${getCardRewards(3)}
+            cards=${getCardRewards(state,3)}
             didSelectCard=${(card) => props.onSelectCard(card)}
             />
         `}

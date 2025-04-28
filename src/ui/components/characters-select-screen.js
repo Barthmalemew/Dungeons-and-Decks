@@ -40,7 +40,7 @@ export default class CharacterSelectScreen extends Component {
                 health: 60,
                 energy: 3,
                 description: 'A nimble fighter who excels at quick attacks and evasion.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield'],
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield', 'Shield', 'Unrelenting Barrage'],
                 class: {
                     Green: true,
                 }
@@ -52,7 +52,7 @@ export default class CharacterSelectScreen extends Component {
                 health: 50,
                 energy: 3,
                 description: 'A powerful spellcaster with high energy but lower health.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield'],
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield','Shield','Spell Slot lvl 1'],
                 class: {
                     Purple: true,
                 }

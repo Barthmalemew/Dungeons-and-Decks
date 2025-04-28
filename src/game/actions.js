@@ -142,17 +142,6 @@ function addStarterDeck(state, characterData = null) {
             // Special starter card (1)
             //createCard('Spell Slot lvl 1')
         ]
-        if(characterData?.class.Red)
-            {
-                deck.push(createCard('Bash'))
-            }
-            else if(characterData?.class.Green) {
-                deck.push(createCard('Unrelenting Barrage'))
-            }
-            else if(characterData?.class.Purple)
-            {
-                deck.push(createCard('Spell Slot lvl 1'))
-            }
     }
     
     return produce(state, (draft) => {
@@ -215,7 +204,8 @@ function _addCardToHand(state, {cardName,shouldUpgrade, card}) {
  */
 function addCardToHandRand(state, {cardN1, cardN2, cardN3, shouldUpgrade, card}) {
     console.log('Card that is invoking the addCardToHandRand action\n',card)
-    let choosenCard = pick({cardN1,cardN2,cardN3})
+    let choosenCard = pick([cardN1,cardN2,cardN3])
+    console.log('card name' + choosenCard)
     const cardRC = createCard(choosenCard, shouldUpgrade)
     let newState = addCardToHand(state, {card: cardRC})
     return newState

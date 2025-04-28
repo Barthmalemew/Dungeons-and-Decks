@@ -188,10 +188,11 @@ export function getCardRewards(gameState, amount=3)
     //need to find a way to check the player's class and ideally filter out the cards that don't match the classes assigned to them as eventually there are plans
     //to have a relic or alternate game option allow one to pick up cards from other classes, I am making the gamestate a parameter of the function to facilitate this
     let rewardCards = niceCards;
-    if(gameState.character)
+    if(gameState.player.class)
     {
         //for the class filtering, key = the name of a class, and value is a bool that designates true if a class is assigned and false if it isn't, other classes can be assigned from relics that allow cards from all classes to be picked up
-        for (let [key, value] of Object.entries(gameState.character)) {
+        for (let [key, value] of Object.entries(gameState.player.class)) {
+            console.log('from getCardRewards\n Key: ' + key + ' Value: ' + value)
             //if a class is not assiged true the body of this if statement will run filtering those cards out of the pool
             if (!value) {
                 //this Color[cClass] might need to be Color[`${cClass}`]
