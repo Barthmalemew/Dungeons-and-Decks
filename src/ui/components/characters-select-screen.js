@@ -14,7 +14,7 @@ export default class CharacterSelectScreen extends Component {
 
     // Function to handle character selection
     handleCharacterSelected = (character) => {
-        this.props.onCharacterSelected(character)
+        this.props.onCharacterSelected(character) // Pass the whole character object
         this.selectedCharacter = character
     }
 
@@ -28,7 +28,10 @@ export default class CharacterSelectScreen extends Component {
                 health: 80,
                 energy: 3,
                 description: 'A stalwart fighter with high health and strong defensive abilities.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'Strike', 'Shield', 'Shield', 'Shield', 'Shield', 'Bash']
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Strike', 'Shield', 'Shield', 'Shield', 'Shield', 'Bash'],
+                class: {
+                    Red: true,
+                }
             },
             { 
                 name: 'Rogue',
@@ -37,16 +40,22 @@ export default class CharacterSelectScreen extends Component {
                 health: 60,
                 energy: 3,
                 description: 'A nimble fighter who excels at quick attacks and evasion.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'ShadowWalk', 'Shield', 'Shield', 'UnrelentingBarrage', 'Shadow']
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield', 'Shield', 'Unrelenting Barrage'],
+                class: {
+                    Green: true,
+                }
             },
             { 
                 name: 'Mage',
                 border: '/images/wizard_slot.png',
                 image: '/images/wizard_char.png',
                 health: 50,
-                energy: 4,
+                energy: 3,
                 description: 'A powerful spellcaster with high energy but lower health.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield', 'TrueStrike', 'TrueStrike']
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield','Shield','Spell Slot lvl 1'],
+                class: {
+                    Purple: true,
+                }
             }
         ]
 
@@ -57,7 +66,7 @@ export default class CharacterSelectScreen extends Component {
                 <section class="CharacterGrid">
                     ${characters.map((character, index) => 
                         html`<article class="CharacterCard" 
-                            onClick=${() => this.props.onCharacterSelected(character)}>
+                            onClick=${() => this.handleCharacterSelected(character)}>
                             <div class="CharacterInfo">
                                 <h2>${character.name}</h2>
                                 <div class="CharacterFrame">

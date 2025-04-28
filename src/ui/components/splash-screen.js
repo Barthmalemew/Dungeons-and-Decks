@@ -23,7 +23,9 @@ export default class SplashScreen extends Component {
 		return html`
 			<article class="Splash Container">
 				<header class="Header">
-					<h1>Dungeons and Decks</h1>
+					<div class="title-div">
+						<h1>Dungeons and Decks</h1>
+					</div>
 					<h2>Placeholder description</h2>
 				</header>
 				<div class="Box">

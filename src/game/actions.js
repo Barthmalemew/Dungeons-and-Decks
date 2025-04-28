@@ -6,13 +6,12 @@
 // =============================================================================
 
 import {produce, enableMapSet} from 'immer'
-import {clamp, shuffle} from '../utils.js'
+import {clamp, shuffle, pick} from '../utils.js'
 import {isDungeonCompleted, getRoomTargets, getCurrRoom} from './utils-state.js'
 import powers from './powers.js'
 import {conditionsAreValid} from './conditions.js'
 import {createCard, CardTargets} from './cards.js'
 import {dungeonWithMap} from '../content/dungeon-encounters.js'
-import {pick} from '../utils.js'
 
 // Enable Immer's Map/Set support for immutable state updates
 enableMapSet()
@@ -73,7 +72,7 @@ enableMapSet()
  * @returns {State} Fresh game state with default values
  */
 function createNewState(state, characterData = null) {
-    console.log("createNewState received characterData:", characterData); // Add this log for debugging
+    console.log("createNewState received characterData:", characterData);
     return {
         turn: 1,
         deck: [],
@@ -82,12 +81,17 @@ function createNewState(state, characterData = null) {
         discardPile: [],
         exhaustPile: [],
         player: {
-            maxEnergy: characterData?.energy || 3, 
-            currentEnergy: characterData?.energy || 3, 
-            maxHealth: characterData?.health || 72, // Uses character health here
-            currentHealth: characterData?.health || 72, // Uses character health here
+            maxEnergy: characterData?.energy || 3,
+            currentEnergy: characterData?.energy || 3,
+            maxHealth: characterData?.health || 72,
+            currentHealth: characterData?.health || 72,
             block: 0,
             powers: {},
+            class : {
+                Red: characterData?.class.Red | false,
+                Green: characterData?.class.Green | false,
+                Purple: characterData?.class.Purple | false,
+            }
         },
         dungeon: undefined,
         createdAt: new Date().getTime(),
@@ -121,30 +125,25 @@ function addStarterDeck(state, characterData = null) {
     let deck = [];
     if (characterData?.startingDeck && Array.isArray(characterData.startingDeck)) {
         // Create deck based on character data
-        console.log("Creating deck from character data:", characterData.startingDeck); // Debug log
+        console.log("Creating deck from character data:", characterData.startingDeck);
         deck = characterData.startingDeck.map(cardName => createCard(cardName));
     } else {
         // Default starter deck if no character data or invalid startingDeck
-        console.log("Creating default starter deck."); // Debug log
+        console.log("Creating default starter deck.");
         deck = [
             // Basic defensive cards (4)
             createCard('Shield'),
             createCard('Shield'),
             createCard('Shield'),
-            //createCard('Shield'),
             // Basic attack cards (5)
             createCard('Strike'),
             createCard('Strike'),
             createCard('Strike'),
-            //createCard('Strike'),
-            //createCard('Strike'),
             // Special starter card (1)
-            createCard('Spell Slot lvl 1')
-            //Testing cards
-/*             createCard('Card Adder'),
-            createCard('Card Adder', true), */
+            //createCard('Spell Slot lvl 1')
         ]
     }
+    
     return produce(state, (draft) => {
         draft.deck = deck
         draft.drawPile = shuffle(deck)
@@ -205,7 +204,8 @@ function _addCardToHand(state, {cardName,shouldUpgrade, card}) {
  */
 function addCardToHandRand(state, {cardN1, cardN2, cardN3, shouldUpgrade, card}) {
     console.log('Card that is invoking the addCardToHandRand action\n',card)
-    let choosenCard = pick({cardN1,cardN2,cardN3})
+    let choosenCard = pick([cardN1,cardN2,cardN3])
+    console.log('card name' + choosenCard)
     const cardRC = createCard(choosenCard, shouldUpgrade)
     let newState = addCardToHand(state, {card: cardRC})
     return newState

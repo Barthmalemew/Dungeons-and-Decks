@@ -1,7 +1,6 @@
 const cardIndex = [
     'Strike',
     'Shield',
-    'UnrelentingBarrage',
     'ShadowWalk',
     'Shadow',
     'TrueStrike',
@@ -11,6 +10,7 @@ const cardIndex = [
     'Firebolt',
     'MagicMissile',
     'level1SpellSlotAtk',
+    'UnrelentingBarrage',
 ]
 
 /**

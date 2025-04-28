@@ -1,9 +1,9 @@
 import {html, render, Component} from '../lib.js'
 import SplashScreen from './splash-screen.js'
-import createNewGame from '../../game/new-game.js'
 import CharacterSelectScreen from './characters-select-screen.js'
 import GameScreen from './game-screen.js'
 import WinScreen from './win-screen.js'
+import createNewGame from '../../game/new-game.js'
 import '../styles/index.css'
 import '../styles/map.css'
 
@@ -25,14 +25,10 @@ export default class DungeonsAndDecks extends Component {
         super()
         const urlParams = new URLSearchParams(window.location.search)
         const initialGameMode = urlParams.has('debug') ? GameModes.gameplay : GameModes.splash
-
-        // Initialize the game object early to prevent undefined errors
-        if (!window.game) {
-            window.game = createNewGame(urlParams.has('debug')); // Pass debug flag if present
-            console.log('Game object initialized.');
-        }
-        this.state = {gameMode: initialGameMode}
-
+        
+        // Game object is now created within GameScreen based on character choice
+        this.state = {gameMode: initialGameMode, selectedCharacter: null}
+        
         this.handleNewGame = this.handleNewGame.bind(this)
         this.handleContinue = this.handleContinue.bind(this)
         this.handleWin = this.handleWin.bind(this)
@@ -41,11 +37,9 @@ export default class DungeonsAndDecks extends Component {
     }
 
     async handleNewGame() {
-        // Optional: Reset game state if needed when starting a *truly* new game
-        // For now, we assume the initial creation in the constructor is sufficient,
-        // or that loading/continuing handles state appropriately.
-        // If a full reset is needed: window.game = createNewGame();
         console.log('Transitioning to character select')
+        // Reset selected character when starting a new flow
+        this.setState({ selectedCharacter: null })
         await this.setState({gameMode: GameModes.characterSelect})
         window.history.pushState('', document.title, window.location.pathname)
     }
@@ -61,32 +55,11 @@ export default class DungeonsAndDecks extends Component {
     handleLose() {
         this.setState({gameMode: GameModes.splash})
     }
-
+    
     async handleCharacterSelected(character) {
-        if (!window.game) {
-            console.error("CRITICAL: window.game is still undefined in handleCharacterSelected!");
-            window.game = createNewGame();
-            return;
-        }
-
         console.log('Character selected:', character);
-
-        // First set the character
-        window.game.enqueue({ type: 'setCharacter', character });
-        window.game.dequeue();
-
-        // Then set up the character's deck and stats
-        window.game.enqueue({ type: 'setupCharacterDeck', character });
-        window.game.dequeue();
-        
-        // Log player state for debugging
-        console.log('Player state after setup:', JSON.parse(JSON.stringify(window.game.state.player)));
-
-        // Draw initial hand
-        window.game.enqueue({ type: 'drawCards', amount: 5 });
-        window.game.dequeue();
-
-        await this.setState({gameMode: GameModes.gameplay});
+        // Store the selected character data and switch to gameplay mode
+        await this.setState({gameMode: GameModes.gameplay, selectedCharacter: character});
     }
 
     render() {
@@ -101,7 +74,8 @@ export default class DungeonsAndDecks extends Component {
             />`
         }
         if (gameMode === GameModes.gameplay) {
-            return html`<${GameScreen} onWin=${this.handleWin} onLoose=${this.handleLose} /> `
+            // Pass the selected character data to GameScreen
+            return html`<${GameScreen} selectedCharacter=${this.state.selectedCharacter} onWin=${this.handleWin} onLoose=${this.handleLose} /> `
         }
         if (gameMode === GameModes.win) {
             return html`<${WinScreen} onNewGame=${this.handleNewGame} /> `
