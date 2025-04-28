@@ -139,6 +139,7 @@ function addStarterDeck(state, characterData = null) {
             //createCard('Strike'),
             //createCard('Strike'),
             // Special starter card (1)
+            createCard('Spell Slot lvl 1')
             //Testing cards
 /*             createCard('Card Adder'),
             createCard('Card Adder', true), */
