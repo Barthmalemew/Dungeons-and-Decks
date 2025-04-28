@@ -12,6 +12,7 @@ import powers from './powers.js'
 import {conditionsAreValid} from './conditions.js'
 import {createCard, CardTargets} from './cards.js'
 import {dungeonWithMap} from '../content/dungeon-encounters.js'
+import {pick} from '../utils.js'
 
 // Enable Immer's Map/Set support for immutable state updates
 enableMapSet()
@@ -139,8 +140,8 @@ function addStarterDeck(state, characterData = null) {
             //createCard('Strike'),
             // Special starter card (1)
             //Testing cards
-            createCard('Card Adder'),
-            createCard('Card Adder', true),
+/*             createCard('Card Adder'),
+            createCard('Card Adder', true), */
         ]
     }
     return produce(state, (draft) => {
@@ -186,7 +187,7 @@ function addCardToHand(state, {card}) {
 }
 
 /**
- * 
+ * This adds a card to the players hand specified by cardName and should upgrade as the other addCardToHand function only allows one to add a copy of the card that triggered this effect to a players hand
  * @type {ActionFn<{cardName: String,shouldUpgrade: boolean, card: CARD}>}
  */
 function _addCardToHand(state, {cardName,shouldUpgrade, card}) {
@@ -194,6 +195,18 @@ function _addCardToHand(state, {cardName,shouldUpgrade, card}) {
     const cardz = createCard(cardName, shouldUpgrade)
     console.log(`From _addCardToHand cardz object: `, cardz)
     let newState = addCardToHand(state, {card: cardz})
+    return newState
+}
+
+/**
+ * 
+ * @type {ActionFn<{cardN1: String, cardN2: String, cardN3: String, shouldUpgrade: Boolean, card: CARD}}
+ */
+function addCardToHandRand(state, {cardN1, cardN2, cardN3, shouldUpgrade, card}) {
+    console.log('Card that is invoking the addCardToHandRand action\n',card)
+    let choosenCard = pick({cardN1,cardN2,cardN3})
+    const cardRC = createCard(choosenCard, shouldUpgrade)
+    let newState = addCardToHand(state, {card: cardRC})
     return newState
 }
 
@@ -870,6 +883,7 @@ const allActions = {
     upgradeCard,
     endEncounter,
     _addCardToHand,
+    addCardToHandRand,
 }
 
 export default allActions
