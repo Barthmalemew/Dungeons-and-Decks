@@ -7,6 +7,7 @@ export default
     damage: 7,
     description: 'Strike a target with your blade and Deal 7 damage.',
     cardRarity: 'Basic',
+    image: 'Strike.png',
     
 }
 
