@@ -4,7 +4,7 @@
 	flex-flow: row nowrap;
 	justify-content: center;
 	min-height: var(--card-height);
-	gap: .7em;
+	gap: .8em;
 }
 .Cards > * {
 	width: var(--card-width);
@@ -60,7 +60,7 @@
 	display: flex;
 	flex-flow: column nowrap;
 	/*background: #2a3335*/
-	background: #2a3335;
+	/*background: #2a3335; this is default */
 	color: var(--whiteText);
 	text-align: center;
 }
@@ -83,7 +83,7 @@
 }
 .Card-name {
 	margin: 0.5rem 0;
-	padding: 0.5rem 0 0.1rem;
+	padding: 0.8rem 0 0.1rem;
 	margin: 0;
 	/* background-color: #111;
 	background-image: linear-gradient(to bottom, hsla(0, 0%, 0%, 0.2), transparent); */
@@ -95,7 +95,7 @@
 	font-family: 'heliotrope_4_caps';
 	font-feature-settings: 'ss10';
 	font-size: 0.75rem;
-	background: hsl(231.3deg 36.07% 51.85%);/*hsl(191.3, 33.3%, 18.8%);*/
+	background: #5c3867;/*hsl(191.3, 33.3%, 18.8%);*/
 	border: 1px solid hsla(0, 0%, 0%, 0.2);
 	border-bottom-width: 2px;
 	border-radius: 0.4em;
@@ -126,14 +126,20 @@
 	color: #fb1515;
 	background-color: hsl(0deg 73% 25%);
 }
+.Hand .Card {
+	height: 210px;
+}
+
 
 .Card-inner-attack {
 	background-image : url('/public/images/attack_border_cropped.png');
 	background-size: contain;
 	z-index: 5;
+	/*background-color:#5c0606;*/
 }
 
 .Card-inner-skill {
-	background-image : url('/public/images/skill_border_cropped.png');
-	background-size: cover;
+	background-image : url('/public/images/test_skill_card.png');
+	background-size:contain;
+	background-color: #8800b4;
 }
