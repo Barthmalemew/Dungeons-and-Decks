@@ -144,6 +144,8 @@ function addStarterDeck(state, characterData = null) {
         ]
     }
     
+    //debug cards
+    deck.push(createCard('Poison Spray'))
     return produce(state, (draft) => {
         draft.deck = deck
         draft.drawPile = shuffle(deck)
@@ -292,7 +294,12 @@ function playCard(state, {card, target}) {
     newState = produce(newState, (draft) => {
         draft.player.currentEnergy = newState.player.currentEnergy - card.energy
         if (card.block) {
-            draft.player.block = newState.player.block + card.block + powers.dexterity.use(newState.player.powers.dexterity)
+            draft.player.block = newState.player.block + card.block
+            console.log('testing to find cause of block error\nBlock: %d\ndex: %d\nBlock + dex: %d\n',draft.player.block,newState.player.powers.dexterity,draft.player.block + powers.dexterity.use(newState.player.powers.dexterity))
+            if(newState.player.powers.dexterity)
+            {
+                draft.player.block += powers.dexterity.use(newState.player.powers.dexterity)
+            }
         }
     })
 
@@ -302,10 +309,10 @@ function playCard(state, {card, target}) {
         const newTarget = card.target === CardTargets.allEnemies ? card.target : target
         let amount = card.damage
         // Apply strength modifier
-        if (newState.player.powers.strength) {
+        if (newState.player.powers?.strength) {
             amount = amount + powers.strength.use(newState.player.powers.strength)
         }
-        if(newState.player.powers.tempStrength) {
+        if(newState.player.powers?.tempStrength) {
             amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
         }
         // Apply weakness modifier
@@ -314,6 +321,7 @@ function playCard(state, {card, target}) {
             
         }
         newState = removeHealth(newState, {target: newTarget, amount})
+        //this loop needs to encompass card actions and powers as well
         while(powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
             newState = removeHealth(newState, { target: newTarget, amount })
             newState = decreasePowerC(newState, 'dblAttack')
@@ -346,10 +354,30 @@ export function useCardActions(state, {target, card}) {
 
         // Ensure action has target info, it also overwrites any target info one is trying to give an action
         if (!action.parameter) action.parameter = {}
-
+        //this is soley so I can reset the target parameter of the actions that simulate multi attacks back to null,
+        //so that they aren't forever set to the first target you used it oneven though that was supposedly fixed
+        let storedTarget = action.parameter?.target
+        let storedAmountDmg = action.parameter?.amount
         //this should make it so that if target info already exists, it won't overwrite anything, but if the target property doesn't exist it will add it
         if(!action.parameter.target) {
+            storedTarget = null
             action.parameter.target = target
+        }
+        //this should allow additional hits to respect both strengths and weak as removeHealth already respects vulnerable
+        if(action.parameter.target !== 'player' && action.type === 'removeHealth')
+        {
+            if(nextState.player.powers?.strength)
+            {
+                action.parameter.amount += powers.strength.use(nextState.player.powers.strength)
+            }
+            if (nextState.player.powers?.tempStrength) 
+            {
+                action.parameter.amount += powers.tempStrength.use(nextState.player.powers.tempStrength)
+            }
+            if(nextState.player.powers?.weak)
+            {
+                action.parameter.amount = powers.weak.use(action.parameter.amount)
+            }
         }
         /**
          * better to implement any waiting here as each function run should be "different" so they shouldn't interfere with other cards
@@ -363,7 +391,15 @@ export function useCardActions(state, {target, card}) {
         console.log(`From useCardActions\nActions:`, action)
         console.log('From useCardActions card: ',card)
         nextState = allActions[action.type](nextState, {...action.parameter, card})
-        
+        //this is just to make sure I don't accidently set some actions target to null that I didn't mean to 
+        if(!storedTarget)
+        {
+            action.parameter.target = storedTarget
+        }
+        if(storedAmountDmg !== action.parameter.amount)
+        {
+            action.parameter.amount = storedAmountDmg
+        }
     })
 
     return nextState
@@ -475,6 +511,7 @@ function applyCardPowers(state, {card, target}) {
         Object.entries(card.powers).forEach(([name, stacks]) => {
             // Player-targeted powers
             if (card.target === CardTargets.player) {
+                console.log('From applyCardPowers\nName: %s\nAmount on player: %d\nStacks being added: %d',name,draft.player.powers?.[name],stacks)
                 draft.player.powers[name] = (draft.player.powers[name] || 0) + stacks
             }
             // All-enemy powers
@@ -532,13 +569,13 @@ function decreasePowerC(state, pName)
     return produce(state, (draft) => {
         if(draft.player.powers[pName])
         {
-            draft.player.powers[pName] = stacks - 1
+            draft.player.powers[pName] = draft.player.powers[pName] - 1
         }
     })
 }
 
 /**
- * A helper function to remove temp powers stacks
+ * A helper function to remove temp powers stacks however it can be used to remove powers that only last for 1 turn, makes me think I might need to double up power descriptions
  * Use at end of turn
  * @param {CardPowers} powersP - Collection of powers to decrease, named distinctly so the powers imported from powers could also be accessed
  */
@@ -601,8 +638,8 @@ function endTurn(state) {
 
     // Run monster turns and decrease power stacks
     newState = playMonsterActions(newState)
-    newState = decreasePlayerPowerStacks(newState)
     newState = decreasePlayerPowerStacksT(newState)
+    newState = decreasePlayerPowerStacks(newState)
     newState = decreaseMonsterPowerStacks(newState)
 
     // Check for game over conditions
@@ -633,7 +670,7 @@ function newTurn(state) {
 
     return produce(newState, (draft) => {
         draft.turn++
-        draft.player.currentEnergy = 3
+        draft.player.currentEnergy = draft.player.maxEnergy
         draft.player.block = 0
     })
 }
@@ -666,6 +703,13 @@ function playMonsterActions(state) {
     
     let nextState = state
     room.monsters.forEach((monster, index) => {
+        if(monster.powers.poison)
+        {
+            let targetP = 'enemy' + `${index}`
+            nextState = setHealth(nextState,{target: targetP,amount: monster.currentHealth - powers.poison.use(monster.powers.poison)})
+            //nextState = decreaseMonsterPowerC(nextState, {pName: 'poison',monster: room.monsters[index]}) wont need to do this since as long as poison damage is dealt before the monsters turn its all good
+
+        }
         nextState = takeMonsterTurn(nextState, index)
     })
     return nextState

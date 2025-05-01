@@ -3,7 +3,7 @@ export default
 {
     name: 'True Strike',
     cardColor: 'Purple',
-    type: 'attack',
+    type: 'skill',
     energy: 1,
     target: 'player',
     description: 'This turn allow your next attack to play twice.',

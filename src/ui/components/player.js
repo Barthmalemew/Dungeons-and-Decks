@@ -2,7 +2,7 @@ import {html, Component} from '../lib.js'
 import {
     weak,
     regen as regen,
-    vulnerable as vulnerable,
+    vulnerable as vulnerablePower,
     strength as strength,
     dexterity,
     frail as frail,
@@ -26,7 +26,7 @@ export const Monster = (props) => {
 		const vulnerable = state.player.powers.vulnerable
 
 		if (type === 'damage' && weakened) amount = weak.use(amount)
-		if (type === 'damage' && vulnerable) amount = vulnerable.use(amount)
+		if (type === 'damage' && vulnerable) amount = vulnerablePower.use(amount)
 
 		let tooltip = ''
 		if (type === 'damage') tooltip = `Will deal ${amount} damage`
@@ -117,7 +117,7 @@ function Healthbar({value, max, block}) {
 const Powers = (props) => {
 	return html`
 		<div class="Target-powers">
-			<${Power} amount=${props.powers.vulnerable} power=${vulnerable} />
+			<${Power} amount=${props.powers.vulnerablePower} power=${vulnerablePower} />
 			<${Power} amount=${props.powers.regen} power=${regen} />
 			<${Power} amount=${props.powers.weak} power=${weak} />
 			<${Power} amount=${props.powers.strength} power=${strength} />

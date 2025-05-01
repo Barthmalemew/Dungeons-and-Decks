@@ -1,7 +1,7 @@
 export default{
     name: "Healing Word", //this is what create card will uses to find the card indicated by the string given to it
     cardColor: "Colorless", //can be Red, Green, Purple, Curse, Colorless
-    type: "ski;;", //can be attack, skill, power, status or curse
+    type: "skill", //can be attack, skill, power, status or curse
     description: "Heals you for 2 damage",
     //image: "usually the name of the card as the image file is named [cardName].png",
     energy: 0, //normally a Number
