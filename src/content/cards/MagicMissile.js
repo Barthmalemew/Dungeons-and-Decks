@@ -3,7 +3,7 @@ export default{
     cardColor: "Colorless", //can be Red, Green, Purple, Curse, Colorless
     type: "attack", //can be attack, skill, power, status or curse
     description: "Fires 3 bolts of pure magic at an enemy dealing 2 damage each.",
-    //image: "usually the name of the card as the image file is named [cardName].png",
+    image: "MagicMissle.png",
     energy: 0, //normally a Number
     damage: 2, //also normally a number
     target: "enemy", //can be player, enemy, allEnemies
