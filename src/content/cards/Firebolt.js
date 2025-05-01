@@ -3,7 +3,7 @@ export default{
     cardColor: "Colorless", //can be Red, Green, Purple, Curse, Colorless
     type: "attack", //can be attack, skill, power, status or curse
     description: "Shoots a bolt of fire at an enemy that deals 5 damage",
-    //image: "usually the name of the card as the image file is named [cardName].png",
+    image: "FireBolt.png",
     energy: 0, //normally a Number
     damage: 5, //also normally a number
     target: "enemy", //can be player, enemy, allEnemies
