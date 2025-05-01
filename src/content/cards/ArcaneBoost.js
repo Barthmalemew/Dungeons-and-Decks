@@ -1,3 +1,4 @@
+
 export default{
     name: "Arcane Boost", //this is what create card will uses to find the card indicated by the string given to it
     cardColor: "Colorless", //can be Red, Green, Purple, Curse, Colorless
@@ -11,7 +12,7 @@ export default{
     ethereal: true, //a boolean that dictates whether a card should exhaust when discarded
     //upgraded this isnt a thing set in cards but rather something createCard adds
     powers: {
-        tempStrenght: 2, //add your powers here, using the name of the power and then a : and then the number of stacks you want to apply
+        tempStrength: 2, //add your powers here, using the name of the power and then a : and then the number of stacks you want to apply
     },
     
 }
@@ -21,7 +22,7 @@ export const upgrade = (card) => {
         ...card, //this makes it so any unchanged values stay unchanged
         description: 'Meditate and gain a temporary boost in strength along with 1 extra energy next turn',
         powers: {
-            tempStrenght: 2, //add your powers here, using the name of the power and then a : and then the number of stacks you want to apply
+            tempStrength: 2, //add your powers here, using the name of the power and then a : and then the number of stacks you want to apply
             //add a stack of energize here
         },
     }
