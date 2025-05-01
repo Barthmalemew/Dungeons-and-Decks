@@ -5,7 +5,10 @@ import {
     vulnerable as vulnerable,
     strength as strength,
     dexterity,
-    frail as frail
+    frail as frail,
+	poison,
+	tempStrength,
+	dblAttack,
 } from '../../game/powers.js'
 
 export const Player = (props) => {
@@ -118,7 +121,10 @@ const Powers = (props) => {
 			<${Power} amount=${props.powers.regen} power=${regen} />
 			<${Power} amount=${props.powers.weak} power=${weak} />
 			<${Power} amount=${props.powers.strength} power=${strength} />
+			<${Power} amount=${props.powers.tempStrength} power=${tempStrength} />
 			<${Power} amount=${props.powers.frail} power=${frail} />
+			<${Power} amount=${props.powers.poison} power=${poison} />
+			<${Power} amount=${props.powers.dblAttack} power=${dblAttack} />
 		</div>
 	`
 }

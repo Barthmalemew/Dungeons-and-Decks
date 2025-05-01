@@ -4,7 +4,7 @@
 @import './cards.css';
 @import './targets.css';
 @import './fct.css';
-/*@import './tooltipped.css'*/
+@import './tooltipped.css';
 @import './map.css';
 
 :root {

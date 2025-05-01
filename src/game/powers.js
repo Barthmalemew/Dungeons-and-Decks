@@ -99,10 +99,27 @@ export const frail = new Power({
 export const dblAttack = new Power({
     type: 'buff',
     name: 'True strike',
-    description: 'Attacks are played ${stacks} times',
+    description: 'Attacks are played ${amount} times',
     duration: 'counter',
-    target: 'Player',
+    target: 'player',
     use: (stacks) => stacks,
 })
 
-export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength}
+export const poison = new Power({
+    type: 'debuff',
+    name: 'Poison',
+    description: 'Deals ${stacks} damage to afflicted enemy at the start of their turn',
+    duration: 'turn',
+    use: (stacks) => stacks,
+})
+
+export const energized = new Power({
+    type: 'buff',
+    name:'Energized',
+    description:'Gain ${stacks} of energy next turn',
+    duration: 'temp',
+    target: 'player',
+    use: (stacks) => stacks,
+})
+
+export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized}
