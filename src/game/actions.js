@@ -62,6 +62,8 @@ enableMapSet()
  * @prop {number} maxHealth - Maximum possible health
  * @prop {number} block - Current defensive shield/block points
  * @prop {object} powers - Active status effects/powers
+ * @prop {object} class - Tracks the players active class, used in reward card selection
+ * @prop {object} nextTurn - Tracks any additions to the start of turn values from cards/powers, like extra energy, starting with block, and drawing more cards 
  */
 
 /**
@@ -88,10 +90,16 @@ function createNewState(state, characterData = null) {
             block: 0,
             powers: {},
             class : {
-                Red: characterData?.class.Red | false,
-                Green: characterData?.class.Green | false,
-                Purple: characterData?.class.Purple | false,
-            }
+                Red: characterData?.class.Red || false,
+                Green: characterData?.class.Green || false,
+                Purple: characterData?.class.Purple || false,
+            },
+            //this object will hold values that will get added to the respective values at the start of the next turn, and then will be set back to zero
+            nextTurn: {
+                energy: 0, //amount of extra energy to add at the start of the next turn
+                block: 0, //amount of block to add at the start of next turn
+                drawAmt: 0, //amount of extra cards to draw next turn
+            },
         },
         dungeon: undefined,
         createdAt: new Date().getTime(),
@@ -576,7 +584,7 @@ function decreasePowerC(state, pName)
 
 /**
  * A helper function to remove temp powers stacks however it can be used to remove powers that only last for 1 turn, makes me think I might need to double up power descriptions
- * Use at end of turn
+ * I need to make this so it trigger if the duration includes the string temp so I can double up on duration descriptions because thats probably the best way to do this
  * @param {CardPowers} powersP - Collection of powers to decrease, named distinctly so the powers imported from powers could also be accessed
  */
 function _decreasePowersT(powersP) {
@@ -590,6 +598,7 @@ function _decreasePowersT(powersP) {
 
 /**
  * This function should call on a helper function to decrease any powers that only last per a single turn
+ * Used at the end of the turn or techincally before the next turn starts but after the monster has acted
  * @type {ActionFn<{}>}
  */
 function decreasePlayerPowerStacksT(state) {
@@ -670,8 +679,8 @@ function newTurn(state) {
 
     return produce(newState, (draft) => {
         draft.turn++
-        draft.player.currentEnergy = draft.player.maxEnergy
-        draft.player.block = 0
+        draft.player.currentEnergy = draft.player.maxEnergy + draft.player.nextTurn.energy
+        draft.player.block = 0 + draft.player.nextTurn.block
     })
 }
 
