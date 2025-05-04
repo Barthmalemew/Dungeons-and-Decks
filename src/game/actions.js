@@ -644,6 +644,14 @@ function endTurn(state) {
             draft.player.currentHealth = newHealth
         })
     }
+    if(state.player.powers?.energized)
+    {
+        newState = produce(newState, (draft) =>
+        {
+            draft.player.nextTurn.energy = powers.energized.use(newState)
+        })
+    }
+
 
     // Run monster turns and decrease power stacks
     newState = playMonsterActions(newState)
@@ -675,12 +683,16 @@ function endTurn(state) {
  * @type {ActionFn<{}>}
  */
 function newTurn(state) {
-    const newState = drawCards(state)
+    let draw = 5 + state.player.nextTurn.drawAmt
+    const newState = drawCards(state,{amount: draw})
 
     return produce(newState, (draft) => {
         draft.turn++
-        draft.player.currentEnergy = draft.player.maxEnergy + draft.player.nextTurn.energy
+        draft.player.currentEnergy = draft.player.maxEnergy + draft.player.nextTurn.energy //this should hopefully allow for +x energy at the start of next turn to work
         draft.player.block = 0 + draft.player.nextTurn.block
+        draft.player.nextTurn.energy = 0
+        draft.player.nextTurn.block = 0
+        draft.player.nextTurn.drawAmt = 0
     })
 }
 
@@ -803,8 +815,11 @@ function move(state, {move}) {
     return produce(nextState, (draft) => {
         // Reset combat-specific states
         draft.player.powers = {}
-        draft.player.currentEnergy = 3
+        draft.player.currentEnergy = draft.player.maxEnergy
         draft.player.block = 0
+        draft.player.nextTurn.energy = 0
+        draft.player.nextTurn.block = 0
+        draft.player.nextTurn.drawAmt = 0
         
         // Update dungeon position and history
         draft.dungeon.graph[move.y][move.x].didVisit = true

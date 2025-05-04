@@ -108,6 +108,7 @@ export default class App extends Component {
             help() {
                 console.log('Welcome to the console for Dungeons and Decks. This will be used to allow certain actions to be run via commands in this console for debugging purposes')
                 console.log('Some examples are dad.dealCards()')
+                console.log('SetPower: dad.run("setPower",{target: player, power: energized, amount: 1})')
             },
         }
         window.dad.help()

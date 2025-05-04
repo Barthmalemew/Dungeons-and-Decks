@@ -119,7 +119,7 @@ export const energized = new Power({
     description:'Gain ${stacks} of energy next turn',
     duration: 'temp',
     target: 'player',
-    use: (stacks) => stacks,
+    use: (state) => state.player.powers.energized,
 })
 
 export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized}
