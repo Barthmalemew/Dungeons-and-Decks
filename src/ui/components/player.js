@@ -11,6 +11,7 @@ import {
 	dblAttack,
 	energized,
 	cultivation,
+	armor,
 } from '../../game/powers.js'
 
 export const Player = (props) => {
@@ -112,6 +113,9 @@ function Healthbar({value, max, block}) {
                 style=${`width: ${(value / max) * 100}%`}
                 data-health-percent=${healthState}
             ></div>
+			<div class="Healthbar-bar Healthbar-blockBar" style=${`width: ${(block / max) * 100}%`}>
+				${block > 0 ? block : ''}
+			</div>
         </div>
     `
 }
@@ -123,12 +127,14 @@ const Powers = (props) => {
 			<${Power} amount=${props.powers.regen} power=${regen} />
 			<${Power} amount=${props.powers.weak} power=${weak} />
 			<${Power} amount=${props.powers.strength} power=${strength} />
+			<${Power} amount=${props.powers.dexterity} power=${dexterity} />
 			<${Power} amount=${props.powers.tempStrength} power=${tempStrength} />
 			<${Power} amount=${props.powers.frail} power=${frail} />
 			<${Power} amount=${props.powers.poison} power=${poison} />
 			<${Power} amount=${props.powers.dblAttack} power=${dblAttack} />
-			<${Power} amount=${props.powers.energized} powers=${energized} />
-			<${Power} amount=${props.powers.cultivation} powers=${cultivation} />
+			<${Power} amount=${props.powers.energized} power=${energized} />
+			<${Power} amount=${props.powers.cultivation} power=${cultivation} />
+			<${Power} amount=${props.powers.armor} power=${armor} />
 		</div>
 	`
 }

@@ -156,7 +156,7 @@ function addStarterDeck(state, characterData = null) {
     }
     
     //debug cards
-    deck.push(createCard('Poison Spray'))
+    //deck.push(createCard('Poison Spray'))
     return produce(state, (draft) => {
         draft.deck = deck
         draft.drawPile = shuffle(deck)
@@ -332,11 +332,7 @@ function playCard(state, {card, target}) {
             
         }
         newState = removeHealth(newState, {target: newTarget, amount})
-        //this loop needs to encompass card actions and powers as well
-        while(powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
-            newState = removeHealth(newState, { target: newTarget, amount })
-            newState = decreasePowerC(newState, 'dblAttack')
-        }
+        
     }
 
     // Apply any power effects from the card
@@ -344,6 +340,72 @@ function playCard(state, {card, target}) {
 
     // Execute any additional card actions
     newState = useCardActions(newState, {target, card})
+
+    //this loop needs to encompass card actions and powers as well
+    while(powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
+        let nextState = replayCard(newState,{card:card,target:target})
+        newState = decreasePowerC(nextState, 'dblAttack')
+    }
+
+    return newState
+}
+
+/**
+ * Handles replaying a card without doing things like discarding it so you cant duplicate cards
+ * Handles targeting, energy cost, damage calculation, and power application
+ * Target format: "player" for self or "enemyX" where X is monster index
+ * @type {ActionFn<{card: object, target?: string}>}
+ */
+function replayCard(state, {card, target})
+{
+    // Validation checks
+    if (!card) throw new Error('No card to play')
+    if (!target) target = card.target
+    if (typeof target !== 'string') throw new Error(`Wrong target to play card: ${target},${card.target}`)
+    if (target === 'enemy') throw new Error('Wrong target, did you mean "enemy0" or "allEnemies"?')
+    //if (state.player.currentEnergy < card.energy) throw new Error('Not enough energy to play card')
+
+    // Start by discarding the played card
+    //let newState = discardCard(state, { card })
+
+    // Handle energy cost and block effects
+    let newState = produce(state, (draft) => {
+        //draft.player.currentEnergy = newState.player.currentEnergy - card.energy
+        if (card.block) {
+            draft.player.block = state.player.block + card.block
+            //console.log('testing to find cause of block error\nBlock: %d\ndex: %d\nBlock + dex: %d\n', draft.player.block, newState.player.powers.dexterity, draft.player.block + powers.dexterity.use(newState.player.powers.dexterity))
+            if (state.player.powers.dexterity) {
+                draft.player.block += powers.dexterity.use(state.player.powers.dexterity)
+            }
+        }
+    })
+
+    // Handle attack/damage effects
+    if (card.type === 'attack' || card.damage) {
+        //a loop should propably start here looking for the power dblAttack and do a decrementing for loop through the stacks
+        const newTarget = card.target === CardTargets.allEnemies ? card.target : target
+        let amount = card.damage
+        // Apply strength modifier
+        if (newState.player.powers?.strength) {
+            amount = amount + powers.strength.use(newState.player.powers.strength)
+        }
+        if (newState.player.powers?.tempStrength) {
+            amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
+        }
+        // Apply weakness modifier
+        if (newState.player.powers.weak) {
+            amount = powers.weak.use(amount)
+
+        }
+        newState = removeHealth(newState, { target: newTarget, amount })
+        //this loop needs to encompass card actions and powers as well
+    }
+
+    // Apply any power effects from the card
+    if (card.powers) newState = applyCardPowers(newState, { target, card })
+
+    // Execute any additional card actions
+    newState = useCardActions(newState, { target, card })
     return newState
 }
 
@@ -660,6 +722,13 @@ function endTurn(state) {
             draft.player.nextTurn.maxEnergy = powers.cultivation.use(newState)
         })
     }
+    if(state.player.powers?.armor)
+    {
+        newState = produce(newState, (draft) =>
+        {
+            draft.player.block = powers.armor.use(newState)
+        })
+    }
 
 
     // Run monster turns and decrease power stacks
@@ -826,11 +895,13 @@ function move(state, {move}) {
     return produce(nextState, (draft) => {
         // Reset combat-specific states
         draft.player.powers = {}
+        draft.player.maxEnergyC = draft.player.maxEnergy
         draft.player.currentEnergy = draft.player.maxEnergy
         draft.player.block = 0
         draft.player.nextTurn.energy = 0
         draft.player.nextTurn.block = 0
         draft.player.nextTurn.drawAmt = 0
+
         
         // Update dungeon position and history
         draft.dungeon.graph[move.y][move.x].didVisit = true

@@ -131,4 +131,13 @@ export const cultivation = new Power({
     use: (state) => state.player.powers.cultivation,
 })
 
-export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized,cultivation}
+export const armor = new Power({
+    type: 'buff',
+    name: 'Armor',
+    description: 'Gain 1 block for each stack at the end of turn',
+    duration: 'combat',
+    target: 'player',
+    use: (state) => state.player.powers.armor + state.player.block,
+})
+
+export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized,cultivation, armor}

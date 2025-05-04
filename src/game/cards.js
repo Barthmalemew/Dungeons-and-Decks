@@ -52,6 +52,7 @@ export const Rarity = {
  * @prop {Number=} poison
  * @prop {Number=} energized
  * @prop {Number=} cultivation
+ * @prop {Number=} armor
  */
 
 /**
