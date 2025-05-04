@@ -729,6 +729,18 @@ function endTurn(state) {
             draft.player.block = powers.armor.use(newState)
         })
     }
+    if(state.player.powers?.blockNxtTurn)
+    {
+        newState = produce(newState, (draft) => {
+            draft.player.nextTurn.block = powers.blockNxtTurn.use(newState)
+        })
+    }
+    if(state.player.powers?.drawCard)
+    {
+        newState = produce(newState, (draft) => {
+            draft.player.nextTurn.drawAmt = powers.drawCard.use(newState)
+        })
+    }
 
 
     // Run monster turns and decrease power stacks

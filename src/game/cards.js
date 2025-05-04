@@ -53,6 +53,8 @@ export const Rarity = {
  * @prop {Number=} energized
  * @prop {Number=} cultivation
  * @prop {Number=} armor
+ * @prop {Number=} blockNxtTurn
+ * @prop {Number=} drawCard
  */
 
 /**

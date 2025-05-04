@@ -12,6 +12,8 @@ import {
 	energized,
 	cultivation,
 	armor,
+	blockNxtTurn as blockPower,
+	drawCard,
 } from '../../game/powers.js'
 
 export const Player = (props) => {
@@ -135,6 +137,8 @@ const Powers = (props) => {
 			<${Power} amount=${props.powers.energized} power=${energized} />
 			<${Power} amount=${props.powers.cultivation} power=${cultivation} />
 			<${Power} amount=${props.powers.armor} power=${armor} />
+			<${Power} amount=${props.powers.blockPower} power=${blockPower} />
+			<${Power} amount=${props.powers.drawCard} power=${drawCard} />
 		</div>
 	`
 }

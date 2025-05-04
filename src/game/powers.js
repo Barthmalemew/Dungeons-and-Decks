@@ -140,4 +140,22 @@ export const armor = new Power({
     use: (state) => state.player.powers.armor + state.player.block,
 })
 
-export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized,cultivation, armor}
+export const blockNxtTurn = new Power({
+    type: 'buff',
+    name:'Block next Turn',
+    description:'Grants you 1 block per stack of this power at the start of your next turn',
+    duration:'temp',
+    target:'player',
+    use: (state) => state.player.powers.blockNxtTurn,
+})
+
+export const drawCard = new Power({
+    type:'buff',
+    name:'Draw Card',
+    description:'Draw 1 extra card next turn for each stack of this power',
+    duration:'temp',
+    target:'player',
+    use: (state)=> state.player.powers.drawCard,
+})
+
+export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized,cultivation, armor,blockNxtTurn,drawCard}
