@@ -122,4 +122,13 @@ export const energized = new Power({
     use: (state) => state.player.powers.energized,
 })
 
-export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized}
+export const cultivation = new Power({
+    type: 'buff',
+    name: 'Cultivation',
+    description: 'Gain +1 to your max energy per stack for this combat',
+    duration: 'combat',
+    target:'player',
+    use: (state) => state.player.powers.cultivation,
+})
+
+export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized,cultivation}

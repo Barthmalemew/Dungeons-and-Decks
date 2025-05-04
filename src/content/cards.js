@@ -15,6 +15,7 @@ const cardIndex = [
     'ArcaneBoost',
     'HealingWord',
     'l1SpSlSkl',
+    'ArcaneRecovery',
 ]
 
 /**

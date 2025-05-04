@@ -58,6 +58,7 @@ enableMapSet()
  * @typedef {object} Player
  * @prop {number} currentEnergy - Available energy for playing cards
  * @prop {number} maxEnergy - Maximum energy per turn
+ * @prop {number} maxEnergyC - Maximum energy per turn for combat as per combat changes to max energy are possible
  * @prop {number} currentHealth - Current health points
  * @prop {number} maxHealth - Maximum possible health
  * @prop {number} block - Current defensive shield/block points
@@ -84,6 +85,7 @@ function createNewState(state, characterData = null) {
         exhaustPile: [],
         player: {
             maxEnergy: characterData?.energy || 3,
+            maxEnergyC: characterData?.energy || 3,
             currentEnergy: characterData?.energy || 3,
             maxHealth: characterData?.health || 72,
             currentHealth: characterData?.health || 72,
@@ -99,6 +101,7 @@ function createNewState(state, characterData = null) {
                 energy: 0, //amount of extra energy to add at the start of the next turn
                 block: 0, //amount of block to add at the start of next turn
                 drawAmt: 0, //amount of extra cards to draw next turn
+                maxEnergy: 0, //amount to add to max energy for a combat, will be set with a power that lasts per combat
             },
         },
         dungeon: undefined,
@@ -651,6 +654,12 @@ function endTurn(state) {
             draft.player.nextTurn.energy = powers.energized.use(newState)
         })
     }
+    if(state.player.powers?.cultivation)
+    {
+        newState = produce(newState, (draft) => {
+            draft.player.nextTurn.maxEnergy = powers.cultivation.use(newState)
+        })
+    }
 
 
     // Run monster turns and decrease power stacks
@@ -688,11 +697,13 @@ function newTurn(state) {
 
     return produce(newState, (draft) => {
         draft.turn++
-        draft.player.currentEnergy = draft.player.maxEnergy + draft.player.nextTurn.energy //this should hopefully allow for +x energy at the start of next turn to work
+        draft.player.maxEnergyC = draft.player.maxEnergy + draft.player.nextTurn.maxEnergy
+        draft.player.currentEnergy = draft.player.maxEnergyC + draft.player.nextTurn.energy //this should hopefully allow for +x energy at the start of next turn to work
         draft.player.block = 0 + draft.player.nextTurn.block
         draft.player.nextTurn.energy = 0
         draft.player.nextTurn.block = 0
         draft.player.nextTurn.drawAmt = 0
+        draft.player.nextTurn.maxEnergy = 0
     })
 }
 

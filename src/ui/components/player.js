@@ -9,6 +9,8 @@ import {
 	poison,
 	tempStrength,
 	dblAttack,
+	energized,
+	cultivation,
 } from '../../game/powers.js'
 
 export const Player = (props) => {
@@ -125,6 +127,8 @@ const Powers = (props) => {
 			<${Power} amount=${props.powers.frail} power=${frail} />
 			<${Power} amount=${props.powers.poison} power=${poison} />
 			<${Power} amount=${props.powers.dblAttack} power=${dblAttack} />
+			<${Power} amount=${props.powers.energized} powers=${energized} />
+			<${Power} amount=${props.powers.cultivation} powers=${cultivation} />
 		</div>
 	`
 }
