@@ -2,10 +2,18 @@ import {html, Component} from '../lib.js'
 import {
     weak,
     regen as regen,
-    vulnerable as vulnerable,
+    vulnerable as vulnerablePower,
     strength as strength,
     dexterity,
-    frail as frail
+    frail as frail,
+	poison,
+	tempStrength,
+	dblAttack,
+	energized,
+	cultivation,
+	armor,
+	blockNxtTurn as blockPower,
+	drawCard,
 } from '../../game/powers.js'
 
 export const Player = (props) => {
@@ -23,7 +31,7 @@ export const Monster = (props) => {
 		const vulnerable = state.player.powers.vulnerable
 
 		if (type === 'damage' && weakened) amount = weak.use(amount)
-		if (type === 'damage' && vulnerable) amount = vulnerable.use(amount)
+		if (type === 'damage' && vulnerable) amount = vulnerablePower.use(amount)
 
 		let tooltip = ''
 		if (type === 'damage') tooltip = `Will deal ${amount} damage`
@@ -107,6 +115,9 @@ function Healthbar({value, max, block}) {
                 style=${`width: ${(value / max) * 100}%`}
                 data-health-percent=${healthState}
             ></div>
+			<div class="Healthbar-bar Healthbar-blockBar" style=${`width: ${(block / max) * 100}%`}>
+				${block > 0 ? block : ''}
+			</div>
         </div>
     `
 }
@@ -114,11 +125,20 @@ function Healthbar({value, max, block}) {
 const Powers = (props) => {
 	return html`
 		<div class="Target-powers">
-			<${Power} amount=${props.powers.vulnerable} power=${vulnerable} />
+			<${Power} amount=${props.powers.vulnerablePower} power=${vulnerablePower} />
 			<${Power} amount=${props.powers.regen} power=${regen} />
 			<${Power} amount=${props.powers.weak} power=${weak} />
 			<${Power} amount=${props.powers.strength} power=${strength} />
+			<${Power} amount=${props.powers.dexterity} power=${dexterity} />
+			<${Power} amount=${props.powers.tempStrength} power=${tempStrength} />
 			<${Power} amount=${props.powers.frail} power=${frail} />
+			<${Power} amount=${props.powers.poison} power=${poison} />
+			<${Power} amount=${props.powers.dblAttack} power=${dblAttack} />
+			<${Power} amount=${props.powers.energized} power=${energized} />
+			<${Power} amount=${props.powers.cultivation} power=${cultivation} />
+			<${Power} amount=${props.powers.armor} power=${armor} />
+			<${Power} amount=${props.powers.blockPower} power=${blockPower} />
+			<${Power} amount=${props.powers.drawCard} power=${drawCard} />
 		</div>
 	`
 }

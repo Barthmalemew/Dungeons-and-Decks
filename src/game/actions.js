@@ -58,10 +58,13 @@ enableMapSet()
  * @typedef {object} Player
  * @prop {number} currentEnergy - Available energy for playing cards
  * @prop {number} maxEnergy - Maximum energy per turn
+ * @prop {number} maxEnergyC - Maximum energy per turn for combat as per combat changes to max energy are possible
  * @prop {number} currentHealth - Current health points
  * @prop {number} maxHealth - Maximum possible health
  * @prop {number} block - Current defensive shield/block points
  * @prop {object} powers - Active status effects/powers
+ * @prop {object} class - Tracks the players active class, used in reward card selection
+ * @prop {object} nextTurn - Tracks any additions to the start of turn values from cards/powers, like extra energy, starting with block, and drawing more cards 
  */
 
 /**
@@ -82,16 +85,24 @@ function createNewState(state, characterData = null) {
         exhaustPile: [],
         player: {
             maxEnergy: characterData?.energy || 3,
+            maxEnergyC: characterData?.energy || 3,
             currentEnergy: characterData?.energy || 3,
             maxHealth: characterData?.health || 72,
             currentHealth: characterData?.health || 72,
             block: 0,
             powers: {},
             class : {
-                Red: characterData?.class.Red | false,
-                Green: characterData?.class.Green | false,
-                Purple: characterData?.class.Purple | false,
-            }
+                Red: characterData?.class.Red || false,
+                Green: characterData?.class.Green || false,
+                Purple: characterData?.class.Purple || false,
+            },
+            //this object will hold values that will get added to the respective values at the start of the next turn, and then will be set back to zero
+            nextTurn: {
+                energy: 0, //amount of extra energy to add at the start of the next turn
+                block: 0, //amount of block to add at the start of next turn
+                drawAmt: 0, //amount of extra cards to draw next turn
+                maxEnergy: 0, //amount to add to max energy for a combat, will be set with a power that lasts per combat
+            },
         },
         dungeon: undefined,
         createdAt: new Date().getTime(),
@@ -144,6 +155,8 @@ function addStarterDeck(state, characterData = null) {
         ]
     }
     
+    //debug cards
+    //deck.push(createCard('Poison Spray'))
     return produce(state, (draft) => {
         draft.deck = deck
         draft.drawPile = shuffle(deck)
@@ -293,6 +306,11 @@ function playCard(state, {card, target}) {
         draft.player.currentEnergy = newState.player.currentEnergy - card.energy
         if (card.block) {
             draft.player.block = newState.player.block + card.block
+            console.log('testing to find cause of block error\nBlock: %d\ndex: %d\nBlock + dex: %d\n',draft.player.block,newState.player.powers.dexterity,draft.player.block + powers.dexterity.use(newState.player.powers.dexterity))
+            if(newState.player.powers.dexterity)
+            {
+                draft.player.block += powers.dexterity.use(newState.player.powers.dexterity)
+            }
         }
     })
 
@@ -302,10 +320,10 @@ function playCard(state, {card, target}) {
         const newTarget = card.target === CardTargets.allEnemies ? card.target : target
         let amount = card.damage
         // Apply strength modifier
-        if (newState.player.powers.strength) {
+        if (newState.player.powers?.strength) {
             amount = amount + powers.strength.use(newState.player.powers.strength)
         }
-        if(newState.player.powers.tempStrength) {
+        if(newState.player.powers?.tempStrength) {
             amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
         }
         // Apply weakness modifier
@@ -314,10 +332,7 @@ function playCard(state, {card, target}) {
             
         }
         newState = removeHealth(newState, {target: newTarget, amount})
-        while(powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
-            newState = removeHealth(newState, { target: newTarget, amount })
-            newState = decreasePowerC(newState, 'dblAttack')
-        }
+        
     }
 
     // Apply any power effects from the card
@@ -325,6 +340,72 @@ function playCard(state, {card, target}) {
 
     // Execute any additional card actions
     newState = useCardActions(newState, {target, card})
+
+    //this loop needs to encompass card actions and powers as well
+    while(powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
+        let nextState = replayCard(newState,{card:card,target:target})
+        newState = decreasePowerC(nextState, 'dblAttack')
+    }
+
+    return newState
+}
+
+/**
+ * Handles replaying a card without doing things like discarding it so you cant duplicate cards
+ * Handles targeting, energy cost, damage calculation, and power application
+ * Target format: "player" for self or "enemyX" where X is monster index
+ * @type {ActionFn<{card: object, target?: string}>}
+ */
+function replayCard(state, {card, target})
+{
+    // Validation checks
+    if (!card) throw new Error('No card to play')
+    if (!target) target = card.target
+    if (typeof target !== 'string') throw new Error(`Wrong target to play card: ${target},${card.target}`)
+    if (target === 'enemy') throw new Error('Wrong target, did you mean "enemy0" or "allEnemies"?')
+    //if (state.player.currentEnergy < card.energy) throw new Error('Not enough energy to play card')
+
+    // Start by discarding the played card
+    //let newState = discardCard(state, { card })
+
+    // Handle energy cost and block effects
+    let newState = produce(state, (draft) => {
+        //draft.player.currentEnergy = newState.player.currentEnergy - card.energy
+        if (card.block) {
+            draft.player.block = state.player.block + card.block
+            //console.log('testing to find cause of block error\nBlock: %d\ndex: %d\nBlock + dex: %d\n', draft.player.block, newState.player.powers.dexterity, draft.player.block + powers.dexterity.use(newState.player.powers.dexterity))
+            if (state.player.powers.dexterity) {
+                draft.player.block += powers.dexterity.use(state.player.powers.dexterity)
+            }
+        }
+    })
+
+    // Handle attack/damage effects
+    if (card.type === 'attack' || card.damage) {
+        //a loop should propably start here looking for the power dblAttack and do a decrementing for loop through the stacks
+        const newTarget = card.target === CardTargets.allEnemies ? card.target : target
+        let amount = card.damage
+        // Apply strength modifier
+        if (newState.player.powers?.strength) {
+            amount = amount + powers.strength.use(newState.player.powers.strength)
+        }
+        if (newState.player.powers?.tempStrength) {
+            amount = amount + powers.tempStrength.use(newState.player.powers.tempStrength)
+        }
+        // Apply weakness modifier
+        if (newState.player.powers.weak) {
+            amount = powers.weak.use(amount)
+
+        }
+        newState = removeHealth(newState, { target: newTarget, amount })
+        //this loop needs to encompass card actions and powers as well
+    }
+
+    // Apply any power effects from the card
+    if (card.powers) newState = applyCardPowers(newState, { target, card })
+
+    // Execute any additional card actions
+    newState = useCardActions(newState, { target, card })
     return newState
 }
 
@@ -346,10 +427,30 @@ export function useCardActions(state, {target, card}) {
 
         // Ensure action has target info, it also overwrites any target info one is trying to give an action
         if (!action.parameter) action.parameter = {}
-
+        //this is soley so I can reset the target parameter of the actions that simulate multi attacks back to null,
+        //so that they aren't forever set to the first target you used it oneven though that was supposedly fixed
+        let storedTarget = action.parameter?.target
+        let storedAmountDmg = action.parameter?.amount
         //this should make it so that if target info already exists, it won't overwrite anything, but if the target property doesn't exist it will add it
         if(!action.parameter.target) {
+            storedTarget = null
             action.parameter.target = target
+        }
+        //this should allow additional hits to respect both strengths and weak as removeHealth already respects vulnerable
+        if(action.parameter.target !== 'player' && action.type === 'removeHealth')
+        {
+            if(nextState.player.powers?.strength)
+            {
+                action.parameter.amount += powers.strength.use(nextState.player.powers.strength)
+            }
+            if (nextState.player.powers?.tempStrength) 
+            {
+                action.parameter.amount += powers.tempStrength.use(nextState.player.powers.tempStrength)
+            }
+            if(nextState.player.powers?.weak)
+            {
+                action.parameter.amount = powers.weak.use(action.parameter.amount)
+            }
         }
         /**
          * better to implement any waiting here as each function run should be "different" so they shouldn't interfere with other cards
@@ -363,7 +464,15 @@ export function useCardActions(state, {target, card}) {
         console.log(`From useCardActions\nActions:`, action)
         console.log('From useCardActions card: ',card)
         nextState = allActions[action.type](nextState, {...action.parameter, card})
-        
+        //this is just to make sure I don't accidently set some actions target to null that I didn't mean to 
+        if(!storedTarget)
+        {
+            action.parameter.target = storedTarget
+        }
+        if(storedAmountDmg !== action.parameter.amount)
+        {
+            action.parameter.amount = storedAmountDmg
+        }
     })
 
     return nextState
@@ -475,6 +584,7 @@ function applyCardPowers(state, {card, target}) {
         Object.entries(card.powers).forEach(([name, stacks]) => {
             // Player-targeted powers
             if (card.target === CardTargets.player) {
+                console.log('From applyCardPowers\nName: %s\nAmount on player: %d\nStacks being added: %d',name,draft.player.powers?.[name],stacks)
                 draft.player.powers[name] = (draft.player.powers[name] || 0) + stacks
             }
             // All-enemy powers
@@ -532,14 +642,14 @@ function decreasePowerC(state, pName)
     return produce(state, (draft) => {
         if(draft.player.powers[pName])
         {
-            draft.player.powers[pName] = stacks - 1
+            draft.player.powers[pName] = draft.player.powers[pName] - 1
         }
     })
 }
 
 /**
- * A helper function to remove temp powers stacks
- * Use at end of turn
+ * A helper function to remove temp powers stacks however it can be used to remove powers that only last for 1 turn, makes me think I might need to double up power descriptions
+ * I need to make this so it trigger if the duration includes the string temp so I can double up on duration descriptions because thats probably the best way to do this
  * @param {CardPowers} powersP - Collection of powers to decrease, named distinctly so the powers imported from powers could also be accessed
  */
 function _decreasePowersT(powersP) {
@@ -553,6 +663,7 @@ function _decreasePowersT(powersP) {
 
 /**
  * This function should call on a helper function to decrease any powers that only last per a single turn
+ * Used at the end of the turn or techincally before the next turn starts but after the monster has acted
  * @type {ActionFn<{}>}
  */
 function decreasePlayerPowerStacksT(state) {
@@ -598,11 +709,44 @@ function endTurn(state) {
             draft.player.currentHealth = newHealth
         })
     }
+    if(state.player.powers?.energized)
+    {
+        newState = produce(newState, (draft) =>
+        {
+            draft.player.nextTurn.energy = powers.energized.use(newState)
+        })
+    }
+    if(state.player.powers?.cultivation)
+    {
+        newState = produce(newState, (draft) => {
+            draft.player.nextTurn.maxEnergy = powers.cultivation.use(newState)
+        })
+    }
+    if(state.player.powers?.armor)
+    {
+        newState = produce(newState, (draft) =>
+        {
+            draft.player.block = powers.armor.use(newState)
+        })
+    }
+    if(state.player.powers?.blockNxtTurn)
+    {
+        newState = produce(newState, (draft) => {
+            draft.player.nextTurn.block = powers.blockNxtTurn.use(newState)
+        })
+    }
+    if(state.player.powers?.drawCard)
+    {
+        newState = produce(newState, (draft) => {
+            draft.player.nextTurn.drawAmt = powers.drawCard.use(newState)
+        })
+    }
+
 
     // Run monster turns and decrease power stacks
     newState = playMonsterActions(newState)
-    newState = decreasePlayerPowerStacks(newState)
     newState = decreasePlayerPowerStacksT(newState)
+    newState = decreasePlayerPowerStacks(newState)
     newState = decreaseMonsterPowerStacks(newState)
 
     // Check for game over conditions
@@ -629,12 +773,18 @@ function endTurn(state) {
  * @type {ActionFn<{}>}
  */
 function newTurn(state) {
-    const newState = drawCards(state)
+    let draw = 5 + state.player.nextTurn.drawAmt
+    const newState = drawCards(state,{amount: draw})
 
     return produce(newState, (draft) => {
         draft.turn++
-        draft.player.currentEnergy = 3
-        draft.player.block = 0
+        draft.player.maxEnergyC = draft.player.maxEnergy + draft.player.nextTurn.maxEnergy
+        draft.player.currentEnergy = draft.player.maxEnergyC + draft.player.nextTurn.energy //this should hopefully allow for +x energy at the start of next turn to work
+        draft.player.block = 0 + draft.player.nextTurn.block
+        draft.player.nextTurn.energy = 0
+        draft.player.nextTurn.block = 0
+        draft.player.nextTurn.drawAmt = 0
+        draft.player.nextTurn.maxEnergy = 0
     })
 }
 
@@ -666,6 +816,13 @@ function playMonsterActions(state) {
     
     let nextState = state
     room.monsters.forEach((monster, index) => {
+        if(monster.powers.poison)
+        {
+            let targetP = 'enemy' + `${index}`
+            nextState = setHealth(nextState,{target: targetP,amount: monster.currentHealth - powers.poison.use(monster.powers.poison)})
+            //nextState = decreaseMonsterPowerC(nextState, {pName: 'poison',monster: room.monsters[index]}) wont need to do this since as long as poison damage is dealt before the monsters turn its all good
+
+        }
         nextState = takeMonsterTurn(nextState, index)
     })
     return nextState
@@ -750,8 +907,13 @@ function move(state, {move}) {
     return produce(nextState, (draft) => {
         // Reset combat-specific states
         draft.player.powers = {}
-        draft.player.currentEnergy = 3
+        draft.player.maxEnergyC = draft.player.maxEnergy
+        draft.player.currentEnergy = draft.player.maxEnergy
         draft.player.block = 0
+        draft.player.nextTurn.energy = 0
+        draft.player.nextTurn.block = 0
+        draft.player.nextTurn.drawAmt = 0
+
         
         // Update dungeon position and history
         draft.dungeon.graph[move.y][move.x].didVisit = true

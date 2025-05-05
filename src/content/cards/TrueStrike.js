@@ -2,12 +2,12 @@
 export default
 {
     name: 'True Strike',
-    color: 'Purple',
-    type: 'attack',
+    cardColor: 'Purple',
+    type: 'skill',
     energy: 1,
     target: 'player',
-    description: 'This turn allow you next attack to play twice.',
-    image: 'TrueStrike.png',
+    description: 'This turn allow your next attack to play twice.',
+    //image: 'TrueStrike.png',
     powers: {
         dblAttack: 1,
     }

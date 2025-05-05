@@ -99,10 +99,63 @@ export const frail = new Power({
 export const dblAttack = new Power({
     type: 'buff',
     name: 'True strike',
-    description: 'Attacks are played ${stacks} times',
+    description: 'Attacks are played ${amount} times',
     duration: 'counter',
-    target: 'Player',
+    target: 'player',
     use: (stacks) => stacks,
 })
 
-export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength}
+export const poison = new Power({
+    type: 'debuff',
+    name: 'Poison',
+    description: 'Deals ${stacks} damage to afflicted enemy at the start of their turn',
+    duration: 'turn',
+    use: (stacks) => stacks,
+})
+
+export const energized = new Power({
+    type: 'buff',
+    name:'Energized',
+    description:'Gain ${stacks} of energy next turn',
+    duration: 'temp',
+    target: 'player',
+    use: (state) => state.player.powers.energized,
+})
+
+export const cultivation = new Power({
+    type: 'buff',
+    name: 'Cultivation',
+    description: 'Gain +1 to your max energy per stack for this combat',
+    duration: 'combat',
+    target:'player',
+    use: (state) => state.player.powers.cultivation,
+})
+
+export const armor = new Power({
+    type: 'buff',
+    name: 'Armor',
+    description: 'Gain 1 block for each stack at the end of turn',
+    duration: 'combat',
+    target: 'player',
+    use: (state) => state.player.powers.armor + state.player.block,
+})
+
+export const blockNxtTurn = new Power({
+    type: 'buff',
+    name:'Block next Turn',
+    description:'Grants you 1 block per stack of this power at the start of your next turn',
+    duration:'temp',
+    target:'player',
+    use: (state) => state.player.powers.blockNxtTurn,
+})
+
+export const drawCard = new Power({
+    type:'buff',
+    name:'Draw Card',
+    description:'Draw 1 extra card next turn for each stack of this power',
+    duration:'temp',
+    target:'player',
+    use: (state)=> state.player.powers.drawCard,
+})
+
+export default {regen, weak, vulnerable, strength, dexterity, frail, dblAttack,tempStrength, poison, energized,cultivation, armor,blockNxtTurn,drawCard}

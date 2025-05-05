@@ -108,6 +108,7 @@ export default class App extends Component {
             help() {
                 console.log('Welcome to the console for Dungeons and Decks. This will be used to allow certain actions to be run via commands in this console for debugging purposes')
                 console.log('Some examples are dad.dealCards()')
+                console.log('SetPower: dad.run("setPower",{target: player, power: energized, amount: 1 })')
             },
         }
         window.dad.help()
@@ -408,7 +409,7 @@ export default class App extends Component {
                             <span
                                 class="tooltipped tooltipped-e tooltipped-multiline"
                                 aria-label="Cards costs energy and this badge shows how much you have left this turn. Next turn your energy is refilled."
-                                >${state.player.currentEnergy}/${state.player.maxEnergy}</span
+                                >${state.player.currentEnergy}/${state.player.maxEnergyC}</span
                             >
                         </div>
                         <p class="Actions">

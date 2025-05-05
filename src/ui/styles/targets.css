@@ -71,9 +71,13 @@
 	border-radius: 0.5rem;
 }
 .Healthbar--hasBlock .Healthbar-blockBar {
-	background: #4a90e2;
+	background: #4a90e2 !important;
 	box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
 	z-index: 2;
+}
+
+.Healthbar-blockBar {
+	background: #4a90e2 !important;
 }
 
 .Healthbar-bar {

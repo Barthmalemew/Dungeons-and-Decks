@@ -52,7 +52,7 @@ export default class CharacterSelectScreen extends Component {
                 health: 50,
                 energy: 3,
                 description: 'A powerful spellcaster with high energy but lower health.',
-                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield','Shield','Spell Slot lvl 1'],
+                startingDeck: ['Strike', 'Strike', 'Strike', 'Shield', 'Shield','Shield','Attack Spell Slot lv:1'],
                 class: {
                     Purple: true,
                 }

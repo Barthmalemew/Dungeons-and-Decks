@@ -1,8 +1,8 @@
 export default{
-    name: "Attack Spell Slot lv:1", //this is what create card will uses to find the card indicated by the string given to it
+    name: "Skill Spell Slot lv:1", //this is what create card will uses to find the card indicated by the string given to it
     cardColor: "Purple", //can be Red, Green, Purple, Curse, Colorless
     type: "skill", //can be attack, skill, power, status or curse
-    description: "Creates 1 of 3 level 1 attack spells",
+    description: "Creates 1 of 3 level 1 skill spells",
     //image: "usually the name of the card as the image file is named [cardName].png",
     energy: 1, //normally a Number
     target: "player", //can be player, enemy, allEnemies
@@ -11,9 +11,9 @@ export default{
         {
             type: 'addCardToHandRand', //the name of the action goes here
             parameter: {
-                cardN1: 'Magic Missile',
-                cardN2: 'Firebolt',
-                cardN3: 'Shatter',
+                cardN1: 'Arcane Boost',
+                cardN2: 'Poison Spray',
+                cardN3: 'Healing Word',
             },
         },
     ],
@@ -28,9 +28,9 @@ export const upgrade = (card) => {
             {
                 type: 'addCardToHandRand', //the name of the action goes here
                 parameter: {
-                    cardN1: 'Magic Missile',
-                    cardN2: 'Firebolt',
-                    cardN3: 'Shatter',
+                    cardN1: 'Arcane Boost',
+                    cardN2: 'Poison Spray',
+                    cardN3: 'Healing Word',
                     shouldUpgrade: true,
                 },
             },

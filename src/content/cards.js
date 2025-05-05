@@ -11,6 +11,16 @@ const cardIndex = [
     'MagicMissile',
     'level1SpellSlotAtk',
     'UnrelentingBarrage',
+    'PoisonSpray',
+    'ArcaneBoost',
+    'HealingWord',
+    'l1SpSlSkl',
+    'ArcaneRecovery',
+    'SpellSlot1Pwr',
+    'MageArmor',
+    'ShieldFaith',
+    'Shillelagh',
+    'ArcaneCult',
 ]
 
 /**
