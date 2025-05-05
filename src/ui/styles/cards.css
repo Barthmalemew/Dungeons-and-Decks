@@ -67,12 +67,12 @@
 .Card-media {
 	margin: 0;
 	border-bottom: 2px solid #2a3335;
-	background: #111;
+	/*background: #111;*/
 }
 .Card-media img {
 	display: block;
 	width: 100%;
-	height: 120px;
+	height: 75px;
 	object-fit: cover;
 	object-position: center top;
 }
@@ -132,7 +132,7 @@
 
 
 .Card-inner-attack {
-	background-image : url('/public/images/attack_border_cropped.png');
+	background-image : url('/public/images/test_attack_open_card.png');
 	background-size: contain;
 	z-index: 5;
 	/*background-color:#5c0606;*/
