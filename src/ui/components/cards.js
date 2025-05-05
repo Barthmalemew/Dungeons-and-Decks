@@ -32,6 +32,9 @@ export function Card(props)
     //this is testing if the image value of the card is set to something, not if that value it is set to exits or not
     const image = card.image ? `/images/cards/${card.image}` : '/images/cards/batBannan.png';
 
+    const backgroundClass = `Card-inner-${card.type.toLowerCase()}`
+    //`Card-border-${card.type.toLowerCase()}`
+
     return html`
     <dad-card
         class='Card'
@@ -42,7 +45,7 @@ export function Card(props)
         data-card-upgrade=${card.upgraded}
         disabled=${isDisabled}
     >
-        <div class="Card-inner">
+        <div class="Card-inner ${backgroundClass}">
             <!-- Card name on top -->
             <h3 class="Card-name">${card.name}</h3> <!-- (Strike) -->
 

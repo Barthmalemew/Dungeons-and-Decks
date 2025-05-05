@@ -133,7 +133,7 @@ h1 {
 }
 h2,
 h3 {
-	font-size: 1.25rem;
+	font-size: 1.00rem;
 	text-shadow: 1px 1px 1px var(--text-inverse);
 }
 h2 {

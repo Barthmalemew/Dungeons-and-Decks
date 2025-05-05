@@ -4,7 +4,7 @@
 	flex-flow: row nowrap;
 	justify-content: center;
 	min-height: var(--card-height);
-	gap: .7em;
+	gap: .8em;
 }
 .Cards > * {
 	width: var(--card-width);
@@ -47,10 +47,10 @@
 .Card {
 	position: relative;
 	display: flex;
-	border: 0.5em ridge #53b5a8;
+	/*border: 0.5em ridge #53b5a8;
 
 	border-width: 0.75rem;
-	border-width: 0.5rem;
+	border-width: 0.5rem;*/
 	image-rendering: -moz-crisp-edges;
 	image-rendering: pixelated;
 }
@@ -60,21 +60,24 @@
 	display: flex;
 	flex-flow: column nowrap;
 	/*background: #2a3335*/
-	background: #2a3335;
+	/*background: #2a3335; this is default */
 	color: var(--whiteText);
 	text-align: center;
 }
 .Card-media {
 	margin: 0;
-	border-bottom: 2px solid #2a3335;
-	background: #111;
+	/*border-bottom: 2px solid #2a3335;*/
+	/*background: #111;*/
 }
 .Card-media img {
 	display: block;
 	width: 100%;
-	height: 120px;
+	height: 74px;
 	object-fit: cover;
 	object-position: center top;
+	padding-left: 12px;
+	padding-right: 8px;
+	padding-top: 4px
 }
 @media (max-height: 500px) {
 	.Card-media img {
@@ -83,7 +86,7 @@
 }
 .Card-name {
 	margin: 0.5rem 0;
-	padding: 0.5rem 0 0.1rem;
+	padding: 0.8rem 0 0.1rem;
 	margin: 0;
 	/* background-color: #111;
 	background-image: linear-gradient(to bottom, hsla(0, 0%, 0%, 0.2), transparent); */
@@ -95,7 +98,7 @@
 	font-family: 'heliotrope_4_caps';
 	font-feature-settings: 'ss10';
 	font-size: 0.75rem;
-	background: hsl(231.3deg 36.07% 51.85%);/*hsl(191.3, 33.3%, 18.8%);*/
+	background: #5c3867;/*hsl(191.3, 33.3%, 18.8%);*/
 	border: 1px solid hsla(0, 0%, 0%, 0.2);
 	border-bottom-width: 2px;
 	border-radius: 0.4em;
@@ -105,8 +108,8 @@
 }
 .Card-description {
 	font-size: 0.875rem;
-	padding-left: 0.2em;
-	padding-right: 0.2em;
+	padding-left: 1.2em;
+	padding-right: 0.9em;
 	min-height: 2.5em;
 	margin: 0;
 }
@@ -125,6 +128,23 @@
 .Hand .Card[disabled] .EnergyBadge {
 	color: #fb1515;
 	background-color: hsl(0deg 73% 25%);
+}
+.Hand .Card {
+	height: 210px;
+}
+
+
+.Card-inner-attack {
+	background-image : url('/public/images/test_attack_card.png');
+	background-size: contain;
+	z-index: 5;
+	/*background-color:#5c0606;*/
+}
+
+.Card-inner-skill {
+	background-image : url('/public/images/test_skill_card.png');
+	background-size:contain;
+	background-color: #8800b4;
 }
 
 .Cards-item {
