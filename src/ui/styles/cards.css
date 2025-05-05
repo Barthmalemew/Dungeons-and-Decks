@@ -135,7 +135,7 @@
 
 
 .Card-inner-attack {
-	background-image : url('/public/images/test_attack_open_card.png');
+	background-image : url('/public/images/test_attack_card.png');
 	background-size: contain;
 	z-index: 5;
 	/*background-color:#5c0606;*/
