@@ -72,11 +72,12 @@
 .Card-media img {
 	display: block;
 	width: 100%;
-	height: 75px;
+	height: 74px;
 	object-fit: cover;
 	object-position: center top;
 	padding-left: 12px;
 	padding-right: 8px;
+	padding-top: 4px
 }
 @media (max-height: 500px) {
 	.Card-media img {
