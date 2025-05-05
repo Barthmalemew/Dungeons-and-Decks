@@ -66,7 +66,7 @@
 }
 .Card-media {
 	margin: 0;
-	border-bottom: 2px solid #2a3335;
+	/*border-bottom: 2px solid #2a3335;*/
 	/*background: #111;*/
 }
 .Card-media img {
@@ -75,6 +75,8 @@
 	height: 75px;
 	object-fit: cover;
 	object-position: center top;
+	padding-left: 12px;
+	padding-right: 8px;
 }
 @media (max-height: 500px) {
 	.Card-media img {
@@ -105,8 +107,8 @@
 }
 .Card-description {
 	font-size: 0.875rem;
-	padding-left: 0.2em;
-	padding-right: 0.2em;
+	padding-left: 1.2em;
+	padding-right: 0.9em;
 	min-height: 2.5em;
 	margin: 0;
 }
