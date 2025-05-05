@@ -1,8 +1,11 @@
+@import './typography.css';
 @import './app.css';
 @import './overlay.css';
 @import './cards.css';
 @import './targets.css';
-
+@import './fct.css';
+/*@import './tooltipped.css'*/
+@import './map.css';
 
 :root {
     --card-width: 10em;
@@ -12,13 +15,16 @@
     --lightblue: hsl(194.7, 53.3%, 79%);
     --red: hsl(0, 77%, 29%);
     --bg: hsl(0deg 0% 11.6%);
-    --text: hsl(250.06deg 39.88% 67.58%);
+    /*--text: hsl(250.06deg 39.88% 67.58%);*/
+    --text: hsl(0deg 0% 82.01%);
+    /*--text: hsl(27.47deg 69.57% 43.16%);*/
     --whiteText: hsl(61.04deg 17.99% 74.55%);
     --text-inverse: hsla(0, 0%, 0%, 0.95);
     --text-stroke: var(--text-inverse);
     --easing: cubic-bezier(0.23, 1, 0.32, 1);
     --lightpurple: hsl(255.21deg 44.38% 77.51%);
     --energyYellow: #af9442;
+    --brown: hsl(33.98deg 28.26% 56.83%);
 }
 
 .CharacterSelect {

@@ -1,0 +1,39 @@
+:root {
+	--energy: green;
+}
+
+body {
+	/* color: green; */
+}
+
+h2,
+h3,
+p,
+figure {
+	margin: 0;
+}
+
+/* A smaller map */
+dad-map {
+	max-width: 500px;
+	min-height: 0;
+	width: 100%;
+	padding: 1em 0;
+	background: none;
+	--pathColor: black;
+}
+dad-map-row {
+	gap: 0;
+}
+
+dad-card .Card-inner {
+	display: flex;
+	align-items: center;
+}
+dad-card img {
+	display: none;
+}
+
+.EnergyBadge {
+	color: var(--energy);
+}

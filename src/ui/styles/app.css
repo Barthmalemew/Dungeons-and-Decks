@@ -68,7 +68,7 @@ button,
 	padding: 0.4em 1em 0.4em;
 	border: 3px solid var(--text-inverse);
 	border-radius: 0.3em;
-	background: var(--lightpurple);
+	background: var(--brown);
 	color: var(--text-inverse);
 	box-shadow: 0 0.2em var(--text-inverse);
 	text-decoration: none;
@@ -84,7 +84,7 @@ button:hover,
 button:focus,
 .driver-popover .driver-popover-footer button:hover,
 .driver-popover .driver-popover-footer button:focus {
-	background: hsl(255, 39%, 79%);
+	background: hsl(35, 22%, 50%);
 	box-shadow: 0 0.1em var(--text-inverse);
 }
 .Button:active,
@@ -107,13 +107,23 @@ tbody {
 	font-size: smaller;
 }
 
-h1 {
+.title-div {
+	background-color: #926945;
+	border-radius: 0.75rem;
 	transform: rotate3d(5, 15, 3, -13deg);
+	position: relative;
+	width: 550px;
+	margin:auto;
+}
+
+h1 {
 	font-size: 4rem;
 	margin-top: 2rem;
 	margin-bottom: -1rem;
-	/*background-image: linear-gradient(68deg, #865fff, hsl(184.38deg 21.03% 68.51%), hsl(126.75deg 28.1% 17.5%));*/
-	background-image: linear-gradient(68deg, #865fff, hsl(184.38deg 21.03% 68.51%), hsl(285.11deg 100% 65.81%));
+	/*background-image: linear-gradient(280deg, #e2e2e2, hsl(0deg 0% 80.71%), hsl(0deg 0% 83.81%));*/
+	background-image: linear-gradient(280deg, #1a1a1a, hsl(0deg 0% 17.21%), hsl(0deg 0% 8.96%));
+	/*background-image: linear-gradient(280deg, #583232, hsl(4deg 100% 32.27%), hsl(358deg 100% 34.4%));*/
+	/*background-image: linear-gradient(280deg, #583232, hsl(34.18deg 55.89% 35.07%), hsl(33.55deg 59.87% 27.43%));*/
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
@@ -150,7 +160,7 @@ h2 {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
-	background-image: url('/images/scenes/moonlit-landscape-1904.jpg');
+	background-image: url('/images/scenes/Background.png');
 }
 .App-background[data-room-index='1'] {
 	background-image: url('/images/scenes/arietty.webp');
@@ -364,7 +374,7 @@ h2 {
 
 .Box,
 .Box--text {
-	background: hsl(275.7deg 8.77% 57.49%);
+	background: hsl(28.54deg 35.9% 42.03%);
 	color: hsl(17, 6%, 7%);
 	padding: 1rem;
 	border-radius: 0.75rem;
@@ -399,6 +409,8 @@ h2 {
 .Header {
 	text-align: center;
 	margin-bottom: 1rem;
+	left: 0;
+	right: 0;
 }
 
 .Options {

@@ -146,3 +146,19 @@
 	background-size:contain;
 	background-color: #8800b4;
 }
+
+.Cards-item {
+	display: flex;
+	flex-flow: column;
+
+	& dad-card+button {
+		margin: 0 auto;
+		font-size: 1rem;
+		position: relative;
+		top: -1rem;
+	}
+
+	& dad-card+button:active:not([disabled]) {
+		top: calc(-1rem + 2px);
+	}
+}
