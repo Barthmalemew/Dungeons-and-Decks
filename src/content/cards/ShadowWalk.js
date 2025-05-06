@@ -1,7 +1,7 @@
 export default{
     name: 'Shadow Walk',
     cardColor: 'Green',
-    type: 'Skill',
+    type: 'skill',
     energy: 3,
     target: 'player',
     block: 10,
