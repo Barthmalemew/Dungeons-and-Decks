@@ -24,7 +24,8 @@ export const createTestDungeon = () => {
 
 
 export const easyMonsters = {}
-export const monsters = {}
+export const mediumMonsters = {}
+export const hardMonsters = {}
 export const elites = {}
 export const bosses = {}
 
@@ -47,14 +48,18 @@ easyMonsters['Easy does it x2'] = MonsterRoom(
 		random: 1,
 	}),
 )
-monsters['RNG does it'] = MonsterRoom(
+
+//2-5
+mediumMonsters['RNG does it'] = MonsterRoom(
 	Monster({
 		hp: random(18, 20),
 		intents: [{damage: 7}, {damage: 11}, {damage: 7}, {block: 9}],
 		random: 4,
 	}),
 )
-monsters['Easy one'] = MonsterRoom(
+
+//2-5
+mediumMonsters['Easy one'] = MonsterRoom(
 	Monster({
 		hp: random(33, 37),
 		intents: [{vulnerable: 1}, {damage: 10}, {damage: 6}, {}, {weak: 1}],
@@ -62,14 +67,16 @@ monsters['Easy one'] = MonsterRoom(
 	}),
 )
 
-
-monsters['jaw worm'] = MonsterRoom(
+//5+
+hardMonsters['jaw worm'] = MonsterRoom(
 	Monster({
 		hp: random(40, 44),
 		intents: [{damage: 11}, {damage: 7, block: 5}, {block: 6}],
 	}),
 )
-monsters['First double trouble'] = MonsterRoom(
+
+//2-5
+mediumMonsters['First double trouble'] = MonsterRoom(
 	Monster({
 		hp: random(13, 17),
 		intents: [{damage: 7}, {block: 4, damage: 8}, {damage: 6}, {}, {block: 6}],
@@ -81,7 +88,9 @@ monsters['First double trouble'] = MonsterRoom(
 		random: 2,
 	}),
 )
-monsters['Mid sized duo'] = MonsterRoom(
+
+//5+
+hardMonsters['Mid sized duo'] = MonsterRoom(
 	Monster({
 		hp: random(28, 32),
 		intents: [{weak: 1}, {damage: 9}, {damage: 6}, {}, {weak: 1}],
@@ -93,7 +102,9 @@ monsters['Mid sized duo'] = MonsterRoom(
 		random: 2,
 	}),
 )
-monsters['Tiny Trio'] = MonsterRoom(
+
+//2-5
+mediumMonsters['Tiny Trio'] = MonsterRoom(
 	Monster({hp: random(12, 15), random: 2, intents: [{damage: 6}]}),
 	Monster({hp: random(12, 15), random: 2, intents: [{damage: 6}]}),
 	Monster({hp: random(10, 16), random: 3, intents: [{damage: 6}]}),
@@ -104,7 +115,9 @@ elites['monster7'] = MonsterRoom(
 		intents: [{damage: 12}, {block: 6, damage: 11}, {block: 5, damage: 16}, {}, {block: 6}],
 	}),
 )
-monsters['monster10'] = MonsterRoom(
+
+//2-5
+mediumMonsters['monster10'] = MonsterRoom(
 	Monster({
 		hp: 28,
 		intents: [{weak: 1}, {block: 10, damage: 10}, {damage: 21}],
@@ -118,7 +131,7 @@ elites['monster9'] = MonsterRoom(
 		random: 6,
 	}),
 )
-elites['Tougher'] = MonsterRoom(Monster({hp: 70, block: 12, intents: [{block: 5}, {damage: 16}]}))
+elites['Tougher'] = MonsterRoom(Monster({hp: 60, block: 12, intents: [{block: 5}, {damage: 16}]}))
 elites['The Trio'] = MonsterRoom(
 	Monster({
 		hp: random(39, 46),
