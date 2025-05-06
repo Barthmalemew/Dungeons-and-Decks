@@ -10,7 +10,7 @@ const cardIndex = [
     'Firebolt',
     'MagicMissile',
     'level1SpellSlotAtk',
-    'UnrelentingBarrage',
+    'unrelentingbarrage',
     'PoisonSpray',
     'ArcaneBoost',
     'HealingWord',

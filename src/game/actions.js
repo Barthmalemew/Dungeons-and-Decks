@@ -335,9 +335,6 @@ function playCard(state, {card, target}) {
         
     }
 
-    // Apply any power effects from the card
-    if (card.powers) newState = applyCardPowers(newState, {target, card})
-
     // Execute any additional card actions
     newState = useCardActions(newState, {target, card})
 
@@ -346,6 +343,9 @@ function playCard(state, {card, target}) {
         let nextState = replayCard(newState,{card:card,target:target})
         newState = decreasePowerC(nextState, 'dblAttack')
     }
+
+    // Apply any power effects from the card
+    if (card.powers) newState = applyCardPowers(newState, {target, card})
 
     return newState
 }

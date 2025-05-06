@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import {uuid, shuffle, random as randomBetween, pick} from '../utils.js'
-import {easyMonsters, monsters, elites, bosses} from '../content/dungeon-encounters.js'
+import {easyMonsters, mediumMonsters, hardMonsters, elites, bosses} from '../content/dungeon-encounters.js'
 import {StartRoom, CampfireRoom} from './rooms.js'
 
 
@@ -376,8 +376,9 @@ export function decideRoomType(type, floor) {
 	const pickRandomFromObj = (obj) => obj[shuffle(Object.keys(obj))[0]]
 	if (floor === 0) return StartRoom()
 	if (type === 'C') return CampfireRoom()
-	if (type === 'M' && floor < 2) return pickRandomFromObj(easyMonsters)
-	if (type === 'M') return pickRandomFromObj(monsters)
+	if (type === 'M' && floor <= 2) return pickRandomFromObj(easyMonsters)
+	if (type === 'M' && floor <= 5) return pickRandomFromObj(mediumMonsters)
+	if (type === 'M') return pickRandomFromObj(hardMonsters)
 	if (type === 'E') return pickRandomFromObj(elites)
 	if (type === 'boss') return pickRandomFromObj(bosses)
 	throw new Error(`Could not match node type "${type}" with a dungeon room`)
