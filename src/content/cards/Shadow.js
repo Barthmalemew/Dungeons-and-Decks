@@ -1,12 +1,11 @@
-import { tempStrength } from "@/game/powers"
 
 export default{
     name: 'Shadow',
     cardColor: 'Green',
-    type: 'Skill',
+    type: 'skill',
     energy: 2,
-    target: 'enemy',
-    damage: 6,
+    target: 'player',
+    //damage: 6,
     description: 'Create 2 dark clones and gain 6 damage to your next attack cards.(Last for one round)',
     image: 'Shadow.png',
     powers:
