@@ -341,11 +341,15 @@ function playCard(state, {card, target}) {
     // Execute any additional card actions
     newState = useCardActions(newState, {target, card})
 
-    //this loop needs to encompass card actions and powers as well
-    while(powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
-        let nextState = replayCard(newState,{card:card,target:target})
-        newState = decreasePowerC(nextState, 'dblAttack')
+    if(card.type === 'attack')
+    {
+        //this loop needs to encompass card actions and powers as well
+        while (powers.dblAttack.use(newState.player.powers.dblAttack) > 0) {
+            let nextState = replayCard(newState, { card: card, target: target })
+            newState = decreasePowerC(nextState, 'dblAttack')
+        }
     }
+    
 
     return newState
 }
