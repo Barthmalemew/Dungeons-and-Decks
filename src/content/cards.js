@@ -21,6 +21,9 @@ const cardIndex = [
     'ShieldFaith',
     'Shillelagh',
     'ArcaneCult',
+    'SecondWind',
+    'Rage',
+    'HeftyAttack',
 ]
 
 /**
